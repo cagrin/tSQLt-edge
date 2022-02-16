@@ -1,0 +1,8 @@
+<Project Sdk="MSBuild.Sdk.SqlProj/2.0.0">
+    <PropertyGroup>
+        <CreateNewDatabase>True</CreateNewDatabase>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="../Source/Source.csproj" />
+    </ItemGroup>
+</Project>

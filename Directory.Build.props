@@ -1,0 +1,8 @@
+<Project>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <SqlServerVersion>Sql150</SqlServerVersion>
+        <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+        <Collation>Polish_CI_AS</Collation>
+    </PropertyGroup>
+</Project>
