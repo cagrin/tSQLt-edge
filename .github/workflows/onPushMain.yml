@@ -32,4 +32,4 @@ jobs:
       - name: Publish tests
         run: dotnet publish latest/Tests /p:TargetDatabaseName=${{ env.DB_NAME }} /p:TargetUser=sa /p:TargetPassword=${{ env.SA_PASSWORD }} /p:TargetPort=${{ job.services.sqlserver.ports[1433] }}
       - name: Run unit tests
-        run: sqlcmd -S localhost,${{ job.services.sqlserver.ports[1433] }} -d ${{ env.DB_NAME }} -U sa -P ${{ env.SA_PASSWORD }} -t 30 -Q "EXEC testSchema.test1"
+        run: sqlcmd -S localhost,${{ job.services.sqlserver.ports[1433] }} -d ${{ env.DB_NAME }} -U sa -P ${{ env.SA_PASSWORD }} -t 30 -Q "EXEC testAPI.RunAll"
