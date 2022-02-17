@@ -3,6 +3,6 @@ CREATE PROCEDURE tSQLt.RenameClass
     @NewSchemaName NVARCHAR(MAX)
 AS
 BEGIN
-    PRINT 'tSQLt.RenameClass - Not implemented yet.';
+    PRINT '- tSQLt.RenameClass';
 END;
 GO

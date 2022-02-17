@@ -2,6 +2,6 @@ CREATE PROCEDURE tSQLt.NewTestClass
     @ClassName NVARCHAR(MAX)
 AS
 BEGIN
-    PRINT 'tSQLt.NewTestClass - Not implemented yet.';
+    PRINT '- tSQLt.NewTestClass';
 END;
 GO

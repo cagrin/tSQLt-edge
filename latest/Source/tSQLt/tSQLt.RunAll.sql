@@ -1,6 +1,6 @@
 CREATE PROCEDURE tSQLt.RunAll
 AS
 BEGIN
-    PRINT 'tSQLt.RunAll Not implemented yet.';
+    PRINT '- tSQLt.RunAll';
 END;
 GO
