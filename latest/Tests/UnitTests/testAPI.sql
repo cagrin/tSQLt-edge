@@ -35,10 +35,38 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE testAPI.[Expectations]
+AS
+BEGIN
+    PRINT 'Expectations:';
+    EXEC tSQLt.ExpectException
+        @Message = 'Table dbo.DoesNotExist not found.',
+        @ExpectedSeverity = 16,
+        @ExpectedState = 10;
+    EXEC tSQLt.ExpectNoException;
+END;
+GO
+
+CREATE PROCEDURE testAPI.[Isolating dependencies]
+AS
+BEGIN
+    PRINT 'Isolating dependencies:';
+    EXEC tSQLt.ApplyConstraint 'dbo.ReferencingTable','ReferencingTable_ReferencedTable_FK';
+    EXEC tSQLt.FakeFunction 'SalesApp.ComputeCommission', 'SalesAppTests.Fake_ComputeCommission';
+    EXEC tSQLt.FakeTable 'FinancialApp.CurrencyConversion';
+    EXEC tSQLt.RemoveObjectIfExists 'FinancialApp.CurrencyConversion';
+    EXEC tSQLt.SpyProcedure 'FinancialApp.CurrentReport';
+    EXEC tSQLt.ApplyTrigger 'Registry.Student', 'AuditInserts';
+    EXEC tSQLt.RemoveObject 'FinancialApp.CurrencyConversion';
+END;
+GO
+
 CREATE PROCEDURE testAPI.RunAll
 AS
 BEGIN
     EXEC testAPI.[Test creation and execution];
     EXEC testAPI.[Assertions];
+    EXEC testAPI.[Expectations];
+    EXEC testAPI.[Isolating dependencies];
 END;
 GO
