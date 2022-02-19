@@ -4,6 +4,6 @@ CREATE PROCEDURE tSQLt.Internal_AssertEqualsString
     @Message NVARCHAR(MAX) = ''
 AS
 BEGIN
-    PRINT '- tSQLt.AssertEqualsString';
+    PRINT CONCAT_WS(' ', '- tSQLt.AssertEqualsString', @Expected, @Actual, @Message);
 END;
 GO

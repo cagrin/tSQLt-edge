@@ -3,6 +3,6 @@
         <CreateNewDatabase>True</CreateNewDatabase>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="../Source/Source.csproj" />
+        <ProjectReference Include="../tSQLt.API/tSQLt.API.csproj" />
     </ItemGroup>
 </Project>

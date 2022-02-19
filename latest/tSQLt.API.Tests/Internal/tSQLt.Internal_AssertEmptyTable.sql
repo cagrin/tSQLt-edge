@@ -3,6 +3,6 @@ CREATE PROCEDURE tSQLt.Internal_AssertEmptyTable
     @Message NVARCHAR(MAX) = ''
 AS
 BEGIN
-    PRINT '- tSQLt.AssertEmptyTable';
+    PRINT CONCAT_WS(' ', '- tSQLt.AssertEmptyTable', @TableName, @Message);
 END;
 GO

@@ -4,6 +4,6 @@ CREATE PROCEDURE tSQLt.Internal_FakeFunction
     @FakeDataSource NVARCHAR(MAX) = NULL
 AS
 BEGIN
-    PRINT '- tSQLt.FakeFunction';
+    PRINT CONCAT_WS(' ', '- tSQLt.FakeFunction', @FunctionName, @FakeFunctionName, @FakeDataSource);
 END;
 GO

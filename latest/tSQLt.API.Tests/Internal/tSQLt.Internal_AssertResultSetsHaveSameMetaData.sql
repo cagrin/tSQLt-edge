@@ -3,6 +3,6 @@ CREATE PROCEDURE tSQLt.Internal_AssertResultSetsHaveSameMetaData
     @actualCommand NVARCHAR(MAX)
 AS
 BEGIN
-    PRINT '- tSQLt.AssertResultSetsHaveSameMetaData';
+    PRINT CONCAT_WS(' ', '- tSQLt.AssertResultSetsHaveSameMetaData', @expectedCommand, @actualCommand);
 END;
 GO

@@ -4,6 +4,6 @@ CREATE PROCEDURE tSQLt.Internal_AssertEqualsTableSchema
     @Message NVARCHAR(MAX) = NULL
 AS
 BEGIN
-    PRINT '- tSQLt.AssertEqualsTableSchema';
+    PRINT CONCAT_WS(' ', '- tSQLt.AssertEqualsTableSchema', @Expected, @Actual, @Message);
 END;
 GO

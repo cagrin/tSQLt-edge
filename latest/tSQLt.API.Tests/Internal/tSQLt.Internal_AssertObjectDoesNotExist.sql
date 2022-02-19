@@ -3,6 +3,6 @@ CREATE PROCEDURE tSQLt.Internal_AssertObjectDoesNotExist
     @Message NVARCHAR(MAX) = ''
 AS
 BEGIN
-    PRINT '- tSQLt.AssertObjectDoesNotExist';
+    PRINT CONCAT_WS(' ', '- tSQLt.AssertObjectDoesNotExist', @ObjectName, @Message);
 END;
 GO

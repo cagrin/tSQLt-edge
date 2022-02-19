@@ -6,6 +6,6 @@ CREATE PROCEDURE tSQLt.Internal_FakeTable
     @Defaults BIT = NULL
 AS
 BEGIN
-    PRINT '- tSQLt.FakeTable';
+    PRINT CONCAT_WS(' ', '- tSQLt.FakeTable', @TableName, @SchemaName, '@Identity', '@ComputedColumns', '@Defaults');
 END;
 GO

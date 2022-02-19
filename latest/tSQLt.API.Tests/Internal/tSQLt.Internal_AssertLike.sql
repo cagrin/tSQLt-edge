@@ -4,6 +4,6 @@ CREATE PROCEDURE tSQLt.Internal_AssertLike
     @Message NVARCHAR(MAX) = ''
 AS
 BEGIN
-    PRINT '- tSQLt.AssertLike';
+    PRINT CONCAT_WS(' ', '- tSQLt.AssertLike', @ExpectedPattern, @Actual, @Message);
 END;
 GO

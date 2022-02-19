@@ -3,6 +3,6 @@ CREATE PROCEDURE tSQLt.Internal_ApplyTrigger
     @TriggerName NVARCHAR(MAX)
 AS
 BEGIN
-    PRINT '- tSQLt.ApplyTrigger';
+    PRINT CONCAT_WS(' ', '- tSQLt.ApplyTrigger', @TableName, @TriggerName);
 END;
 GO

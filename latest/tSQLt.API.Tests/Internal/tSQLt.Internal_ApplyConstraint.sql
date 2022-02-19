@@ -5,6 +5,6 @@ CREATE PROCEDURE tSQLt.Internal_ApplyConstraint
     @NoCascade BIT = 0
 AS
 BEGIN
-    PRINT '- tSQLt.ApplyConstraint';
+    PRINT CONCAT_WS(' ', '- tSQLt.ApplyConstraint', @TableName, @ConstraintName, @SchemaName, '@NoCascade');
 END;
 GO

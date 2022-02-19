@@ -4,6 +4,6 @@ CREATE PROCEDURE tSQLt.Internal_AssertNotEquals
     @Message NVARCHAR(MAX) = ''
 AS
 BEGIN
-    PRINT '- tSQLt.AssertNotEquals';
+    PRINT CONCAT_WS(' ', '- tSQLt.AssertNotEquals', '@Expected', '@Actual', @Message);
 END;
 GO

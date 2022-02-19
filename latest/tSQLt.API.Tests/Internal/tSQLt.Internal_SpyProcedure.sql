@@ -3,6 +3,6 @@ CREATE PROCEDURE tSQLt.Internal_SpyProcedure
     @CommandToExecute NVARCHAR(MAX) = NULL
 AS
 BEGIN
-    PRINT '- tSQLt.SpyProcedure';
+    PRINT CONCAT_WS(' ', '- tSQLt.SpyProcedure', @ProcedureName, @CommandToExecute);
 END;
 GO
