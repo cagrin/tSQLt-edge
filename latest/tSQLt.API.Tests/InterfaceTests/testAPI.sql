@@ -1,65 +1,34 @@
 CREATE SCHEMA testAPI;
 GO
 
-CREATE PROCEDURE testAPI.[Test creation and execution]
-AS
-BEGIN
-    PRINT 'Test creation and execution:';
-    EXEC tSQLt.NewTestClass '@ClassName';
-    EXEC tSQLt.DropClass '@ClassName';
-    EXEC tSQLt.RunAll;
-    EXEC tSQLt.Run '@TestName';
-    EXEC tSQLt.RenameClass '@SchemaName', '@NewSchemaName';
-END;
-GO
-
-CREATE PROCEDURE testAPI.[Assertions]
-AS
-BEGIN
-    PRINT 'Assertions:';
-    EXEC tSQLt.AssertEmptyTable '@TableName', '@Message';
-    EXEC tSQLt.AssertEquals '@Expected', '@Actual', '@Message';
-    EXEC tSQLt.AssertEqualsString '@Expected', '@Actual', '@Message';
-    EXEC tSQLt.AssertEqualsTable '@Expected', '@Actual', '@Message', '@FailMsg';
-    EXEC tSQLt.AssertEqualsTableSchema '@Expected', '@Actual', '@Message';
-    EXEC tSQLt.AssertNotEquals '@Expected', '@Actual', '@Message';
-    EXEC tSQLt.AssertObjectDoesNotExist '@ObjectName', '@Message';
-    EXEC tSQLt.AssertObjectExists '@ObjectName', '@Message';
-    EXEC tSQLt.AssertResultSetsHaveSameMetaData '@expectedCommand', '@actualCommand';
-    EXEC tSQLt.Fail '@Message0', '@Message1', '@Message2', '@Message3', '@Message4', '@Message5', '@Message6', '@Message7', '@Message8', '@Message9';
-    EXEC tSQLt.AssertLike '@ExpectedPattern', '@Actual', '@Message';
-END;
-GO
-
-CREATE PROCEDURE testAPI.[Expectations]
-AS
-BEGIN
-    PRINT 'Expectations:';
-    EXEC tSQLt.ExpectException '@ExpectedMessage', NULL, NULL, '@Message', '@ExpectedMessagePattern', NULL;
-    EXEC tSQLt.ExpectNoException '@Message';
-END;
-GO
-
-CREATE PROCEDURE testAPI.[Isolating dependencies]
-AS
-BEGIN
-    PRINT 'Isolating dependencies:';
-    EXEC tSQLt.ApplyConstraint '@TableName', '@ConstraintName', '@SchemaName', NULL;
-    EXEC tSQLt.FakeFunction '@FunctionName', '@FakeFunctionName', '@FakeDataSource';
-    EXEC tSQLt.FakeTable '@TableName', '@SchemaName', NULL, NULL, NULL;
-    EXEC tSQLt.RemoveObjectIfExists '@ObjectName';
-    EXEC tSQLt.SpyProcedure '@ProcedureName', '@CommandToExecute';
-    EXEC tSQLt.ApplyTrigger '@TableName', '@TriggerName';
-    EXEC tSQLt.RemoveObject '@ObjectName';
-END;
-GO
-
 CREATE PROCEDURE testAPI.RunAll
 AS
 BEGIN
-    EXEC testAPI.[Test creation and execution];
-    EXEC testAPI.[Assertions];
-    EXEC testAPI.[Expectations];
-    EXEC testAPI.[Isolating dependencies];
+    DECLARE @Command NVARCHAR(MAX) = '
+    DECLARE @Command NVARCHAR(MAX);
+    SELECT @Command = STRING_AGG(command, CHAR(13))
+    FROM
+    (
+        SELECT ''EXEC '' + spname + ISNULL('' '' + STRING_AGG(name + '' = '' + default_value, '', '') WITHIN GROUP (ORDER BY parameter_id), '''') + '';'' AS command
+        FROM
+        (
+            SELECT TOP (100) PERCENT
+                QUOTENAME(SCHEMA_NAME(r.schema_id)) + ''.'' + QUOTENAME(r.name) AS spname,
+                p.name,
+                default_value = CASE WHEN p.system_type_id = 231 THEN '''''''' + p.name + '''''''' ELSE ''NULL'' END,
+                p.parameter_id
+            FROM sys.procedures r
+            LEFT JOIN sys.parameters p
+            ON p.object_id = r.object_id
+            WHERE SCHEMA_NAME(r.schema_id) = ''tSQLt''
+            AND r.name NOT LIKE ''Internal%''
+            ORDER BY r.name, p.parameter_id
+        ) A
+        GROUP BY spname
+    ) B
+
+    EXEC (@Command);
+    ';
+    EXEC (@Command);
 END;
 GO
