@@ -6,6 +6,12 @@ CREATE PROCEDURE tSQLt.FakeTable
     @Defaults BIT = NULL
 AS
 BEGIN
-    PRINT '- tSQLt.FakeTable';
+    DECLARE @Command NVARCHAR(MAX) = 'tSQLt.Internal_FakeTable';
+    EXEC @Command
+    @TableName = @TableName,
+    @SchemaName = @SchemaName,
+    @Identity = @Identity,
+    @ComputedColumns = @ComputedColumns,
+    @Defaults = @Defaults;
 END;
 GO

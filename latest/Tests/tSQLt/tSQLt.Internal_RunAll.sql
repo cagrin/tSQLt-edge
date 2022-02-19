@@ -1,0 +1,6 @@
+CREATE PROCEDURE tSQLt.Internal_RunAll
+AS
+BEGIN
+    PRINT '- tSQLt.RunAll';
+END;
+GO

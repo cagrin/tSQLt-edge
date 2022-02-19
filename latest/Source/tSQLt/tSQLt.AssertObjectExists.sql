@@ -3,6 +3,9 @@ CREATE PROCEDURE tSQLt.AssertObjectExists
     @Message NVARCHAR(MAX) = ''
 AS
 BEGIN
-    PRINT '- tSQLt.AssertObjectExists';
+    DECLARE @Command NVARCHAR(MAX) = 'tSQLt.Internal_AssertObjectExists';
+    EXEC @Command
+    @ObjectName = @ObjectName,
+    @Message = @Message;
 END;
 GO

@@ -1,0 +1,7 @@
+CREATE PROCEDURE tSQLt.Internal_Run
+    @TestName NVARCHAR(MAX) = NULL
+AS
+BEGIN
+    PRINT '- tSQLt.Run';
+END;
+GO

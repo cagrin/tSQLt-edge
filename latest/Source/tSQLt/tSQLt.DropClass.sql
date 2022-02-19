@@ -2,6 +2,8 @@ CREATE PROCEDURE tSQLt.DropClass
     @ClassName NVARCHAR(MAX)
 AS
 BEGIN
-    PRINT '- tSQLt.DropClass';
+    DECLARE @Command NVARCHAR(MAX) = 'tSQLt.Internal_DropClass';
+    EXEC @Command
+    @ClassName = @ClassName;
 END;
 GO

@@ -4,6 +4,10 @@ CREATE PROCEDURE tSQLt.AssertEquals
     @Message NVARCHAR(MAX) = ''
 AS
 BEGIN
-    PRINT '- tSQLt.AssertEquals';
+    DECLARE @Command NVARCHAR(MAX) = 'tSQLt.Internal_AssertEquals';
+    EXEC @Command
+    @Expected = @Expected,
+    @Actual = @Actual,
+    @Message = @Message;
 END;
 GO

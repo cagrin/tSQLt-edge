@@ -5,6 +5,11 @@ CREATE PROCEDURE tSQLt.AssertEqualsTable
     @FailMsg NVARCHAR(MAX) = 'Unexpected/missing resultset rows!'
 AS
 BEGIN
-    PRINT '- tSQLt.AssertEqualsTable';
+    DECLARE @Command NVARCHAR(MAX) = 'tSQLt.Internal_AssertEqualsTable';
+    EXEC @Command
+    @Expected = @Expected,
+    @Actual = @Actual,
+    @Message = @Message,
+    @FailMsg = @FailMsg;
 END;
 GO

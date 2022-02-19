@@ -3,6 +3,9 @@ CREATE PROCEDURE tSQLt.RenameClass
     @NewSchemaName NVARCHAR(MAX)
 AS
 BEGIN
-    PRINT '- tSQLt.RenameClass';
+    DECLARE @Command NVARCHAR(MAX) = 'tSQLt.Internal_RenameClass';
+    EXEC @Command
+    @SchemaName = @SchemaName,
+    @NewSchemaName = @NewSchemaName;
 END;
 GO
