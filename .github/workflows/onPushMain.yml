@@ -16,6 +16,7 @@ jobs:
         with:
           dotnet-version: '6.0'
       - name: Unit tests
+        shell: pwsh
         run: |
           cd latest
           ./test.ps1
