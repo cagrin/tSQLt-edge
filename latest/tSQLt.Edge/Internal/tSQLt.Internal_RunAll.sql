@@ -6,7 +6,7 @@ BEGIN
     SELECT @Command = STRING_AGG(command, CHAR(13))
     FROM
     (
-        SELECT command = ''EXEC '' + spname + '';''
+        SELECT command = ''PRINT '''''' + spname + ''''''; '' + ''EXEC '' + spname + '';''
         FROM
         (
             SELECT TOP (100) PERCENT
