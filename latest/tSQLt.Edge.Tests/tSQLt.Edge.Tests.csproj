@@ -4,6 +4,6 @@
         <CreateNewDatabase>True</CreateNewDatabase>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="../tSQLt.API/tSQLt.API.csproj" />
+        <ProjectReference Include="../tSQLt.Edge/tSQLt.Edge.csproj" />
     </ItemGroup>
 </Project>
