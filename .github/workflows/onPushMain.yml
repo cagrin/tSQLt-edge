@@ -15,6 +15,11 @@ jobs:
         uses: actions/setup-dotnet@master
         with:
           dotnet-version: '6.0'
+      - name: Setup pwsh SqlServer module
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module -Name SqlServer
       - name: Unit tests
         shell: pwsh
         run: |
