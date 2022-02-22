@@ -4,14 +4,14 @@ CREATE PROCEDURE tSQLt.Internal_AssertNotEquals
     @Message NVARCHAR(MAX) = ''
 AS
 BEGIN
-    IF (@Expected = @Actual) OR (@Expected IS NULL AND @Actual IS NULL)
+    IF NOT (@Expected = @Actual) OR NOT (@Expected IS NULL AND @Actual IS NULL)
     BEGIN
-        DECLARE @Failed NVARCHAR(MAX) = FORMATMESSAGE(N'tSQLt.AssertNotEquals failed. Expected any value except:<%s>. Actual:<%s>.', CONVERT(NVARCHAR(MAX), @Expected), CONVERT(NVARCHAR(MAX), @Actual));
-        EXEC tSQLt.Fail @Message0 = @Failed, @Message1 = @Message;
+        RETURN 0;
     END
     ELSE
     BEGIN
-        RETURN 0;
+        DECLARE @Failed NVARCHAR(MAX) = FORMATMESSAGE(N'tSQLt.AssertNotEquals failed. Expected any value except:<%s>. Actual:<%s>.', CONVERT(NVARCHAR(MAX), @Expected), CONVERT(NVARCHAR(MAX), @Actual));
+        EXEC tSQLt.Fail @Message0 = @Failed, @Message1 = @Message;
     END
 END;
 GO
