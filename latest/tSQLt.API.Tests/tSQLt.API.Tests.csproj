@@ -1,6 +1,6 @@
 <Project Sdk="MSBuild.Sdk.SqlProj/2.0.0">
     <PropertyGroup>
-        <SuppressTSqlWarnings></SuppressTSqlWarnings>
+        <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="../tSQLt.API/tSQLt.API.csproj" />
