@@ -5,7 +5,7 @@ BEGIN
     DECLARE @Command NVARCHAR(MAX) =
     (
         SELECT
-            STRING_AGG('EXEC tSQLt.Private_Run @TestName = ''' + QUOTENAME(SCHEMA_NAME(r.schema_id)) + '.' + QUOTENAME(r.name) + ''';', CHAR(13))
+            STRING_AGG(FORMATMESSAGE('EXEC tSQLt.Private_Run @TestName = ''%s.%s'';', QUOTENAME(SCHEMA_NAME(r.schema_id)), QUOTENAME(r.name)), CHAR(13))
             WITHIN GROUP (ORDER BY SCHEMA_NAME(r.schema_id), r.name)
         FROM sys.procedures r
         WHERE r.name LIKE 'test%'
@@ -14,8 +14,8 @@ BEGIN
         AND
         (
             @TestName IS NULL
-            OR QUOTENAME(SCHEMA_NAME(r.schema_id)) = @TestName
-            OR QUOTENAME(SCHEMA_NAME(r.schema_id)) + '.' + QUOTENAME(r.name) = @TestName
+            OR @TestName = QUOTENAME(SCHEMA_NAME(r.schema_id))
+            OR @testname = FORMATMESSAGE('%s.%s', QUOTENAME(SCHEMA_NAME(r.schema_id)), QUOTENAME(r.name))
         )
     );
 
