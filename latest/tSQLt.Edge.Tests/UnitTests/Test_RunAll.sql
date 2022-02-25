@@ -1,8 +1,11 @@
-CREATE PROCEDURE tSQLt.Internal_RunAll
+CREATE SCHEMA Test_RunAll;
+GO
+
+CREATE PROCEDURE Test_RunAll.Test_Internal
 AS
 BEGIN
     DECLARE @Command NVARCHAR(MAX);
-    
+/*
     SELECT @Command = STRING_AGG(CONVERT(NVARCHAR(MAX), FORMATMESSAGE('EXEC (''%s'');', REPLACE(command, '''', ''''''))), CHAR(13))
     FROM
     (
@@ -62,5 +65,6 @@ BEGIN
     ) B
 
     EXEC (@Command);
+*/
 END;
 GO

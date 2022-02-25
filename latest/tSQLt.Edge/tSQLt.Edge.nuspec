@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>tSQLt.Edge</id>
+    <title></title>
+    <authors>Krzysztof Strugiński</authors>
+		<description>tSQLt-compatible unit testing framework for Azure SQL Edge.</description>
+    <owners>cagrin</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="file">LICENSE</license>
+    <readme>README.md</readme>
+    <version>0</version>
+  </metadata>
+  <files>
+    <file src="./bin/Release/net6.0/tSQLt.Edge.dacpac" target="tools/" />
+		<file src="../../LICENS*" target=""/>
+    <file src="../../README.md" target=""/>
+  </files>
+</package>

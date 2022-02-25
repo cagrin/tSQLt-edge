@@ -2,7 +2,4 @@
     <PropertyGroup>
         <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
     </PropertyGroup>
-    <ItemGroup>
-        <ProjectReference Include="../tSQLt.API/tSQLt.API.csproj" />
-    </ItemGroup>
 </Project>
