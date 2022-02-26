@@ -1,4 +1,4 @@
-﻿CREATE SCHEMA [Test_Interfaces];
+CREATE SCHEMA [Test_Interfaces];
 GO
 
 CREATE PROCEDURE [Test_Interfaces].[Test_Assertions]
