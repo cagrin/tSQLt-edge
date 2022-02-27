@@ -22,6 +22,8 @@ BEGIN
         SELECT @ErrorMessage = ERROR_MESSAGE();
         SELECT @ErrorSeverity = ERROR_SEVERITY();
         SELECT @ErrorState = ERROR_STATE();
+
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 
     IF @TranCounter = 0
@@ -29,8 +31,5 @@ BEGIN
     ELSE
         IF XACT_STATE() <> -1
             ROLLBACK TRANSACTION TestName;
-
-    IF @@ERROR <> 0
-        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
 END;
 GO
