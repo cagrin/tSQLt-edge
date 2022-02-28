@@ -4,35 +4,23 @@ GO
 CREATE PROCEDURE Test_RunAll.Test_Interfaces
 AS
 BEGIN
-    DECLARE @Actual NVARCHAR(MAX);
-
-    SELECT @Actual = STRING_AGG(CONVERT(NVARCHAR(MAX), command),NCHAR(10))
-    FROM
+    DECLARE @Actual NVARCHAR(MAX) =
     (
         SELECT
-            command = FORMATMESSAGE
+            STRING_AGG
             (
-                'EXEC %s%s;',
-                spname,
-                STRING_AGG(pvalue, ',') WITHIN GROUP (ORDER BY parameter_id)
-            )
-        FROM
-        (
-            SELECT TOP (100) PERCENT
-                spname = FORMATMESSAGE('%s.%s', QUOTENAME(SCHEMA_NAME(r.schema_id)), QUOTENAME(r.name)),
-                pvalue = CASE WHEN p.name IS NOT NULL THEN FORMATMESSAGE(' %s', p.name) ELSE '' END,
-                p.parameter_id
-            FROM sys.procedures r
-            LEFT JOIN sys.parameters p
-            ON p.object_id = r.object_id
-            WHERE SCHEMA_NAME(r.schema_id) = 'tSQLt'
-            AND r.name NOT LIKE 'Internal[_]%'
-            AND r.name NOT LIKE 'Private[_]%'
-            AND r.name <> 'RunAll'
-            ORDER BY r.name, p.parameter_id
-        ) A
-        GROUP BY spname
-    ) B
+                FORMATMESSAGE('EXEC %s.%s %s;',
+                QUOTENAME(SCHEMA_NAME(schema_id)),
+                QUOTENAME(name),
+                tSQLt.Private_GetParameters(object_id)),
+                NCHAR(10)
+            ) WITHIN GROUP (ORDER BY name)
+        FROM sys.procedures
+        WHERE SCHEMA_NAME(schema_id) = 'tSQLt'
+        AND name NOT LIKE 'Internal[_]%'
+        AND name NOT LIKE 'Private[_]%'
+        AND name <> 'RunAll'
+    );
 
     DECLARE @Expected NVARCHAR(MAX) =
 'EXEC [tSQLt].[ApplyConstraint] @TableName, @ConstraintName, @SchemaName, @NoCascade;
