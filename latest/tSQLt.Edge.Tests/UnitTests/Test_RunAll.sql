@@ -51,3 +51,54 @@ EXEC [tSQLt].[SpyProcedure] @ProcedureName, @CommandToExecute;';
     EXEC tSQLt.AssertEqualsString @Expected, @Actual;
 END;
 GO
+
+CREATE PROCEDURE Test_RunAll.Test_InterfacesWithTypes
+AS
+BEGIN
+    DECLARE @Actual NVARCHAR(MAX) =
+    (
+        SELECT
+            STRING_AGG
+            (
+                FORMATMESSAGE('%s.%s %s;',
+                QUOTENAME(SCHEMA_NAME(schema_id)),
+                QUOTENAME(name),
+                tSQLt.Private_GetParametersWithTypes(object_id)),
+                NCHAR(10)
+            ) WITHIN GROUP (ORDER BY name)
+        FROM sys.procedures
+        WHERE SCHEMA_NAME(schema_id) = 'tSQLt'
+        AND name NOT LIKE 'Internal[_]%'
+        AND name NOT LIKE 'Private[_]%'
+        AND name <> 'RunAll'
+    );
+
+    DECLARE @Expected NVARCHAR(MAX) =
+'[tSQLt].[ApplyConstraint] @TableName nvarchar(max), @ConstraintName nvarchar(max), @SchemaName nvarchar(max), @NoCascade bit;
+[tSQLt].[ApplyTrigger] @TableName nvarchar(max), @TriggerName nvarchar(max);
+[tSQLt].[AssertEmptyTable] @TableName nvarchar(max), @Message nvarchar(max);
+[tSQLt].[AssertEquals] @Expected sql_variant, @Actual sql_variant, @Message nvarchar(max);
+[tSQLt].[AssertEqualsString] @Expected nvarchar(max), @Actual nvarchar(max), @Message nvarchar(max);
+[tSQLt].[AssertEqualsTable] @Expected nvarchar(max), @Actual nvarchar(max), @Message nvarchar(max), @FailMsg nvarchar(max);
+[tSQLt].[AssertEqualsTableSchema] @Expected nvarchar(max), @Actual nvarchar(max), @Message nvarchar(max);
+[tSQLt].[AssertLike] @ExpectedPattern nvarchar(max), @Actual nvarchar(max), @Message nvarchar(max);
+[tSQLt].[AssertNotEquals] @Expected sql_variant, @Actual sql_variant, @Message nvarchar(max);
+[tSQLt].[AssertObjectDoesNotExist] @ObjectName nvarchar(max), @Message nvarchar(max);
+[tSQLt].[AssertObjectExists] @ObjectName nvarchar(max), @Message nvarchar(max);
+[tSQLt].[AssertResultSetsHaveSameMetaData] @expectedCommand nvarchar(max), @actualCommand nvarchar(max);
+[tSQLt].[DropClass] @ClassName nvarchar(max);
+[tSQLt].[ExpectException] @ExpectedMessage nvarchar(max), @ExpectedSeverity int, @ExpectedState int, @Message nvarchar(max), @ExpectedMessagePattern nvarchar(max), @ExpectedErrorNumber int;
+[tSQLt].[ExpectNoException] @Message nvarchar(max);
+[tSQLt].[Fail] @Message0 nvarchar(max), @Message1 nvarchar(max), @Message2 nvarchar(max), @Message3 nvarchar(max), @Message4 nvarchar(max), @Message5 nvarchar(max), @Message6 nvarchar(max), @Message7 nvarchar(max), @Message8 nvarchar(max), @Message9 nvarchar(max);
+[tSQLt].[FakeFunction] @FunctionName nvarchar(max), @FakeFunctionName nvarchar(max), @FakeDataSource nvarchar(max);
+[tSQLt].[FakeTable] @TableName nvarchar(max), @SchemaName nvarchar(max), @Identity bit, @ComputedColumns bit, @Defaults bit;
+[tSQLt].[NewTestClass] @ClassName nvarchar(max);
+[tSQLt].[RemoveObject] @ObjectName nvarchar(max), @NewName nvarchar(max), @IfExists int;
+[tSQLt].[RemoveObjectIfExists] @ObjectName nvarchar(max), @NewName nvarchar(max);
+[tSQLt].[RenameClass] @SchemaName nvarchar(max), @NewSchemaName nvarchar(max);
+[tSQLt].[Run] @TestName nvarchar(max);
+[tSQLt].[SpyProcedure] @ProcedureName nvarchar(max), @CommandToExecute nvarchar(max);';
+
+    EXEC tSQLt.AssertEqualsString @Expected, @Actual;
+END;
+GO
