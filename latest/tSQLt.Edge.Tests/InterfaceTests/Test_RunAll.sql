@@ -84,8 +84,6 @@ BEGIN
         AND name <> 'RunAll'
     );
 
-    print @actual
-
     DECLARE @Expected NVARCHAR(MAX) =
 '[tSQLt].[ApplyConstraint] @TableName nvarchar(max), @ConstraintName nvarchar(max), @SchemaName nvarchar(max), @NoCascade bit;
 [tSQLt].[ApplyTrigger] @TableName nvarchar(max), @TriggerName nvarchar(max);

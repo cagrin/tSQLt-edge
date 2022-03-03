@@ -6,7 +6,7 @@ AS
 BEGIN
     IF NOT (@Expected = @Actual) OR NOT (@Expected IS NULL AND @Actual IS NULL)
     BEGIN
-        RETURN 0;
+        RETURN;
     END
     ELSE
     BEGIN
