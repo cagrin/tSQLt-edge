@@ -1,7 +1,7 @@
 CREATE FUNCTION tSQLt.Private_GetParameters (@ObjectId INT)
 RETURNS NVARCHAR(MAX) AS
 BEGIN
-    DECLARE @Result NVARCHAR(MAX) =
+    RETURN
     (
         SELECT
             STRING_AGG
@@ -12,7 +12,5 @@ BEGIN
         FROM sys.parameters
         WHERE object_id = @ObjectId
     );
-
-    RETURN ISNULL(@Result, '');
 END;
 GO

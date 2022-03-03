@@ -1,7 +1,7 @@
 CREATE FUNCTION tSQLt.Private_GetType (@TypeId INT, @Length INT, @Precision INT, @Scale INT, @CollationName NVARCHAR(MAX))
 RETURNS NVARCHAR(MAX) AS
 BEGIN
-    DECLARE @Result NVARCHAR(MAX) =
+    RETURN
     (
         SELECT
             CONCAT
@@ -17,7 +17,5 @@ BEGIN
                 END
             )
     );
-
-    RETURN ISNULL(@Result, '');
 END;
 GO

@@ -4,20 +4,44 @@ CREATE PROCEDURE tSQLt.Internal_SpyProcedure
 AS
 BEGIN
     DECLARE @ObjectId INT = OBJECT_ID(@ProcedureName);
+    DECLARE @Parameters NVARCHAR(MAX) = tSQLt.Private_GetParameters (@Objectid);
+    DECLARE @Columns NVARCHAR(MAX) = REPLACE(@Parameters, '@', '');
+    DECLARE @ParametersWithTypes NVARCHAR(MAX) = tSQLt.Private_GetParametersWithTypes (@Objectid);
+    DECLARE @ColumnsWithTypes NVARCHAR(MAX) = REPLACE(@ParametersWithTypes, '@', '');
+    DECLARE @LogTableName NVARCHAR(MAX) = CONCAT(QUOTENAME(OBJECT_SCHEMA_NAME(@ObjectId)), '.', QUOTENAME(CONCAT(OBJECT_NAME(@ObjectId), '_SpyProcedureLog')));
 
-    DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
+    DECLARE @InsertIntoLogTableCommand NVARCHAR(MAX) = CONCAT
+    (
+        'INSERT INTO ',
+        @LogTableName,
+        CASE WHEN @Columns IS NULL THEN ' DEFAULT VALUES' ELSE CONCAT(' (', @Columns, ') SELECT ', @Parameters) END,
+        ';'
+    );
+
+    DECLARE @CreateLogTableCommand NVARCHAR(MAX) = CONCAT_WS
+    (
+        ' ',
+        'CREATE TABLE',
+        @LogTableName,
+        '(_id_ int IDENTITY(1, 1) PRIMARY KEY CLUSTERED',
+        CASE WHEN @ColumnsWithTypes IS NULL THEN '' ELSE CONCAT(', ', @ColumnsWithTypes) END,
+        ');'
+    );
+
+    DECLARE @CreateProcedureCommand NVARCHAR(MAX) = CONCAT_WS
     (
         ' ',
         'CREATE PROCEDURE',
         @ProcedureName,
-        tSQLt.Private_GetParametersWithTypes (@Objectid),
+        @ParametersWithTypes,
         'AS BEGIN',
+        @InsertIntoLogTableCommand,
         @CommandToExecute,
         'RETURN; END;'
     );
 
     EXEC tSQLt.Private_RenameObject @ObjectId;
-
-    EXEC (@Command);
+    EXEC (@CreateLogTableCommand);
+    EXEC (@CreateProcedureCommand);
 END;
 GO
