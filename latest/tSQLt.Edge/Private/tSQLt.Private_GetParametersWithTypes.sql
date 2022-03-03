@@ -3,7 +3,7 @@ RETURNS NVARCHAR(MAX) AS
 BEGIN
     DECLARE @Result NVARCHAR(MAX) =
     (
-        SELECT STRING_AGG(name + ' ' + tSQLt.Private_GetType(user_type_id, max_length, precision, scale, NULL), ', ') WITHIN GROUP (ORDER BY parameter_id)
+        SELECT STRING_AGG(CONCAT(name, ' ', tSQLt.Private_GetType(user_type_id, max_length, precision, scale, NULL)), ', ') WITHIN GROUP (ORDER BY parameter_id)
         FROM sys.parameters
         WHERE object_id = @ObjectId
     );

@@ -5,12 +5,15 @@ AS
 BEGIN
     DECLARE @ObjectId INT = OBJECT_ID(@ProcedureName);
 
-    DECLARE @Command NVARCHAR(MAX) = FORMATMESSAGE
+    DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
     (
-        'CREATE PROCEDURE %s %s AS BEGIN %s RETURN; END;',
+        ' ',
+        'CREATE PROCEDURE',
         @ProcedureName,
         tSQLt.Private_GetParametersWithTypes (@Objectid),
-        ISNULL(@CommandToExecute + ';', '')
+        'AS BEGIN',
+        @CommandToExecute,
+        'RETURN; END;'
     );
 
     EXEC tSQLt.Private_RenameObject @ObjectId;
