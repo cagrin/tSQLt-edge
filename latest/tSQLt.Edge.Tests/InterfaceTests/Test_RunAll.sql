@@ -9,10 +9,16 @@ BEGIN
         SELECT
             STRING_AGG
             (
-                FORMATMESSAGE('EXEC %s.%s %s;',
-                QUOTENAME(SCHEMA_NAME(schema_id)),
-                QUOTENAME(name),
-                tSQLt.Private_GetParameters(object_id)),
+                CONCAT
+                (
+                    'EXEC ',
+                    QUOTENAME(SCHEMA_NAME(schema_id)),
+                    '.',
+                    QUOTENAME(name),
+                    ' ',
+                    tSQLt.Private_GetParameters(object_id),
+                    ';'
+                ),
                 NCHAR(10)
             ) WITHIN GROUP (ORDER BY name)
         FROM sys.procedures
@@ -60,10 +66,15 @@ BEGIN
         SELECT
             STRING_AGG
             (
-                FORMATMESSAGE('%s.%s %s;',
-                QUOTENAME(SCHEMA_NAME(schema_id)),
-                QUOTENAME(name),
-                tSQLt.Private_GetParametersWithTypes(object_id)),
+                CONCAT
+                (
+                    QUOTENAME(SCHEMA_NAME(schema_id)),
+                    '.',
+                    QUOTENAME(name),
+                    ' ',
+                    tSQLt.Private_GetParametersWithTypes(object_id),
+                    ';'
+                ),
                 NCHAR(10)
             ) WITHIN GROUP (ORDER BY name)
         FROM sys.procedures
@@ -72,6 +83,8 @@ BEGIN
         AND name NOT LIKE 'Private[_]%'
         AND name <> 'RunAll'
     );
+
+    print @actual
 
     DECLARE @Expected NVARCHAR(MAX) =
 '[tSQLt].[ApplyConstraint] @TableName nvarchar(max), @ConstraintName nvarchar(max), @SchemaName nvarchar(max), @NoCascade bit;

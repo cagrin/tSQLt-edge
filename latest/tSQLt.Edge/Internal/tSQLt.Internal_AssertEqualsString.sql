@@ -10,7 +10,14 @@ BEGIN
     END
     ELSE
     BEGIN
-        DECLARE @Failed NVARCHAR(MAX) = FORMATMESSAGE(N'tSQLt.AssertEqualsString failed. Expected:<%s>. Actual:<%s>.', @Expected, @Actual);
+        DECLARE @Failed NVARCHAR(MAX) = CONCAT
+        (
+            'tSQLt.AssertEqualsString failed. Expected:<',
+            ISNULL(@Expected, '(null)'),
+            '>. Actual:<',
+            ISNULL(@Actual, '(null)'),
+            '>.'
+        );
         EXEC tSQLt.Fail @Message0 = @Failed, @Message1 = @Message;
     END
 END;

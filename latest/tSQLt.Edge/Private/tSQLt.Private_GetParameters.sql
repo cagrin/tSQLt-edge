@@ -3,7 +3,12 @@ RETURNS NVARCHAR(MAX) AS
 BEGIN
     DECLARE @Result NVARCHAR(MAX) =
     (
-        SELECT STRING_AGG(name, ', ') WITHIN GROUP (ORDER BY parameter_id)
+        SELECT
+            STRING_AGG
+            (
+                name,
+                ', '
+            ) WITHIN GROUP (ORDER BY parameter_id)
         FROM sys.parameters
         WHERE object_id = @ObjectId
     );
