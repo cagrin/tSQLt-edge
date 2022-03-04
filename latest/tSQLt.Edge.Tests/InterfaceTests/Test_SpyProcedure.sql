@@ -33,17 +33,33 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE Test_SpyProcedure.Test_NewProcedureWithP1_P2_Output
+CREATE PROCEDURE Test_SpyProcedure.Test_NewProcedureWithP1_DefaultValue
 AS
 BEGIN
-    EXEC ('CREATE PROCEDURE dbo.NewProcedure @P1 char(1), @P2 int OUTPUT AS BEGIN RETURN; END;');
+    EXEC ('CREATE PROCEDURE dbo.NewProcedure @P1 int = 1 AS BEGIN RETURN; END;');
 
     EXEC tSQLt.SpyProcedure 'dbo.NewProcedure';
 
-    DECLARE @P2 int = 2;
-    EXEC dbo.NewProcedure @P1 = '1', @P2 = @P2 OUTPUT;
+    EXEC dbo.NewProcedure;
 
-    IF NOT EXISTS (SELECT 1 FROM dbo.NewProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = '1' AND P2 = 2)
+    IF NOT EXISTS (SELECT 1 FROM dbo.NewProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 IS NULL)
+    BEGIN
+        EXEC tSQLt.Fail 'dbo.NewProcedure_SpyProcedureLog should exists.';
+    END
+END;
+GO
+
+CREATE PROCEDURE Test_SpyProcedure.Test_NewProcedureWithP1_Output
+AS
+BEGIN
+    EXEC ('CREATE PROCEDURE dbo.NewProcedure @P1 int OUTPUT AS BEGIN RETURN; END;');
+
+    EXEC tSQLt.SpyProcedure 'dbo.NewProcedure';
+
+    DECLARE @P1 int = 1;
+    EXEC dbo.NewProcedure @P1 = @P1 OUTPUT;
+
+    IF NOT EXISTS (SELECT 1 FROM dbo.NewProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = 1)
     BEGIN
         EXEC tSQLt.Fail 'dbo.NewProcedure_SpyProcedureLog should exists.';
     END

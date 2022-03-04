@@ -6,7 +6,7 @@ BEGIN
     DECLARE @ObjectId INT = OBJECT_ID(@ProcedureName);
     DECLARE @Parameters NVARCHAR(MAX) = tSQLt.Private_GetParameters (@Objectid);
     DECLARE @Columns NVARCHAR(MAX) = tSQLt.Private_GetColumns (@Objectid);
-    DECLARE @ParametersWithTypes NVARCHAR(MAX) = tSQLt.Private_GetParametersWithTypes (@Objectid);
+    DECLARE @ParametersWithTypesDefaultNulls NVARCHAR(MAX) = tSQLt.Private_GetParametersWithTypesDefaultNulls (@Objectid);
     DECLARE @ColumnsWithTypes NVARCHAR(MAX) = tSQLt.Private_GetColumnsWithTypes (@Objectid);
     DECLARE @LogTableName NVARCHAR(MAX) = CONCAT(QUOTENAME(OBJECT_SCHEMA_NAME(@ObjectId)), '.', QUOTENAME(CONCAT(OBJECT_NAME(@ObjectId), '_SpyProcedureLog')));
 
@@ -33,7 +33,7 @@ BEGIN
         ' ',
         'CREATE PROCEDURE',
         @ProcedureName,
-        @ParametersWithTypes,
+        @ParametersWithTypesDefaultNulls,
         'AS BEGIN',
         @InsertIntoLogTableCommand,
         @CommandToExecute,

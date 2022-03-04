@@ -1,6 +1,8 @@
 <Project Sdk="MSBuild.Sdk.SqlProj/2.0.0">
     <PropertyGroup>
         <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+        <DropObjectsNotInSource>True</DropObjectsNotInSource>
+        <DoNotDropObjectTypes>Files</DoNotDropObjectTypes>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="../tSQLt.Edge/tSQLt.Edge.csproj" />
