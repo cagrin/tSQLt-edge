@@ -8,6 +8,6 @@
         <ProjectReference Include="..\Example\Example.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="tSQLt.Edge" Version="0.1.0" />
+        <PackageReference Include="tSQLt.Edge" Version="0.2.0" />
     </ItemGroup>
 </Project>
