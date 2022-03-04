@@ -5,9 +5,9 @@ AS
 BEGIN
     DECLARE @ObjectId INT = OBJECT_ID(@ProcedureName);
     DECLARE @Parameters NVARCHAR(MAX) = tSQLt.Private_GetParameters (@Objectid);
-    DECLARE @Columns NVARCHAR(MAX) = REPLACE(@Parameters, '@', '');
+    DECLARE @Columns NVARCHAR(MAX) = tSQLt.Private_GetColumns (@Objectid);
     DECLARE @ParametersWithTypes NVARCHAR(MAX) = tSQLt.Private_GetParametersWithTypes (@Objectid);
-    DECLARE @ColumnsWithTypes NVARCHAR(MAX) = REPLACE(@ParametersWithTypes, '@', '');
+    DECLARE @ColumnsWithTypes NVARCHAR(MAX) = tSQLt.Private_GetColumnsWithTypes (@Objectid);
     DECLARE @LogTableName NVARCHAR(MAX) = CONCAT(QUOTENAME(OBJECT_SCHEMA_NAME(@ObjectId)), '.', QUOTENAME(CONCAT(OBJECT_NAME(@ObjectId), '_SpyProcedureLog')));
 
     DECLARE @InsertIntoLogTableCommand NVARCHAR(MAX) = CONCAT

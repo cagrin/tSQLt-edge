@@ -8,9 +8,9 @@ BEGIN
 
     EXEC tSQLt.SpyProcedure 'dbo.NewProcedure';
 
-    EXEC ('EXEC dbo.NewProcedure');
+    EXEC dbo.NewProcedure;
 
-    IF OBJECT_ID ('dbo.NewProcedure_SpyProcedureLog', 'U') IS NULL
+    IF NOT EXISTS (SELECT 1 FROM dbo.NewProcedure_SpyProcedureLog WHERE _id_ = 1)
     BEGIN
         EXEC tSQLt.Fail 'dbo.NewProcedure_SpyProcedureLog should exists.';
     END
@@ -24,9 +24,26 @@ BEGIN
 
     EXEC tSQLt.SpyProcedure 'dbo.NewProcedure';
 
-    EXEC ('EXEC dbo.NewProcedure @P1 = 0;');
+    EXEC dbo.NewProcedure @P1 = 1;
 
-    IF OBJECT_ID ('dbo.NewProcedure_SpyProcedureLog', 'U') IS NULL
+    IF NOT EXISTS (SELECT 1 FROM dbo.NewProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = 1)
+    BEGIN
+        EXEC tSQLt.Fail 'dbo.NewProcedure_SpyProcedureLog should exists.';
+    END
+END;
+GO
+
+CREATE PROCEDURE Test_SpyProcedure.Test_NewProcedureWithP1_P2_Output
+AS
+BEGIN
+    EXEC ('CREATE PROCEDURE dbo.NewProcedure @P1 char(1), @P2 int OUTPUT AS BEGIN RETURN; END;');
+
+    EXEC tSQLt.SpyProcedure 'dbo.NewProcedure';
+
+    DECLARE @P2 int = 2;
+    EXEC dbo.NewProcedure @P1 = '1', @P2 = @P2 OUTPUT;
+
+    IF NOT EXISTS (SELECT 1 FROM dbo.NewProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = '1' AND P2 = 2)
     BEGIN
         EXEC tSQLt.Fail 'dbo.NewProcedure_SpyProcedureLog should exists.';
     END

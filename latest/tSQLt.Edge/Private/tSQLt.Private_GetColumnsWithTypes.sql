@@ -1,4 +1,4 @@
-CREATE FUNCTION tSQLt.Private_GetParametersWithTypes (@ObjectId INT)
+CREATE FUNCTION tSQLt.Private_GetColumnsWithTypes (@ObjectId INT)
 RETURNS NVARCHAR(MAX) AS
 BEGIN
     RETURN
@@ -9,9 +9,8 @@ BEGIN
                 CONCAT_WS
                 (
                     ' ',
-                    name,
-                    tSQLt.Private_GetType(user_type_id, max_length, precision, scale, NULL),
-                    CASE WHEN is_output = 1 THEN 'OUTPUT' ELSE NULL END
+                    REPLACE(name, '@', ''),
+                    tSQLt.Private_GetType(user_type_id, max_length, precision, scale, NULL)
                 ),
                 ', '
             ) WITHIN GROUP (ORDER BY parameter_id)
