@@ -25,3 +25,6 @@ jobs:
         run: |
           cd latest
           ./test.ps1
+          cd..
+          cd current
+          ./test.ps1
