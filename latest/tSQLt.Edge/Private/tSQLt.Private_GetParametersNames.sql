@@ -1,4 +1,4 @@
-CREATE FUNCTION tSQLt.Private_GetColumns (@ObjectId INT)
+CREATE FUNCTION tSQLt.Private_GetParametersNames (@ObjectId INT)
 RETURNS NVARCHAR(MAX) AS
 BEGIN
     RETURN
