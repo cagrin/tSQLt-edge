@@ -10,7 +10,7 @@ BEGIN
                 (
                     ' ',
                     name,
-                    tSQLt.Private_GetType(user_type_id, max_length, precision, scale, NULL),
+                    tSQLt.Private_GetType(user_type_id, max_length, precision, scale, collation_name),
                     CASE is_nullable WHEN 1 THEN 'NULL' ELSE 'NOT NULL' END
                 ),
                 ', '
