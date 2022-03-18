@@ -1,54 +1,66 @@
 CREATE SCHEMA Test_AssertEquals;
 GO
 
-CREATE PROCEDURE Test_AssertEquals.Test_HelloHallo
+CREATE PROCEDURE Test_AssertEquals.Test_Hello_Hello
 AS
 BEGIN
-    -- True
-    EXEC tSQLt.AssertEquals 'hallo', 'hallo';
-    EXEC tSQLt.AssertEquals NULL, NULL;
-
-    -- False
-    DECLARE @Expected NVARCHAR(MAX), @Actual NVARCHAR(MAX);
-    BEGIN TRY
-        EXEC tSQLt.AssertEquals 'hello', 'hallo';
-    END TRY
-    BEGIN CATCH
-        SELECT @Expected = 'tSQLt.AssertEquals failed. Expected:<hello>. Actual:<hallo>.', @Actual = ERROR_MESSAGE();
-        EXEC tSQLt.AssertEqualsString @Expected, @Actual;
-    END CATCH
-    BEGIN TRY
-        EXEC tSQLt.AssertEquals 'hello', NULL;
-    END TRY
-    BEGIN CATCH
-        SELECT @Expected = 'tSQLt.AssertEquals failed. Expected:<hello>. Actual:<(null)>.', @Actual = ERROR_MESSAGE();
-        EXEC tSQLt.AssertEqualsString @Expected, @Actual;
-    END CATCH
+    EXEC tSQLt.AssertEquals 'hello', 'hello';
 END;
 GO
 
-CREATE PROCEDURE Test_AssertEquals.Test_Numbers
+CREATE PROCEDURE Test_AssertEquals.Test_NULL_NULL
 AS
 BEGIN
-    -- True
-    EXEC tSQLt.AssertEquals 5, 5;
-    EXEC tSQLt.AssertEquals 3.14, 3.14;
+    EXEC tSQLt.AssertEquals NULL, NULL;
+END;
+GO
 
-    -- False
-    DECLARE @Expected NVARCHAR(MAX), @Actual NVARCHAR(MAX);
-    BEGIN TRY
-        EXEC tSQLt.AssertEquals 5, 6;
-    END TRY
-    BEGIN CATCH
-        SELECT @Expected = 'tSQLt.AssertEquals failed. Expected:<5>. Actual:<6>.', @Actual = ERROR_MESSAGE();
-        EXEC tSQLt.AssertEqualsString @Expected, @Actual;
-    END CATCH
-    BEGIN TRY
-        EXEC tSQLt.AssertEquals 3.14, 3.141;
-    END TRY
-    BEGIN CATCH
-        SELECT @Expected = 'tSQLt.AssertEquals failed. Expected:<3.14>. Actual:<3.141>.', @Actual = ERROR_MESSAGE();
-        EXEC tSQLt.AssertEqualsString @Expected, @Actual;
-    END CATCH
+CREATE PROCEDURE Test_AssertEquals.Test_Hello_Hallo
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'tSQLt.AssertEquals failed. Expected:<hello>. Actual:<hallo>.';
+
+    EXEC tSQLt.AssertEquals 'hello', 'hallo';
+END;
+GO
+
+CREATE PROCEDURE Test_AssertEquals.Test_Hello_NULL
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'tSQLt.AssertEquals failed. Expected:<hello>. Actual:<(null)>.';
+
+    EXEC tSQLt.AssertEquals 'hello', NULL;
+END;
+GO
+
+CREATE PROCEDURE Test_AssertEquals.Test_5_5
+AS
+BEGIN
+    EXEC tSQLt.AssertEquals 5, 5;
+END;
+GO
+
+CREATE PROCEDURE Test_AssertEquals.Test_Pi_Pi
+AS
+BEGIN
+    EXEC tSQLt.AssertEquals 3.14, 3.14;
+END;
+GO
+
+CREATE PROCEDURE Test_AssertEquals.Test_5_6
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'tSQLt.AssertEquals failed. Expected:<5>. Actual:<6>.';
+
+    EXEC tSQLt.AssertEquals 5, 6;
+END;
+GO
+
+CREATE PROCEDURE Test_AssertEquals.Test_Pi_Pi1
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'tSQLt.AssertEquals failed. Expected:<3.14>. Actual:<3.141>.';
+
+    EXEC tSQLt.AssertEquals 3.14, 3.141;
 END;
 GO

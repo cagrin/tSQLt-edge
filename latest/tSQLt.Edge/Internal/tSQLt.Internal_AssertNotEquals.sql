@@ -4,7 +4,7 @@ CREATE PROCEDURE tSQLt.Internal_AssertNotEquals
     @Message NVARCHAR(MAX) = ''
 AS
 BEGIN
-    IF NOT (@Expected = @Actual) OR NOT (@Expected IS NULL AND @Actual IS NULL)
+    IF (@Expected <> @Actual) OR (@Expected IS NULL AND @Actual IS NOT NULL) OR (@Expected IS NOT NULL AND @Actual IS NULL)
     BEGIN
         RETURN;
     END
