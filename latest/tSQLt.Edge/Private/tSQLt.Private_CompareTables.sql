@@ -4,11 +4,13 @@ CREATE PROCEDURE tSQLt.Private_CompareTables
     @Diffs INT OUTPUT
 AS
 BEGIN
+    DECLARE @ColumnsNames NVARCHAR(MAX) = tSQLt.Private_GetColumnsNames(OBJECT_ID(@Expected));
+
     DECLARE @DiffsCommand NVARCHAR(MAX) = CONCAT_WS
     (
         ' ',
-        'SELECT _row_ = ROW_NUMBER() OVER(ORDER BY (SELECT 1)), * INTO #Expected FROM', @Expected,
-        'SELECT _row_ = ROW_NUMBER() OVER(ORDER BY (SELECT 1)), * INTO #Actual FROM', @Actual,
+        'SELECT _row_ = ROW_NUMBER() OVER(ORDER BY', @ColumnsNames, '), * INTO #Expected FROM', @Expected,
+        'SELECT _row_ = ROW_NUMBER() OVER(ORDER BY', @ColumnsNames, '), * INTO #Actual FROM', @Actual,
         'SELECT @Diffs = COUNT(1) FROM',
         '(',
             '(',
