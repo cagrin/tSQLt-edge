@@ -4,31 +4,27 @@ CREATE PROCEDURE tSQLt.Private_CompareTables
     @Diffs INT OUTPUT
 AS
 BEGIN
-    DECLARE @ExpectedSelect NVARCHAR(MAX) = CONCAT_WS
-    (
-        ' ',
-        'SELECT * FROM',
-        @Expected
-    );
-
-    DECLARE @ActualSelect NVARCHAR(MAX) = CONCAT_WS
-    (
-        ' ',
-        'SELECT * FROM',
-        @Actual
-    );
-
     DECLARE @DiffsCommand NVARCHAR(MAX) = CONCAT_WS
     (
         ' ',
-        'SELECT @Diffs = COUNT(*) FROM',
+        'SELECT _row_ = ROW_NUMBER() OVER(ORDER BY (SELECT 1)), * INTO #Expected FROM', @Expected,
+        'SELECT _row_ = ROW_NUMBER() OVER(ORDER BY (SELECT 1)), * INTO #Actual FROM', @Actual,
+        'SELECT @Diffs = COUNT(1) FROM',
         '(',
-            '(', @ExpectedSelect, 'EXCEPT', @ActualSelect, ')',
+            '(',
+                'SELECT * FROM #Expected',
+                'EXCEPT',
+                'SELECT * FROM #Actual',
+            ')',
             'UNION ALL',
-            '(', @ActualSelect, 'EXCEPT', @ExpectedSelect, ')',
+            '(',
+                'SELECT * FROM #Actual',
+                'EXCEPT',
+                'SELECT * FROM #Expected',
+            ')',
         ') A'
     );
 
-    EXEC sp_executesql @DiffsCommand, N'@Diffs INT OUTPUT', @Diffs OUTPUT
+    EXEC sys.sp_executesql @DiffsCommand, N'@Diffs INT OUTPUT', @Diffs OUTPUT
 END;
 GO
