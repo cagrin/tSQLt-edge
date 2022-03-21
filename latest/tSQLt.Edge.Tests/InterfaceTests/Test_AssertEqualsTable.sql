@@ -120,3 +120,13 @@ BEGIN
     EXEC tSQLt.AssertEqualsTable 'dbo.TestTable1', 'dbo.TestTable2';
 END;
 GO
+
+CREATE PROCEDURE Test_AssertEqualsTable.Test_TempTables
+AS
+BEGIN
+    CREATE TABLE #TestTable1 (Column1 INT);
+    CREATE TABLE #TestTable2 (Column1 INT);
+
+    EXEC tSQLt.AssertEqualsTable '#TestTable1', '#TestTable2';
+END;
+GO

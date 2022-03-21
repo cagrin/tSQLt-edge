@@ -4,11 +4,9 @@ CREATE PROCEDURE tSQLt.Internal_AssertEqualsTableSchema
     @Message NVARCHAR(MAX) = NULL
 AS
 BEGIN
-    DECLARE @ExpectedObjectId INT = OBJECT_ID(@Expected);
-    DECLARE @ExpectedColumns NVARCHAR(MAX) = tSQLt.Private_GetColumns (@ExpectedObjectId);
+    DECLARE @ExpectedColumns NVARCHAR(MAX) = tSQLt.Private_GetColumns (@Expected);
 
-    DECLARE @ActualObjectId INT = OBJECT_ID(@Actual);
-    DECLARE @ActualColumns NVARCHAR(MAX) = tSQLt.Private_GetColumns (@ActualObjectId);
+    DECLARE @ActualColumns NVARCHAR(MAX) = tSQLt.Private_GetColumns (@Actual);
 
     IF (@ExpectedColumns = @ActualColumns)
     BEGIN

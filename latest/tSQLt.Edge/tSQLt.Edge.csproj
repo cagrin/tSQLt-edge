@@ -1,5 +1,5 @@
 <Project Sdk="MSBuild.Sdk.SqlProj/2.0.0">
     <PropertyGroup>
-        <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+        <SuppressTSqlWarnings>71502,71562</SuppressTSqlWarnings>
     </PropertyGroup>
 </Project>

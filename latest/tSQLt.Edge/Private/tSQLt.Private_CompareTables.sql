@@ -4,7 +4,7 @@ CREATE PROCEDURE tSQLt.Private_CompareTables
     @Diffs INT OUTPUT
 AS
 BEGIN
-    DECLARE @ColumnsNames NVARCHAR(MAX) = tSQLt.Private_GetColumnsNames(OBJECT_ID(@Expected));
+    DECLARE @ColumnsNames NVARCHAR(MAX) = tSQLt.Private_GetColumnsNames(@Expected);
 
     DECLARE @DiffsCommand NVARCHAR(MAX) = CONCAT_WS
     (
