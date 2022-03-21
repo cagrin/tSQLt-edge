@@ -3,6 +3,19 @@ CREATE PROCEDURE tSQLt.Internal_AssertObjectExists
     @Message NVARCHAR(MAX) = ''
 AS
 BEGIN
-    PRINT CONCAT_WS(' ', '- tSQLt.AssertObjectExists', @ObjectName, @Message);
+    IF (OBJECT_ID(@ObjectName) IS NOT NULL) OR (OBJECT_ID(CONCAT('tempdb..', @ObjectName)) IS NOT NULL)
+    BEGIN
+        RETURN;
+    END
+    ELSE
+    BEGIN
+        DECLARE @Failed NVARCHAR(MAX) = CONCAT
+        (
+            'tSQLt.AssertObjectExists failed. Object:<',
+            ISNULL(CONVERT(NVARCHAR(MAX), @ObjectName), '(null)'),
+            '> does not exist.'
+        );
+        EXEC tSQLt.Fail @Message0 = @Failed, @Message1 = @Message;
+    END
 END;
 GO
