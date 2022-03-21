@@ -94,3 +94,29 @@ BEGIN
     EXEC tSQLt.AssertEqualsTable 'dbo.TestTable1', 'dbo.TestTable2';
 END;
 GO
+
+CREATE PROCEDURE Test_AssertEqualsTable.Test_TwoColumnsTwoRows
+AS
+BEGIN
+    CREATE TABLE dbo.TestTable1 (Column1 BIGINT, Column2 CHAR(3));
+    CREATE TABLE dbo.TestTable2 (Column1 INT, Column2 VARCHAR(3));
+    INSERT INTO dbo.TestTable1 VALUES (1, 'ABC');
+    INSERT INTO dbo.TestTable1 VALUES (2, 'XYZ');
+    INSERT INTO dbo.TestTable2 VALUES (1, 'ABC');
+    INSERT INTO dbo.TestTable2 VALUES (2, 'XYZ');
+
+    EXEC tSQLt.AssertEqualsTable 'dbo.TestTable1', 'dbo.TestTable2';
+END;
+GO
+
+CREATE PROCEDURE Test_AssertEqualsTable.Test_TwoColumnsTwoNulls
+AS
+BEGIN
+    CREATE TABLE dbo.TestTable1 (Column1 BIGINT, Column2 CHAR(3));
+    CREATE TABLE dbo.TestTable2 (Column1 INT, Column2 VARCHAR(3));
+    INSERT INTO dbo.TestTable1 VALUES (NULL, NULL);
+    INSERT INTO dbo.TestTable2 VALUES (NULL, NULL);
+
+    EXEC tSQLt.AssertEqualsTable 'dbo.TestTable1', 'dbo.TestTable2';
+END;
+GO
