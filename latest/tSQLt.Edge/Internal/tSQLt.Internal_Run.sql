@@ -9,6 +9,7 @@ BEGIN
             (
                 CONCAT
                 (
+                    CAST('' AS NVARCHAR(MAX)),
                     'EXEC tSQLt.Private_Run @TestName = ''',
                     QUOTENAME(SCHEMA_NAME(r.schema_id)),
                     '.',
