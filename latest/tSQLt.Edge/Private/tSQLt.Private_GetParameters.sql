@@ -9,8 +9,7 @@ BEGIN
                 name,
                 ', '
             ) WITHIN GROUP (ORDER BY parameter_id)
-        FROM sys.parameters
-        WHERE object_id = @ObjectId
+        FROM tSQLt.System_Parameters(@ObjectId)
     );
 END;
 GO

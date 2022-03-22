@@ -19,6 +19,7 @@ RETURNS @Interfaces TABLE
 	[skips_repl_constraints] [bit] NULL
 ) AS
 BEGIN
+	INSERT INTO @Interfaces
     SELECT * FROM sys.procedures
     WHERE SCHEMA_NAME(schema_id) = 'tSQLt'
     AND name NOT LIKE 'Internal[_]%'
