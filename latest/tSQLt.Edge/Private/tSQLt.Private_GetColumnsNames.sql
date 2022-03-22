@@ -1,4 +1,4 @@
-CREATE FUNCTION tSQLt.Private_GetColumnsNames (@TableName NVARCHAR(MAX))
+CREATE FUNCTION tSQLt.Private_GetColumnsNames (@ObjectName NVARCHAR(MAX))
 RETURNS NVARCHAR(MAX) AS
 BEGIN
     RETURN
@@ -9,14 +9,7 @@ BEGIN
                 QUOTENAME(name),
                 ', '
             ) WITHIN GROUP (ORDER BY column_id)
-        FROM
-        (
-            SELECT * FROM sys.columns
-            WHERE object_id = OBJECT_ID(@TableName)
-            UNION ALL
-            SELECT * FROM tempdb.sys.columns
-            WHERE object_id = OBJECT_ID(CONCAT('tempdb..', @TableName))
-        ) A
+        FROM tSQLt.System_Columns(@ObjectName)
     );
 END;
 GO
