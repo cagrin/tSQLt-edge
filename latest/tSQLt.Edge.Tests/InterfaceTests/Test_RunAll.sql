@@ -21,11 +21,7 @@ BEGIN
                 ),
                 NCHAR(10)
             ) WITHIN GROUP (ORDER BY name)
-        FROM sys.procedures
-        WHERE SCHEMA_NAME(schema_id) = 'tSQLt'
-        AND name NOT LIKE 'Internal[_]%'
-        AND name NOT LIKE 'Private[_]%'
-        AND name <> 'RunAll'
+        FROM tSQLt.System_Interfaces()
     );
 
     DECLARE @Expected NVARCHAR(MAX) =
@@ -77,11 +73,7 @@ BEGIN
                 ),
                 NCHAR(10)
             ) WITHIN GROUP (ORDER BY name)
-        FROM sys.procedures
-        WHERE SCHEMA_NAME(schema_id) = 'tSQLt'
-        AND name NOT LIKE 'Internal[_]%'
-        AND name NOT LIKE 'Private[_]%'
-        AND name <> 'RunAll'
+        FROM tSQLt.System_Interfaces()
     );
 
     DECLARE @Expected NVARCHAR(MAX) =
