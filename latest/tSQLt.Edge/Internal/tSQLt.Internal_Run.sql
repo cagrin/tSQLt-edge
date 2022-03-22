@@ -11,24 +11,13 @@ BEGIN
                 (
                     CAST('' AS NVARCHAR(MAX)),
                     'EXEC tSQLt.Private_Run @TestName = ''',
-                    QUOTENAME(SCHEMA_NAME(r.schema_id)),
-                    '.',
-                    QUOTENAME(r.name),
+                    TestName,
                     ''';'
                 ),
                 NCHAR(10)
             )
-            WITHIN GROUP (ORDER BY SCHEMA_NAME(r.schema_id), r.name)
-        FROM sys.procedures r
-        WHERE r.name LIKE 'test%'
-        AND SCHEMA_NAME(r.schema_id) <> 'tSQLt'
-        AND NOT EXISTS (SELECT 1 FROM sys.parameters p WHERE p.object_id = r.object_id)
-        AND
-        (
-            @TestName IS NULL
-            OR @TestName = QUOTENAME(SCHEMA_NAME(r.schema_id))
-            OR @Testname = CONCAT(QUOTENAME(SCHEMA_NAME(r.schema_id)), '.', QUOTENAME(r.name))
-        )
+            WITHIN GROUP (ORDER BY TestName)
+        FROM tSQLt.Private_FindTestNames(@TestName)
     );
 
     EXEC (@Command);
