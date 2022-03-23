@@ -2,6 +2,7 @@ CREATE PROCEDURE tSQLt.Internal_ExpectNoException
     @Message NVARCHAR(MAX) = NULL
 AS
 BEGIN
-    PRINT CONCAT_WS(' ', '- tSQLt.ExpectNoException', @Message);
+    INSERT INTO #ExpectException (ExpectException, Message)
+    SELECT 0, @Message;
 END;
 GO

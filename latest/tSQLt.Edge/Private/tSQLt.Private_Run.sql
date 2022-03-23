@@ -8,7 +8,8 @@ BEGIN
     DECLARE @ErrorState INT;
 
     DECLARE @ExpectedMessage NVARCHAR(MAX);
-    CREATE TABLE #ExpectException (ExpectedMessage NVARCHAR(MAX));
+    DECLARE @Message NVARCHAR(MAX);
+    CREATE TABLE #ExpectException (ExpectException BIT NOT NULL, ExpectedMessage NVARCHAR(MAX), [Message] NVARCHAR(MAX));
 
     -- https://docs.microsoft.com/en-us/sql/t-sql/language-elements/save-transaction-transact-sql?view=sql-server-ver15
     SET @TranCounter = @@TRANCOUNT;
@@ -27,14 +28,14 @@ BEGIN
         SELECT @ErrorState = ERROR_STATE();
     END CATCH
 
-    IF EXISTS (SELECT 1 FROM #ExpectException)
+    IF EXISTS (SELECT 1 FROM #ExpectException WHERE ExpectException = 1)
     BEGIN
-        SELECT @ExpectedMessage = ExpectedMessage FROM #ExpectException;
+        SELECT @ExpectedMessage = ExpectedMessage, @Message = Message FROM #ExpectException WHERE ExpectException = 1;
 
         IF @ErrorMessage IS NOT NULL
             EXEC tSQLt.AssertEqualsString @ExpectedMessage, @ErrorMessage;
         ELSE
-            EXEC tSQLt.Fail 'Expected an exception to be raised. ExpectedMessage:', @ExpectedMessage;
+            EXEC tSQLt.Fail @Message, 'Expected an exception to be raised. ExpectedMessage:', @ExpectedMessage;
 
         SET @ErrorMessage = NULL;
     END
@@ -46,6 +47,6 @@ BEGIN
             ROLLBACK TRANSACTION TestName;
 
     IF @ErrorMessage IS NOT NULL
-        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+        RAISERROR(N'%s', @ErrorSeverity, @ErrorState, @ErrorMessage);
 END;
 GO
