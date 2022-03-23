@@ -4,6 +4,21 @@ CREATE PROCEDURE tSQLt.Internal_AssertLike
     @Message NVARCHAR(MAX) = ''
 AS
 BEGIN
-    PRINT CONCAT_WS(' ', '- tSQLt.AssertLike', @ExpectedPattern, @Actual, @Message);
+    IF (@Actual LIKE @ExpectedPattern) OR (@Actual IS NULL AND @ExpectedPattern IS NULL)
+    BEGIN
+        RETURN;
+    END
+    ELSE
+    BEGIN
+        DECLARE @Failed NVARCHAR(MAX) = CONCAT
+        (
+            'tSQLt.AssertLike failed. ExpectedPattern:<',
+            ISNULL(CONVERT(NVARCHAR(MAX), @ExpectedPattern), '(null)'),
+            '> but Actual:<',
+            ISNULL(CONVERT(NVARCHAR(MAX), @Actual), '(null)'),
+            '>.'
+        );
+        EXEC tSQLt.Fail @Message, @Failed;
+    END
 END;
 GO
