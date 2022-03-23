@@ -17,20 +17,11 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE Test_ExpectNoException.Fail_FailSelect
-AS
-BEGIN
-    EXEC tSQLt.ExpectNoException;
-
-    SELECT 1/0 A INTO #Fail;
-END;
-GO
-
 CREATE PROCEDURE Test_ExpectNoException.Test_FailSelect
 AS
 BEGIN
-    EXEC Test_Extensions.AssertTestFails
-        @TestName = 'Test_ExpectNoException.Fail_FailSelect',
+    EXEC Test_Extensions.AssertCommandFails
+        @Command = 'EXEC tSQLt.ExpectNoException; SELECT 1/0 A INTO #Fail;',
         @ExpectedMessage = 'Expected no exception to be raised. ErrorMessage:<Divide by zero error encountered.>.';
 END;
 GO
