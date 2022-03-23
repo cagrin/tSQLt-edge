@@ -8,7 +8,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE Test_ExpectNoException.Private_GoodSelect
+CREATE PROCEDURE Test_ExpectNoException.Test_GoodSelect
 AS
 BEGIN
     EXEC tSQLt.ExpectNoException;
@@ -17,7 +17,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE Test_ExpectNoException.Private_FailSelect
+CREATE PROCEDURE Test_ExpectNoException.Fail_FailSelect
 AS
 BEGIN
     EXEC tSQLt.ExpectNoException;
@@ -29,12 +29,8 @@ GO
 CREATE PROCEDURE Test_ExpectNoException.Test_FailSelect
 AS
 BEGIN
-    BEGIN TRY
-        EXEC tSQLt.Private_Run 'Test_ExpectNoException.Private_FailSelect';
-    END TRY
-    BEGIN CATCH
-        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
-        EXEC tSQLt.AssertEqualsString 'Expected no exception to be raised. ErrorMessage:<Divide by zero error encountered.>.', @ErrorMessage;
-    END CATCH
+    EXEC Test_Extensions.AssertTestFails
+        @TestName = 'Test_ExpectNoException.Fail_FailSelect',
+        @ExpectedMessage = 'Expected no exception to be raised. ErrorMessage:<Divide by zero error encountered.>.';
 END;
 GO

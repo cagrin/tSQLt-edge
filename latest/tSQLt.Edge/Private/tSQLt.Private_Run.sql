@@ -35,6 +35,6 @@ BEGIN
             ROLLBACK TRANSACTION TestName;
 
     IF @ErrorMessage IS NOT NULL
-        RAISERROR(N'%s', @ErrorSeverity, @ErrorState, @ErrorMessage);
+        RAISERROR(N'%s', 16, 10, @ErrorMessage);
 END;
 GO

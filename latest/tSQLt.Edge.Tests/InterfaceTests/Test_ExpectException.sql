@@ -1,7 +1,7 @@
 CREATE SCHEMA Test_ExpectException;
 GO
 
-CREATE PROCEDURE Test_ExpectException.Private_EmptyExec
+CREATE PROCEDURE Test_ExpectException.Fail_EmptyExec
 AS
 BEGIN
     EXEC tSQLt.ExpectException;
@@ -11,17 +11,13 @@ GO
 CREATE PROCEDURE Test_ExpectException.Test_EmptyExec
 AS
 BEGIN
-    BEGIN TRY
-        EXEC tSQLt.Private_Run 'Test_ExpectException.Private_EmptyExec';
-    END TRY
-    BEGIN CATCH
-        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
-        EXEC tSQLt.AssertEqualsString 'Expected an exception to be raised. ExpectedMessage: (null)', @ErrorMessage;
-    END CATCH
+    EXEC Test_Extensions.AssertTestFails
+        @TestName = 'Test_ExpectException.Fail_EmptyExec',
+        @ExpectedMessage = 'Expected an exception to be raised. ExpectedMessage:<(null)>.';
 END;
 GO
 
-CREATE PROCEDURE Test_ExpectException.Private_GoodSelect
+CREATE PROCEDURE Test_ExpectException.Fail_GoodSelect
 AS
 BEGIN
     EXEC tSQLt.ExpectException 'Error message.';
@@ -33,13 +29,9 @@ GO
 CREATE PROCEDURE Test_ExpectException.Test_GoodSelect
 AS
 BEGIN
-    BEGIN TRY
-        EXEC tSQLt.Private_Run 'Test_ExpectException.Private_GoodSelect';
-    END TRY
-    BEGIN CATCH
-        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
-        EXEC tSQLt.AssertEqualsString 'Expected an exception to be raised. ExpectedMessage:<Error message.>.', @ErrorMessage;
-    END CATCH
+    EXEC Test_Extensions.AssertTestFails
+        @TestName = 'Test_ExpectException.Fail_GoodSelect',
+        @ExpectedMessage = 'Expected an exception to be raised. ExpectedMessage:<Error message.>.';
 END;
 GO
 
@@ -52,7 +44,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE Test_ExpectException.Private_BadErrorMessage
+CREATE PROCEDURE Test_ExpectException.Fail_BadErrorMessage
 AS
 BEGIN
     EXEC tSQLt.ExpectException 'Bad error message.';
@@ -64,12 +56,8 @@ GO
 CREATE PROCEDURE Test_ExpectException.Test_BadErrorMessage
 AS
 BEGIN
-    BEGIN TRY
-        EXEC tSQLt.Private_Run 'Test_ExpectException.Private_BadErrorMessage';
-    END TRY
-    BEGIN CATCH
-        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
-        EXEC tSQLt.AssertEqualsString 'Expected an exception to be raised. ExpectedMessage:<Bad error message.>. ActualMessage:<Divide by zero error encountered.>.', @ErrorMessage;
-    END CATCH
+    EXEC Test_Extensions.AssertTestFails
+        @TestName = 'Test_ExpectException.Fail_BadErrorMessage',
+        @ExpectedMessage = 'Expected an exception to be raised. ExpectedMessage:<Bad error message.>. ActualMessage:<Divide by zero error encountered.>.';
 END;
 GO
