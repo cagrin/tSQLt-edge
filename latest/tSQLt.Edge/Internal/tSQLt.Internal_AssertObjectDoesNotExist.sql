@@ -15,7 +15,7 @@ BEGIN
             ISNULL(CONVERT(NVARCHAR(MAX), @ObjectName), '(null)'),
             '> does exist.'
         );
-        EXEC tSQLt.Fail @Message0 = @Failed, @Message1 = @Message;
+        EXEC tSQLt.Fail @Message, @Failed;
     END
 END;
 GO

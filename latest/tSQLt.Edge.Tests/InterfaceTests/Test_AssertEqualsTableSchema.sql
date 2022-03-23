@@ -23,6 +23,18 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE Test_AssertEqualsTableSchema.Test_ErrorMessage
+AS
+BEGIN
+    CREATE TABLE dbo.TestTable1 (Column1 INT);
+    CREATE TABLE dbo.TestTable2 (Column2 INT);
+
+    EXEC tSQLt.ExpectException 'Error message. tSQLt.AssertEqualsTableSchema failed. Expected:<[Column1] int NULL>. Actual:<[Column2] int NULL>.';
+
+    EXEC tSQLt.AssertEqualsTableSchema 'dbo.TestTable1', 'dbo.TestTable2', 'Error message.';
+END;
+GO
+
 CREATE PROCEDURE Test_AssertEqualsTableSchema.Test_DifferentColumnNullable
 AS
 BEGIN

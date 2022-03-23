@@ -18,7 +18,7 @@ BEGIN
             @Actual,
             '>.'
         );
-        EXEC tSQLt.Fail @Message0 = @Failed;
+        EXEC tSQLt.Fail @Message, @Failed;
     END
 END;
 GO

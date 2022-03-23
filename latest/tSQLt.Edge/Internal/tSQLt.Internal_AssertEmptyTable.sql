@@ -17,7 +17,7 @@ BEGIN
             @TableName,
             '> is not empty.'
         );
-        EXEC tSQLt.Fail @Message0 = @Failed;
+        EXEC tSQLt.Fail @Message, @Failed;
     END
 END;
 GO

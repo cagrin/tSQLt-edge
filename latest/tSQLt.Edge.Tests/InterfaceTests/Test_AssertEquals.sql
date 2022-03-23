@@ -24,6 +24,15 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE Test_AssertEquals.Test_ErrorMessage
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'Error message. tSQLt.AssertEquals failed. Expected:<hello>. Actual:<hallo>.';
+
+    EXEC tSQLt.AssertEquals 'hello', 'hallo', 'Error message.';
+END;
+GO
+
 CREATE PROCEDURE Test_AssertEquals.Test_Hello_NULL
 AS
 BEGIN

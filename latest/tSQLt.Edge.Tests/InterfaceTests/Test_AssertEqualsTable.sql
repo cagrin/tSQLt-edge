@@ -36,6 +36,19 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE Test_AssertEqualsTable.Test_ErrorMessage
+AS
+BEGIN
+    CREATE TABLE dbo.TestTable1 (Column1 INT);
+    CREATE TABLE dbo.TestTable2 (Column1 INT);
+    INSERT INTO dbo.TestTable1 (Column1) VALUES (1);
+
+    EXEC tSQLt.ExpectException 'Error message. tSQLt.AssertEqualsTable failed. Expected:<dbo.TestTable1> has different rowset than Actual:<dbo.TestTable2>.';
+
+    EXEC tSQLt.AssertEqualsTable 'dbo.TestTable1', 'dbo.TestTable2', 'Error message.';
+END;
+GO
+
 CREATE PROCEDURE Test_AssertEqualsTable.Test_SecondTableIsNotEmpty
 AS
 BEGIN

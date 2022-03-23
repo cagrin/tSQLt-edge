@@ -11,6 +11,20 @@ CREATE PROCEDURE tSQLt.Internal_Fail
     @Message9 NVARCHAR(MAX) = ''
 AS
 BEGIN
-    RAISERROR(N'%s %s %s %s %s %s %s %s %s %s', 16, 10, @Message0, @Message1, @Message2, @Message3, @Message4, @Message5, @Message6, @Message7, @Message8, @Message9);
+    DECLARE @ErrorMessage NVARCHAR(MAX) = CONCAT_WS
+    (
+        ' ',
+        NULLIF(@Message0, ''),
+        NULLIF(@Message1, ''),
+        NULLIF(@Message2, ''),
+        NULLIF(@Message3, ''),
+        NULLIF(@Message4, ''),
+        NULLIF(@Message5, ''),
+        NULLIF(@Message6, ''),
+        NULLIF(@Message7, ''),
+        NULLIF(@Message8, ''),
+        NULLIF(@Message9, '')
+    );
+    RAISERROR(@ErrorMessage, 16, 10);
 END;
 GO

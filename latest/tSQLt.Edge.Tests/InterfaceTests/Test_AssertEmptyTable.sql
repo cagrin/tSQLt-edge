@@ -58,6 +58,18 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE Test_AssertEmptyTable.Test_ErrorMessage
+AS
+BEGIN
+    CREATE TABLE dbo.TestTable1 (Column1 INT);
+    INSERT INTO dbo.TestTable1 (Column1) VALUES (1);
+
+    EXEC tSQLt.ExpectException 'Error message. tSQLt.AssertEmptyTable failed. Expected:<dbo.TestTable1> is not empty.';
+
+    EXEC tSQLt.AssertEmptyTable 'dbo.TestTable1', 'Error message.';
+END;
+GO
+
 CREATE PROCEDURE Test_AssertEmptyTable.Test_NonEmptyTempTable
 AS
 BEGIN

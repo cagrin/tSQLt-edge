@@ -22,7 +22,7 @@ BEGIN
             ISNULL(@ActualColumns, '(null)'),
             '>.'
         );
-        EXEC tSQLt.Fail @Message0 = @Failed;
+        EXEC tSQLt.Fail @Message, @Failed;
     END
 END;
 GO

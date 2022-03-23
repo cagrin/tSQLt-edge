@@ -18,7 +18,7 @@ BEGIN
             ISNULL(CONVERT(NVARCHAR(MAX), @Actual), '(null)'),
             '>.'
         );
-        EXEC tSQLt.Fail @Message0 = @Failed, @Message1 = @Message;
+        EXEC tSQLt.Fail @Message, @Failed;
     END
 END;
 GO

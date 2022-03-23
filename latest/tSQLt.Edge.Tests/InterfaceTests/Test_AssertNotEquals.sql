@@ -24,6 +24,15 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE Test_AssertNotEquals.Test_ErrorMessage
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'Error message. tSQLt.AssertNotEquals failed. Expected any value except:<hello>. Actual:<hello>.';
+
+    EXEC tSQLt.AssertNotEquals 'hello', 'hello', 'Error message.';
+END;
+GO
+
 CREATE PROCEDURE Test_AssertNotEquals.Test_NULL_NULL
 AS
 BEGIN

@@ -26,6 +26,17 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE Test_AssertObjectDoesNotExist.Test_ErrorMessage
+AS
+BEGIN
+    CREATE TABLE dbo.TestTable1 (Column1 INT);
+
+    EXEC tSQLt.ExpectException 'Error message. tSQLt.AssertObjectDoesNotExist failed. Object:<dbo.TestTable1> does exist.';
+
+    EXEC tSQLt.AssertObjectDoesNotExist 'dbo.TestTable1', 'Error message.';
+END;
+GO
+
 CREATE PROCEDURE Test_AssertObjectDoesNotExist.Test_TempDoesExist
 AS
 BEGIN
