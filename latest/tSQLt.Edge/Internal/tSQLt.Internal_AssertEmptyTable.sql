@@ -3,6 +3,21 @@ CREATE PROCEDURE tSQLt.Internal_AssertEmptyTable
     @Message NVARCHAR(MAX) = ''
 AS
 BEGIN
-    PRINT CONCAT_WS(' ', '- tSQLt.AssertEmptyTable', @TableName, @Message);
+    DECLARE @IsEmpty BIT; EXEC tSQLt.Private_IsEmptyTable @TableName, @IsEmpty OUTPUT;
+
+    IF (@IsEmpty = 1)
+    BEGIN
+        RETURN;
+    END
+    ELSE
+    BEGIN
+        DECLARE @Failed NVARCHAR(MAX) = CONCAT
+        (
+            'tSQLt.AssertEmptyTable failed. Expected:<',
+            @TableName,
+            '> is not empty.'
+        );
+        EXEC tSQLt.Fail @Message0 = @Failed;
+    END
 END;
 GO
