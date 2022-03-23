@@ -25,6 +25,6 @@ BEGIN
         NULLIF(@Message8, ''),
         NULLIF(@Message9, '')
     );
-    RAISERROR(@ErrorMessage, 16, 10);
+    RAISERROR(N'%s', 16, 10, @ErrorMessage);
 END;
 GO
