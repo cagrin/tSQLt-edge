@@ -11,9 +11,7 @@ GO
 CREATE PROCEDURE Test_ExpectNoException.Test_GoodSelect
 AS
 BEGIN
-    EXEC tSQLt.ExpectNoException;
-
-    SELECT 1.0 A INTO #Good;
+    EXEC tSQLt.ExpectNoException; SELECT 1.0 A INTO #Good;
 END;
 GO
 

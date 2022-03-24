@@ -7,7 +7,7 @@ CREATE PROCEDURE tSQLt.Internal_ExpectException
     @ExpectedErrorNumber INT = NULL
 AS
 BEGIN
-    INSERT INTO #ExpectException (ExpectException, ExpectedMessage, Message)
-    SELECT 1, @ExpectedMessage, @Message;
+    INSERT INTO #ExpectException (ExpectException, ExpectedMessage, ExpectedSeverity, ExpectedState, Message)
+    SELECT 1, @ExpectedMessage, @ExpectedSeverity, @ExpectedState, @Message;
 END;
 GO

@@ -7,7 +7,7 @@ BEGIN
     DECLARE @ErrorSeverity INT;
     DECLARE @ErrorState INT;
 
-    CREATE TABLE #ExpectException (ExpectException BIT NOT NULL, ExpectedMessage NVARCHAR(MAX), [Message] NVARCHAR(MAX));
+    CREATE TABLE #ExpectException (ExpectException BIT NOT NULL, ExpectedMessage NVARCHAR(MAX), ExpectedSeverity INT, ExpectedState INT, Message NVARCHAR(MAX));
 
     -- https://docs.microsoft.com/en-us/sql/t-sql/language-elements/save-transaction-transact-sql?view=sql-server-ver15
     SET @TranCounter = @@TRANCOUNT;
