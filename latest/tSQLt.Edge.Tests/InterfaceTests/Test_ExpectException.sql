@@ -19,6 +19,15 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE Test_ExpectException.Test_GoodSelectWithMessage
+AS
+BEGIN
+    EXEC Test_Extensions.AssertCommandFails
+        @Command = 'EXEC tSQLt.ExpectException ''Error message.'', @Message = ''Message.''; SELECT 1.0 A INTO #Fail;',
+        @ExpectedMessage = 'Message. Expected an exception to be raised. ExpectedMessage:<Error message.>.';
+END;
+GO
+
 CREATE PROCEDURE Test_ExpectException.Test_FailSelect
 AS
 BEGIN
@@ -34,5 +43,14 @@ BEGIN
     EXEC Test_Extensions.AssertCommandFails
         @Command = 'EXEC tSQLt.ExpectException ''Bad error message.''; SELECT 1/0 A INTO #Fail;',
         @ExpectedMessage = 'Expected an exception to be raised. ExpectedMessage:<Bad error message.>. ActualMessage:<Divide by zero error encountered.>.';
+END;
+GO
+
+CREATE PROCEDURE Test_ExpectException.Test_BadErrorMessageWithMessage
+AS
+BEGIN
+    EXEC Test_Extensions.AssertCommandFails
+        @Command = 'EXEC tSQLt.ExpectException ''Bad error message.'', @Message = ''Message.''; SELECT 1/0 A INTO #Fail;',
+        @ExpectedMessage = 'Message. Expected an exception to be raised. ExpectedMessage:<Bad error message.>. ActualMessage:<Divide by zero error encountered.>.';
 END;
 GO

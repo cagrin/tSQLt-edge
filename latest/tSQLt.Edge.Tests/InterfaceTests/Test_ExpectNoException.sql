@@ -25,3 +25,12 @@ BEGIN
         @ExpectedMessage = 'Expected no exception to be raised. ErrorMessage:<Divide by zero error encountered.>.';
 END;
 GO
+
+CREATE PROCEDURE Test_ExpectNoException.Test_FailSelectWithMessage
+AS
+BEGIN
+    EXEC Test_Extensions.AssertCommandFails
+        @Command = 'EXEC tSQLt.ExpectNoException ''Message.''; SELECT 1/0 A INTO #Fail;',
+        @ExpectedMessage = 'Message. Expected no exception to be raised. ErrorMessage:<Divide by zero error encountered.>.';
+END;
+GO

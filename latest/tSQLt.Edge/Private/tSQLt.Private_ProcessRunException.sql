@@ -18,11 +18,12 @@ BEGIN
     BEGIN
         IF @ErrorMessage IS NOT NULL
         BEGIN
-            SET @ErrorMessage = CONCAT
+            SET @ErrorMessage = CONCAT_WS
             (
-                'Expected no exception to be raised. ErrorMessage:<',
-                @ErrorMessage,
-                '>.'
+                ' ',
+                @Message,
+                'Expected no exception to be raised.',
+                CONCAT('ErrorMessage:<', @ErrorMessage, '>.')
             );
         END
     END
@@ -37,23 +38,24 @@ BEGIN
             END
             ELSE
             BEGIN
-                SET @ErrorMessage = CONCAT
+                SET @ErrorMessage = CONCAT_WS
                 (
-                    'Expected an exception to be raised. ExpectedMessage:<',
-                    ISNULL(@ExpectedMessage, '(null)'),
-                    '>. ActualMessage:<',
-                    ISNULL(@ErrorMessage, '(null)'),
-                    '>.'
+                    ' ',
+                    @Message,
+                    'Expected an exception to be raised.',
+                    CONCAT('ExpectedMessage:<', ISNULL(@ExpectedMessage, '(null)'), '>.'),
+                    CONCAT('ActualMessage:<', ISNULL(@ErrorMessage, '(null)'), '>.')
                 );
             END
         END
         ELSE
         BEGIN
-            SET @ErrorMessage = CONCAT
+            SET @ErrorMessage = CONCAT_WS
             (
-                'Expected an exception to be raised. ExpectedMessage:<',
-                ISNULL(@ExpectedMessage, '(null)'),
-                '>.'
+                ' ',
+                @Message,
+                'Expected an exception to be raised.',
+                CONCAT('ExpectedMessage:<', ISNULL(@ExpectedMessage, '(null)'), '>.')
             );
         END
     END
