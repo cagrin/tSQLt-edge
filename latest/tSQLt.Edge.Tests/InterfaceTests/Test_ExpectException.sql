@@ -84,3 +84,19 @@ BEGIN
         @ExpectedMessage = 'Expected an exception to be raised. ExpectedState:<-1>. ActualState:<1>.';
 END;
 GO
+
+CREATE PROCEDURE Test_ExpectException.Test_GoodExpectedErrorNumber
+AS
+BEGIN
+    EXEC tSQLt.ExpectException @ExpectedErrorNumber = 8134; SELECT 1/0 A INTO #Fail;
+END;
+GO
+
+CREATE PROCEDURE Test_ExpectException.Test_BadExpectedErrorNumber
+AS
+BEGIN
+    EXEC Test_Extensions.AssertCommandFails
+        @Command = 'EXEC tSQLt.ExpectException @ExpectedErrorNumber = -1; SELECT 1/0 A INTO #Fail;',
+        @ExpectedMessage = 'Expected an exception to be raised. ExpectedErrorNumber:<-1>. ActualErrorNumber:<8134>.';
+END;
+GO

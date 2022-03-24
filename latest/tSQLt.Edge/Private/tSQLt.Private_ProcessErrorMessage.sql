@@ -1,7 +1,8 @@
-CREATE PROCEDURE tSQLt.Private_ProcessRunException
+CREATE PROCEDURE tSQLt.Private_ProcessErrorMessage
     @ErrorMessage NVARCHAR(4000) OUTPUT,
-    @ErrorSeverity INT OUTPUT,
-    @ErrorState INT OUTPUT
+    @ErrorSeverity INT,
+    @ErrorState INT,
+    @ErrorNumber INT
 AS
 BEGIN
     DECLARE @ExpectException BIT;
@@ -9,13 +10,17 @@ BEGIN
     DECLARE @ExpectedSeverity INT;
     DECLARE @ExpectedState INT;
     DECLARE @Message NVARCHAR(MAX);
+    DECLARE @ExpectedMessagePattern NVARCHAR(MAX);
+    DECLARE @ExpectedErrorNumber INT;
 
     SELECT
         @ExpectException  = ExpectException,
         @ExpectedMessage  = ExpectedMessage,
         @ExpectedSeverity = ExpectedSeverity,
         @ExpectedState    = ExpectedState,
-        @Message          = Message
+        @Message          = Message,
+        @ExpectedMessagePattern = ExpectedMessagePattern,
+        @ExpectedErrorNumber    = ExpectedErrorNumber
     FROM #ExpectException
 
     IF @ExpectException = 0
@@ -71,6 +76,18 @@ BEGIN
                     'Expected an exception to be raised.',
                     CONCAT('ExpectedState:<', ISNULL(CONVERT(NVARCHAR(MAX), @ExpectedState), '(null)'), '>.'),
                     CONCAT('ActualState:<', ISNULL(CONVERT(NVARCHAR(MAX), @ErrorState), '(null)'), '>.')
+                );
+            END
+
+            IF @ExpectedErrorNumber IS NOT NULL AND NOT (@ExpectedErrorNumber = @ErrorNumber)
+            BEGIN
+                SET @ErrorMessage = CONCAT_WS
+                (
+                    ' ',
+                    @Message,
+                    'Expected an exception to be raised.',
+                    CONCAT('ExpectedErrorNumber:<', ISNULL(CONVERT(NVARCHAR(MAX), @ExpectedErrorNumber), '(null)'), '>.'),
+                    CONCAT('ActualErrorNumber:<', ISNULL(CONVERT(NVARCHAR(MAX), @ErrorNumber), '(null)'), '>.')
                 );
             END
         END
