@@ -48,48 +48,56 @@ BEGIN
                     ' ',
                     @Message,
                     'Expected an exception to be raised.',
-                    CONCAT('ExpectedMessage:<', ISNULL(@ExpectedMessage, '(null)'), '>.'),
+                    CONCAT('ExpectedMessage:<', @ExpectedMessage, '>.'),
                     CONCAT('ActualMessage:<', ISNULL(@ErrorMessage, '(null)'), '>.')
+                );
+            END
+            ELSE IF @ExpectedSeverity IS NOT NULL AND NOT (@ExpectedSeverity = @ErrorSeverity)
+            BEGIN
+                SET @ErrorMessage = CONCAT_WS
+                (
+                    ' ',
+                    @Message,
+                    'Expected an exception to be raised.',
+                    CONCAT('ExpectedSeverity:<', CONVERT(NVARCHAR(MAX), @ExpectedSeverity), '>.'),
+                    CONCAT('ActualSeverity:<', CONVERT(NVARCHAR(MAX), @ErrorSeverity), '>.')
+                );
+            END
+            ELSE IF @ExpectedState IS NOT NULL AND NOT (@ExpectedState = @ErrorState)
+            BEGIN
+                SET @ErrorMessage = CONCAT_WS
+                (
+                    ' ',
+                    @Message,
+                    'Expected an exception to be raised.',
+                    CONCAT('ExpectedState:<', CONVERT(NVARCHAR(MAX), @ExpectedState), '>.'),
+                    CONCAT('ActualState:<', CONVERT(NVARCHAR(MAX), @ErrorState), '>.')
+                );
+            END
+            ELSE IF @ExpectedMessagePattern IS NOT NULL AND NOT (@ErrorMessage LIKE @ExpectedMessagePattern)
+            BEGIN
+                SET @ErrorMessage = CONCAT_WS
+                (
+                    ' ',
+                    @Message,
+                    'Expected an exception to be raised.',
+                    CONCAT('ExpectedMessagePattern:<', @ExpectedMessagePattern, '>.'),
+                    CONCAT('ActualMessage:<', ISNULL(@ErrorMessage, '(null)'), '>.')
+                );
+            END
+            ELSE IF @ExpectedErrorNumber IS NOT NULL AND NOT (@ExpectedErrorNumber = @ErrorNumber)
+            BEGIN
+                SET @ErrorMessage = CONCAT_WS
+                (
+                    ' ',
+                    @Message,
+                    'Expected an exception to be raised.',
+                    CONCAT('ExpectedErrorNumber:<', CONVERT(NVARCHAR(MAX), @ExpectedErrorNumber), '>.'),
+                    CONCAT('ActualErrorNumber:<', CONVERT(NVARCHAR(MAX), @ErrorNumber), '>.')
                 );
             END
             ELSE
                 SET @ErrorMessage = NULL;
-
-            IF @ExpectedSeverity IS NOT NULL AND NOT (@ExpectedSeverity = @ErrorSeverity)
-            BEGIN
-                SET @ErrorMessage = CONCAT_WS
-                (
-                    ' ',
-                    @Message,
-                    'Expected an exception to be raised.',
-                    CONCAT('ExpectedSeverity:<', ISNULL(CONVERT(NVARCHAR(MAX), @ExpectedSeverity), '(null)'), '>.'),
-                    CONCAT('ActualSeverity:<', ISNULL(CONVERT(NVARCHAR(MAX), @ErrorSeverity), '(null)'), '>.')
-                );
-            END
-
-            IF @ExpectedState IS NOT NULL AND NOT (@ExpectedState = @ErrorState)
-            BEGIN
-                SET @ErrorMessage = CONCAT_WS
-                (
-                    ' ',
-                    @Message,
-                    'Expected an exception to be raised.',
-                    CONCAT('ExpectedState:<', ISNULL(CONVERT(NVARCHAR(MAX), @ExpectedState), '(null)'), '>.'),
-                    CONCAT('ActualState:<', ISNULL(CONVERT(NVARCHAR(MAX), @ErrorState), '(null)'), '>.')
-                );
-            END
-
-            IF @ExpectedErrorNumber IS NOT NULL AND NOT (@ExpectedErrorNumber = @ErrorNumber)
-            BEGIN
-                SET @ErrorMessage = CONCAT_WS
-                (
-                    ' ',
-                    @Message,
-                    'Expected an exception to be raised.',
-                    CONCAT('ExpectedErrorNumber:<', ISNULL(CONVERT(NVARCHAR(MAX), @ExpectedErrorNumber), '(null)'), '>.'),
-                    CONCAT('ActualErrorNumber:<', ISNULL(CONVERT(NVARCHAR(MAX), @ErrorNumber), '(null)'), '>.')
-                );
-            END
         END
         ELSE
         BEGIN
@@ -97,8 +105,7 @@ BEGIN
             (
                 ' ',
                 @Message,
-                'Expected an exception to be raised.',
-                CONCAT('ExpectedMessage:<', ISNULL(@ExpectedMessage, '(null)'), '>.')
+                'Expected an exception to be raised.'
             );
         END
     END

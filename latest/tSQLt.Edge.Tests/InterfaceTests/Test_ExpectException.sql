@@ -6,7 +6,7 @@ AS
 BEGIN
     EXEC Test_Extensions.AssertCommandFails
         @Command = 'EXEC tSQLt.ExpectException;',
-        @ExpectedMessage = 'Expected an exception to be raised. ExpectedMessage:<(null)>.';
+        @ExpectedMessage = 'Expected an exception to be raised.';
 END;
 GO
 
@@ -15,7 +15,7 @@ AS
 BEGIN
     EXEC Test_Extensions.AssertCommandFails
         @Command = 'EXEC tSQLt.ExpectException ''Error message.''; SELECT 1.0 A INTO #Fail;',
-        @ExpectedMessage = 'Expected an exception to be raised. ExpectedMessage:<Error message.>.';
+        @ExpectedMessage = 'Expected an exception to be raised.';
 END;
 GO
 
@@ -24,7 +24,7 @@ AS
 BEGIN
     EXEC Test_Extensions.AssertCommandFails
         @Command = 'EXEC tSQLt.ExpectException ''Error message.'', @Message = ''Message.''; SELECT 1.0 A INTO #Fail;',
-        @ExpectedMessage = 'Message. Expected an exception to be raised. ExpectedMessage:<Error message.>.';
+        @ExpectedMessage = 'Message. Expected an exception to be raised.';
 END;
 GO
 
@@ -98,5 +98,35 @@ BEGIN
     EXEC Test_Extensions.AssertCommandFails
         @Command = 'EXEC tSQLt.ExpectException @ExpectedErrorNumber = -1; SELECT 1/0 A INTO #Fail;',
         @ExpectedMessage = 'Expected an exception to be raised. ExpectedErrorNumber:<-1>. ActualErrorNumber:<8134>.';
+END;
+GO
+
+CREATE PROCEDURE Test_ExpectException.Test_GoodExpectedMessagePattern
+AS
+BEGIN
+    EXEC tSQLt.ExpectException @ExpectedMessagePattern = 'Divide by % error encountered.'; SELECT 1/0 A INTO #Fail;
+END;
+GO
+
+CREATE PROCEDURE Test_ExpectException.Test_BadExpectedMessagePattern
+AS
+BEGIN
+    EXEC Test_Extensions.AssertCommandFails
+        @Command = 'EXEC tSQLt.ExpectException @ExpectedMessagePattern = ''Bad error message %''; SELECT 1/0 A INTO #Fail;',
+        @ExpectedMessage = 'Expected an exception to be raised. ExpectedMessagePattern:<Bad error message %>. ActualMessage:<Divide by zero error encountered.>.';
+END;
+GO
+
+CREATE PROCEDURE Test_ExpectException.Test_GoodAllExpected
+AS
+BEGIN
+    EXEC tSQLt.ExpectException
+        @ExpectedMessage = 'Divide by zero error encountered.',
+        @ExpectedSeverity = 16,
+        @ExpectedState = 1,
+        @ExpectedMessagePattern = 'Divide by % error encountered.',
+        @ExpectedErrorNumber = 8134;
+
+    SELECT 1/0 A INTO #Fail;
 END;
 GO
