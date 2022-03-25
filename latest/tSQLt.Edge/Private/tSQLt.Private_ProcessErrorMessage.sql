@@ -13,6 +13,9 @@ BEGIN
     DECLARE @ExpectedMessagePattern NVARCHAR(MAX);
     DECLARE @ExpectedErrorNumber INT;
 
+    DECLARE @ExpectedNoExceptionMessage NVARCHAR(MAX) = 'Expected no exception to be raised.';
+    DECLARE @ExpectedExceptionMessage NVARCHAR(MAX) = 'Expected an exception to be raised.';
+
     SELECT
         @ExpectException  = ExpectException,
         @ExpectedMessage  = ExpectedMessage,
@@ -29,10 +32,11 @@ BEGIN
         BEGIN
             SET @ErrorMessage = CONCAT_WS
             (
-                ' ',
-                @Message,
-                'Expected no exception to be raised.',
-                CONCAT('ErrorMessage:<', @ErrorMessage, '>.')
+                ' ', @Message, @ExpectedNoExceptionMessage,
+                CONCAT('ErrorMessage:<', @ErrorMessage, '>.'),
+                CONCAT('ErrorSeverity:<', CONVERT(NVARCHAR(MAX), @ErrorSeverity), '>.'),
+                CONCAT('ErrorState:<', CONVERT(NVARCHAR(MAX), @ErrorState), '>.'),
+                CONCAT('ErrorNumber:<', CONVERT(NVARCHAR(MAX), @ErrorNumber), '>.')
             );
         END
     END
@@ -45,9 +49,7 @@ BEGIN
             BEGIN
                 SET @ErrorMessage = CONCAT_WS
                 (
-                    ' ',
-                    @Message,
-                    'Expected an exception to be raised.',
+                    ' ', @Message, @ExpectedExceptionMessage,
                     CONCAT('ExpectedMessage:<', @ExpectedMessage, '>.'),
                     CONCAT('ActualMessage:<', ISNULL(@ErrorMessage, '(null)'), '>.')
                 );
@@ -56,9 +58,7 @@ BEGIN
             BEGIN
                 SET @ErrorMessage = CONCAT_WS
                 (
-                    ' ',
-                    @Message,
-                    'Expected an exception to be raised.',
+                    ' ', @Message, @ExpectedExceptionMessage,
                     CONCAT('ExpectedSeverity:<', CONVERT(NVARCHAR(MAX), @ExpectedSeverity), '>.'),
                     CONCAT('ActualSeverity:<', CONVERT(NVARCHAR(MAX), @ErrorSeverity), '>.')
                 );
@@ -67,9 +67,7 @@ BEGIN
             BEGIN
                 SET @ErrorMessage = CONCAT_WS
                 (
-                    ' ',
-                    @Message,
-                    'Expected an exception to be raised.',
+                    ' ', @Message, @ExpectedExceptionMessage,
                     CONCAT('ExpectedState:<', CONVERT(NVARCHAR(MAX), @ExpectedState), '>.'),
                     CONCAT('ActualState:<', CONVERT(NVARCHAR(MAX), @ErrorState), '>.')
                 );
@@ -78,9 +76,7 @@ BEGIN
             BEGIN
                 SET @ErrorMessage = CONCAT_WS
                 (
-                    ' ',
-                    @Message,
-                    'Expected an exception to be raised.',
+                    ' ', @Message, @ExpectedExceptionMessage,
                     CONCAT('ExpectedMessagePattern:<', @ExpectedMessagePattern, '>.'),
                     CONCAT('ActualMessage:<', ISNULL(@ErrorMessage, '(null)'), '>.')
                 );
@@ -89,9 +85,7 @@ BEGIN
             BEGIN
                 SET @ErrorMessage = CONCAT_WS
                 (
-                    ' ',
-                    @Message,
-                    'Expected an exception to be raised.',
+                    ' ', @Message, @ExpectedExceptionMessage,
                     CONCAT('ExpectedErrorNumber:<', CONVERT(NVARCHAR(MAX), @ExpectedErrorNumber), '>.'),
                     CONCAT('ActualErrorNumber:<', CONVERT(NVARCHAR(MAX), @ErrorNumber), '>.')
                 );
@@ -103,9 +97,12 @@ BEGIN
         BEGIN
             SET @ErrorMessage = CONCAT_WS
             (
-                ' ',
-                @Message,
-                'Expected an exception to be raised.'
+                ' ', @Message, @ExpectedExceptionMessage,
+                CASE WHEN @ExpectedMessage IS NOT NULL THEN CONCAT('ExpectedMessage:<', @ExpectedMessage, '>.') ELSE NULL END,
+                CASE WHEN @ExpectedSeverity IS NOT NULL THEN CONCAT('ExpectedSeverity:<', CONVERT(NVARCHAR(MAX), @ExpectedSeverity), '>.') ELSE NULL END,
+                CASE WHEN @ExpectedState IS NOT NULL THEN CONCAT('ExpectedState:<', CONVERT(NVARCHAR(MAX), @ExpectedState), '>.') ELSE NULL END,
+                CASE WHEN @ExpectedMessagePattern IS NOT NULL THEN CONCAT('ExpectedMessagePattern:<', @ExpectedMessagePattern, '>.') ELSE NULL END,
+                CASE WHEN @ExpectedErrorNumber IS NOT NULL THEN CONCAT('ExpectedErrorNumber:<', CONVERT(NVARCHAR(MAX), @ExpectedErrorNumber), '>.') ELSE NULL END
             );
         END
     END

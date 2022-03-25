@@ -15,7 +15,7 @@ AS
 BEGIN
     EXEC Test_Extensions.AssertCommandFails
         @Command = 'EXEC tSQLt.ExpectException ''Error message.''; SELECT 1.0 A INTO #Fail;',
-        @ExpectedMessage = 'Expected an exception to be raised.';
+        @ExpectedMessage = 'Expected an exception to be raised. ExpectedMessage:<Error message.>.';
 END;
 GO
 
@@ -24,7 +24,7 @@ AS
 BEGIN
     EXEC Test_Extensions.AssertCommandFails
         @Command = 'EXEC tSQLt.ExpectException ''Error message.'', @Message = ''Message.''; SELECT 1.0 A INTO #Fail;',
-        @ExpectedMessage = 'Message. Expected an exception to be raised.';
+        @ExpectedMessage = 'Message. Expected an exception to be raised. ExpectedMessage:<Error message.>.';
 END;
 GO
 
@@ -128,5 +128,14 @@ BEGIN
         @ExpectedErrorNumber = 8134;
 
     SELECT 1/0 A INTO #Fail;
+END;
+GO
+
+CREATE PROCEDURE Test_ExpectException.Test_GoodSelectWithSomeExpected
+AS
+BEGIN
+    EXEC Test_Extensions.AssertCommandFails
+        @Command = 'EXEC tSQLt.ExpectException @ExpectedMessagePattern = ''Divide by %'', @ExpectedSeverity = 16, @ExpectedState = 1, @ExpectedErrorNumber = 8134; SELECT 1.0 A INTO #Fail;',
+        @ExpectedMessage = 'Expected an exception to be raised. ExpectedSeverity:<16>. ExpectedState:<1>. ExpectedMessagePattern:<Divide by %>. ExpectedErrorNumber:<8134>.';
 END;
 GO

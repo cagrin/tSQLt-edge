@@ -20,7 +20,7 @@ AS
 BEGIN
     EXEC Test_Extensions.AssertCommandFails
         @Command = 'EXEC tSQLt.ExpectNoException; SELECT 1/0 A INTO #Fail;',
-        @ExpectedMessage = 'Expected no exception to be raised. ErrorMessage:<Divide by zero error encountered.>.';
+        @ExpectedMessage = 'Expected no exception to be raised. ErrorMessage:<Divide by zero error encountered.>. ErrorSeverity:<16>. ErrorState:<1>. ErrorNumber:<8134>.';
 END;
 GO
 
@@ -29,6 +29,6 @@ AS
 BEGIN
     EXEC Test_Extensions.AssertCommandFails
         @Command = 'EXEC tSQLt.ExpectNoException ''Message.''; SELECT 1/0 A INTO #Fail;',
-        @ExpectedMessage = 'Message. Expected no exception to be raised. ErrorMessage:<Divide by zero error encountered.>.';
+        @ExpectedMessage = 'Message. Expected no exception to be raised. ErrorMessage:<Divide by zero error encountered.>. ErrorSeverity:<16>. ErrorState:<1>. ErrorNumber:<8134>.';
 END;
 GO
