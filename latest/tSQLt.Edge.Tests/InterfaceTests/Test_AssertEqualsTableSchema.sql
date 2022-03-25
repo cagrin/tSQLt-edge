@@ -68,3 +68,31 @@ BEGIN
     EXEC tSQLt.AssertEqualsTableSchema '#TestTable1', '#TestTable2';
 END;
 GO
+
+CREATE PROCEDURE Test_AssertEqualsTableSchema.Test_SameTypeWithDifferentSchema
+AS
+BEGIN
+    EXEC('CREATE SCHEMA [Schema A]');
+    EXEC('CREATE SCHEMA [Schema B]');
+    EXEC('CREATE TABLE [Schema A].[Table A] (Column1 INT)');
+    EXEC('CREATE TABLE [Schema B].[Table B] (Column1 INT)');
+
+    EXEC tSQLt.AssertEqualsTableSchema '[Schema A].[Table A]', '[Schema B].[Table B]';
+END;
+GO
+
+CREATE PROCEDURE Test_AssertEqualsTableSchema.Test_UserTypeWithDifferentSchema
+AS
+BEGIN
+    EXEC('CREATE SCHEMA [Schema A]');
+    EXEC('CREATE SCHEMA [Schema B]');
+    EXEC('CREATE TYPE [Schema A].[Test Type] FROM INT');
+    EXEC('CREATE TYPE [Schema B].[Test Type] FROM INT');
+    EXEC('CREATE TABLE [Schema A].[Table A] (Column1 [Schema A].[Test Type])');
+    EXEC('CREATE TABLE [Schema B].[Table B] (Column1 [Schema B].[Test Type])');
+
+    EXEC tSQLt.ExpectException 'tSQLt.AssertEqualsTableSchema failed. Expected:<[Column1] [Schema A].[Test Type] NULL>. Actual:<[Column1] [Schema B].[Test Type] NULL>.';
+
+    EXEC tSQLt.AssertEqualsTableSchema '[Schema A].[Table A]', '[Schema B].[Table B]';
+END;
+GO

@@ -6,7 +6,7 @@ BEGIN
         SELECT
             CONCAT
             (
-                TYPE_NAME(@TypeId),
+                tSQLt.Private_GetTypeName(@TypeId),
                 CASE
                 WHEN @Length = -1                                                     THEN '(max)'
                 WHEN TYPE_NAME(@TypeId) IN ('nchar', 'nvarchar')                      THEN CONCAT('(', @Length / 2, ')')
