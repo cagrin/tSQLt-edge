@@ -20,7 +20,24 @@ RETURNS @Tests TABLE
 ) AS
 BEGIN
 	INSERT INTO @Tests
-	SELECT * FROM sys.procedures r
+	SELECT
+		[name],
+		[object_id],
+		[principal_id],
+		[schema_id],
+		[parent_object_id],
+		[type],
+		[type_desc],
+		[create_date],
+		[modify_date],
+		[is_ms_shipped],
+		[is_published],
+		[is_schema_published],
+		[is_auto_executed],
+		[is_execution_replicated],
+		[is_repl_serializable_only],
+		[skips_repl_constraints]
+	FROM sys.procedures r
 	WHERE r.name LIKE 'test%'
 	AND SCHEMA_NAME(r.schema_id) <> 'tSQLt'
 	AND NOT EXISTS (SELECT 1 FROM sys.parameters p WHERE p.object_id = r.object_id)

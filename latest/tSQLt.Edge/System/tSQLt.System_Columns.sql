@@ -41,10 +41,86 @@ RETURNS @Columns TABLE
 ) AS
 BEGIN
     INSERT INTO @Columns
-    SELECT * FROM sys.columns
+    SELECT
+		[object_id],
+		[name],
+		[column_id],
+		[system_type_id],
+		[user_type_id],
+		[max_length],
+		[precision],
+		[scale],
+		[collation_name],
+		[is_nullable],
+		[is_ansi_padded],
+		[is_rowguidcol],
+		[is_identity],
+		[is_computed],
+		[is_filestream],
+		[is_replicated],
+		[is_non_sql_subscribed],
+		[is_merge_published],
+		[is_dts_replicated],
+		[is_xml_document],
+		[xml_collection_id],
+		[default_object_id],
+		[rule_object_id],
+		[is_sparse],
+		[is_column_set],
+		[generated_always_type],
+		[generated_always_type_desc],
+		[encryption_type],
+		[encryption_type_desc],
+		[encryption_algorithm_name],
+		[column_encryption_key_id],
+		[column_encryption_key_database_name],
+		[is_hidden],
+		[is_masked],
+		[graph_type],
+		[graph_type_desc],
+		[is_data_deletion_filter_column]
+	FROM sys.columns
     WHERE object_id = OBJECT_ID(@ObjectName)
     UNION ALL
-    SELECT * FROM tempdb.sys.columns
+    SELECT
+		[object_id],
+		[name],
+		[column_id],
+		[system_type_id],
+		[user_type_id],
+		[max_length],
+		[precision],
+		[scale],
+		[collation_name],
+		[is_nullable],
+		[is_ansi_padded],
+		[is_rowguidcol],
+		[is_identity],
+		[is_computed],
+		[is_filestream],
+		[is_replicated],
+		[is_non_sql_subscribed],
+		[is_merge_published],
+		[is_dts_replicated],
+		[is_xml_document],
+		[xml_collection_id],
+		[default_object_id],
+		[rule_object_id],
+		[is_sparse],
+		[is_column_set],
+		[generated_always_type],
+		[generated_always_type_desc],
+		[encryption_type],
+		[encryption_type_desc],
+		[encryption_algorithm_name],
+		[column_encryption_key_id],
+		[column_encryption_key_database_name],
+		[is_hidden],
+		[is_masked],
+		[graph_type],
+		[graph_type_desc],
+		[is_data_deletion_filter_column]
+	FROM tempdb.sys.columns
     WHERE object_id = OBJECT_ID(CONCAT('tempdb..', @ObjectName))
 
     RETURN;

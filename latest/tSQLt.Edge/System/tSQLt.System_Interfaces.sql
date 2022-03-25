@@ -20,7 +20,24 @@ RETURNS @Interfaces TABLE
 ) AS
 BEGIN
 	INSERT INTO @Interfaces
-    SELECT * FROM sys.procedures
+    SELECT
+		[name],
+		[object_id],
+		[principal_id],
+		[schema_id],
+		[parent_object_id],
+		[type],
+		[type_desc],
+		[create_date],
+		[modify_date],
+		[is_ms_shipped],
+		[is_published],
+		[is_schema_published],
+		[is_auto_executed],
+		[is_execution_replicated],
+		[is_repl_serializable_only],
+		[skips_repl_constraints]
+	FROM sys.procedures
     WHERE SCHEMA_NAME(schema_id) = 'tSQLt'
     AND name NOT LIKE 'Internal[_]%'
     AND name NOT LIKE 'Private[_]%'

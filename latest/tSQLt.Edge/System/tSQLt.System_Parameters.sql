@@ -25,7 +25,29 @@ RETURNS @Parameters TABLE
 ) AS
 BEGIN
 	INSERT INTO @Parameters
-    SELECT * FROM sys.parameters
+    SELECT
+		[object_id],
+		[name],
+		[parameter_id],
+		[system_type_id],
+		[user_type_id],
+		[max_length],
+		[precision],
+		[scale],
+		[is_output],
+		[is_cursor_ref],
+		[has_default_value],
+		[is_xml_document],
+		[default_value],
+		[xml_collection_id],
+		[is_readonly],
+		[is_nullable],
+		[encryption_type],
+		[encryption_type_desc],
+		[encryption_algorithm_name],
+		[column_encryption_key_id],
+		[column_encryption_key_database_name]
+	FROM sys.parameters
     WHERE object_id = @ObjectId
 
     RETURN;
