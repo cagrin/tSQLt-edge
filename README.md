@@ -15,7 +15,7 @@ Detailed principles:
 - Use STRING_AGG instead of concatenate strings with FOR XML PATH
 
 ## Compatibility
-[tSQLt-edge 0.3.0](https://www.nuget.org/packages/tSQLt.Edge/0.3.0) is partially compatible with tSQLt unit testing framework. See [full user guide](https://tsqlt.org/full-user-guide/) for more details about tSQLt.
+[tSQLt-edge 0.4.0](https://www.nuget.org/packages/tSQLt.Edge/0.4.0) is partially compatible with tSQLt unit testing framework. See [full user guide](https://tsqlt.org/full-user-guide/) for more details about tSQLt.
 
 ||Status|
 |--- |---|
@@ -28,12 +28,12 @@ Detailed principles:
 - ![](https://img.shields.io/badge/NewTestClass--red)
 - ![](https://img.shields.io/badge/DropClass--red)
 - ![](https://img.shields.io/badge/RunAll--yellow)
-- ![](https://img.shields.io/badge/Run--green)
+- ![](https://img.shields.io/badge/Run--yellow)
 - ![](https://img.shields.io/badge/RenameClass--red)
 
 #### Assertions:
 
-- ![](https://img.shields.io/badge/AssertEmptyTable--red)
+- ![](https://img.shields.io/badge/AssertEmptyTable--green)
 - ![](https://img.shields.io/badge/AssertEquals--green)
 - ![](https://img.shields.io/badge/AssertEqualsString--green)
 - ![](https://img.shields.io/badge/AssertEqualsTable--green)
@@ -43,12 +43,12 @@ Detailed principles:
 - ![](https://img.shields.io/badge/AssertObjectExists--green)
 - ![](https://img.shields.io/badge/AssertResultSetsHaveSameMetaData--green)
 - ![](https://img.shields.io/badge/Fail--green)
-- ![](https://img.shields.io/badge/AssertLike--red)
+- ![](https://img.shields.io/badge/AssertLike--green)
 
 #### Expectations:
 
 - ![](https://img.shields.io/badge/ExpectException--green)
-- ![](https://img.shields.io/badge/ExpectNoException--red)
+- ![](https://img.shields.io/badge/ExpectNoException--green)
 
 #### Isolating dependencies:
 
