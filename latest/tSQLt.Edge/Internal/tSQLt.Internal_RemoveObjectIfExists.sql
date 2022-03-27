@@ -3,6 +3,6 @@ CREATE PROCEDURE tSQLt.Internal_RemoveObjectIfExists
     @NewName NVARCHAR(MAX) = NULL OUTPUT
 AS
 BEGIN
-    PRINT CONCAT_WS(' ', '- tSQLt.RemoveObjectIfExists', @ObjectName, @NewName);
+    EXEC tSQLt.Internal_RemoveObject @ObjectName, @NewName OUTPUT, @IfExists = 1;
 END;
 GO

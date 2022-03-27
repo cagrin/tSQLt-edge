@@ -4,6 +4,7 @@ CREATE PROCEDURE tSQLt.Internal_RemoveObject
     @IfExists INT = 0
 AS
 BEGIN
-    PRINT CONCAT_WS(' ', '- tSQLt.RemoveObject', @ObjectName, @NewName, '@IfExists');
+    DECLARE @ObjectId INT = OBJECT_ID(@ObjectName);
+    EXEC tSQLt.Private_RenameObject @ObjectId;
 END;
 GO
