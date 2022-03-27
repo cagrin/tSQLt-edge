@@ -9,10 +9,7 @@ BEGIN
     DECLARE @ObjectId INT = OBJECT_ID('dbo.NewProcedure');
     EXEC tSQLt.Private_RenameObject @ObjectId;
 
-    IF OBJECT_ID('dbo.NewProcedure') IS NOT NULL
-    BEGIN
-        EXEC tSQLt.Fail 'dbo.NewProcedure should not exists.';
-    END
+    EXEC tSQLt.AssertObjectDoesNotExist 'dbo.NewProcedure';
 END;
 GO
 
@@ -24,9 +21,32 @@ BEGIN
     DECLARE @ObjectId INT = OBJECT_ID('dbo.NewTable');
     EXEC tSQLt.Private_RenameObject @ObjectId;
 
-    IF OBJECT_ID('dbo.NewTable') IS NOT NULL
-    BEGIN
-        EXEC tSQLt.Fail 'dbo.NewTable should not exists.';
-    END
+    EXEC tSQLt.AssertObjectDoesNotExist 'dbo.NewTable';
+END;
+GO
+
+CREATE PROCEDURE Test_RenameObject.Test_Table_WithNewNameIsNull
+AS
+BEGIN
+    EXEC ('CREATE TABLE dbo.NewTable (Id int);');
+
+    DECLARE @ObjectId INT = OBJECT_ID('dbo.NewTable');
+    DECLARE @NewName NVARCHAR(MAX);
+    EXEC tSQLt.Private_RenameObject @ObjectId, @NewName OUTPUT;
+
+    EXEC tSQLt.AssertObjectExists @NewName;
+END;
+GO
+
+CREATE PROCEDURE Test_RenameObject.Test_Table_WithNewNameIsNewId
+AS
+BEGIN
+    EXEC ('CREATE TABLE dbo.NewTable (Id int);');
+
+    DECLARE @ObjectId INT = OBJECT_ID('dbo.NewTable');
+    DECLARE @NewName NVARCHAR(MAX) = NEWID();
+    EXEC tSQLt.Private_RenameObject @ObjectId, @NewName OUTPUT;
+
+    EXEC tSQLt.AssertObjectExists @NewName;
 END;
 GO
