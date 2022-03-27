@@ -13,6 +13,7 @@ Detailed principles:
 - No CLR code
 - Use CONCAT, CONCAT_WS instead of adding strings (+)
 - Use STRING_AGG instead of concatenate strings with FOR XML PATH
+- Use tSQLt assertions in internal tests
 
 ## Compatibility
 [tSQLt-edge 0.4.0](https://www.nuget.org/packages/tSQLt.Edge/0.4.0) is partially compatible with tSQLt unit testing framework. See [full user guide](https://tsqlt.org/full-user-guide/) for more details about tSQLt.

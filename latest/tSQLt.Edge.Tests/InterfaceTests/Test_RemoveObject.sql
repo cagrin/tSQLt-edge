@@ -8,10 +8,7 @@ BEGIN
 
     EXEC tSQLt.RemoveObject 'dbo.NewProcedure';
 
-    IF OBJECT_ID('dbo.NewProcedure') IS NOT NULL
-    BEGIN
-        EXEC tSQLt.Fail 'dbo.NewProcedure should not exists.';
-    END
+    EXEC tSQLt.AssertObjectDoesNotExist 'dbo.NewProcedure';
 END;
 GO
 
@@ -22,10 +19,7 @@ BEGIN
 
     EXEC tSQLt.RemoveObject 'dbo.NewTable';
 
-    IF OBJECT_ID('dbo.NewTable') IS NOT NULL
-    BEGIN
-        EXEC tSQLt.Fail 'dbo.NewTable should not exists.';
-    END
+    EXEC tSQLt.AssertObjectDoesNotExist 'dbo.NewTable';
 END;
 GO
 
