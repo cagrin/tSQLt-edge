@@ -28,3 +28,19 @@ BEGIN
     END
 END;
 GO
+
+CREATE PROCEDURE Test_RemoveObject.Test_Table_NotExists
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'tSQLt.RemoveObject failed. ObjectName:<dbo.NewTable> does not exist.'
+
+    EXEC tSQLt.RemoveObject 'dbo.NewTable';
+END;
+GO
+
+CREATE PROCEDURE Test_RemoveObject.Test_Table_IfExists
+AS
+BEGIN
+    EXEC tSQLt.RemoveObject 'dbo.NewTable', @IfExists = 1;
+END;
+GO

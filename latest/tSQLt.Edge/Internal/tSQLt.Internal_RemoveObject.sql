@@ -5,6 +5,23 @@ CREATE PROCEDURE tSQLt.Internal_RemoveObject
 AS
 BEGIN
     DECLARE @ObjectId INT = OBJECT_ID(@ObjectName);
-    EXEC tSQLt.Private_RenameObject @ObjectId;
+
+    IF (@ObjectId IS NOT NULL)
+    BEGIN
+        EXEC tSQLt.Private_RenameObject @ObjectId, @NewName OUTPUT;
+    END
+    ELSE
+    BEGIN
+        IF @IfExists = 0
+        BEGIN
+            DECLARE @Failed NVARCHAR(MAX) = CONCAT
+            (
+                'tSQLt.RemoveObject failed. ObjectName:<',
+                ISNULL(CONVERT(NVARCHAR(MAX), @ObjectName), '(null)'),
+                '> does not exist.'
+            );
+            EXEC tSQLt.Fail @Failed;
+        END
+    END;
 END;
 GO

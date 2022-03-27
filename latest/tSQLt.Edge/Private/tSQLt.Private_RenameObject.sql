@@ -1,7 +1,10 @@
 CREATE PROCEDURE tSQLt.Private_RenameObject
-    @ObjectId INT
+    @ObjectId INT,
+    @NewName NVARCHAR(MAX) = NULL OUTPUT
 AS
 BEGIN
+    SET @NewName = ISNULL(@NewName, NEWID());
+
     DECLARE @Command NVARCHAR(MAX) = CONCAT
     (
         'EXEC sp_rename ''',
@@ -9,10 +12,10 @@ BEGIN
         '.',
         QUOTENAME(OBJECT_NAME(@ObjectId)),
         ''', ''',
-        CAST(NEWID() AS NVARCHAR(MAX)),
+        @NewName,
         ''', ''OBJECT'';'
     );
-    
+
     EXEC (@Command);
 END;
 GO
