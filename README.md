@@ -16,7 +16,7 @@ Detailed principles:
 - Use tSQLt assertions in internal tests
 
 ## Compatibility
-[tSQLt-edge](https://www.nuget.org/packages/tSQLt.Edge) is partially compatible with tSQLt unit testing framework. See [full user guide](https://tsqlt.org/full-user-guide/) for more details about tSQLt.
+[tSQLt-edge 0.5.0](https://www.nuget.org/packages/tSQLt.Edge/0.5.0) is partially compatible with tSQLt unit testing framework. See [full user guide](https://tsqlt.org/full-user-guide/) for more details about tSQLt.
 
 ||Status|
 |--- |---|
