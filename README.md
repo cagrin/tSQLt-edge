@@ -16,7 +16,7 @@ Detailed principles:
 - Use tSQLt assertions in internal tests
 
 ## Compatibility
-[tSQLt-edge 0.4.0](https://www.nuget.org/packages/tSQLt.Edge/0.4.0) is partially compatible with tSQLt unit testing framework. See [full user guide](https://tsqlt.org/full-user-guide/) for more details about tSQLt.
+[tSQLt-edge](https://www.nuget.org/packages/tSQLt.Edge) is partially compatible with tSQLt unit testing framework. See [full user guide](https://tsqlt.org/full-user-guide/) for more details about tSQLt.
 
 ||Status|
 |--- |---|
@@ -37,7 +37,7 @@ Detailed principles:
 - ![](https://img.shields.io/badge/AssertEmptyTable--green)
 - ![](https://img.shields.io/badge/AssertEquals--green)
 - ![](https://img.shields.io/badge/AssertEqualsString--green)
-- ![](https://img.shields.io/badge/AssertEqualsTable--green)
+- ![](https://img.shields.io/badge/AssertEqualsTable--yellow)
 - ![](https://img.shields.io/badge/AssertEqualsTableSchema--green)
 - ![](https://img.shields.io/badge/AssertNotEquals--green)
 - ![](https://img.shields.io/badge/AssertObjectDoesNotExist--green)
@@ -56,7 +56,15 @@ Detailed principles:
 - ![](https://img.shields.io/badge/ApplyConstraint--red)
 - ![](https://img.shields.io/badge/FakeFunction--red)
 - ![](https://img.shields.io/badge/FakeTable--red)
-- ![](https://img.shields.io/badge/RemoveObjectIfExists--red)
+- ![](https://img.shields.io/badge/RemoveObjectIfExists--green)
 - ![](https://img.shields.io/badge/SpyProcedure--green)
 - ![](https://img.shields.io/badge/ApplyTrigger--red)
-- ![](https://img.shields.io/badge/RemoveObject--red)
+- ![](https://img.shields.io/badge/RemoveObject--green)
+
+## Extentions
+
+tSQLt-edge has some additional stored procedures:
+
+|Name|Description|
+|--- |---|
+|AssertNotEqualsString|Same as AssertNotEquals, but for NVARCHAR(MAX)|

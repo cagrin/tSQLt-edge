@@ -3,8 +3,10 @@ CREATE PROCEDURE tSQLt.Internal_AssertResultSetsHaveSameMetaData
     @ActualCommand NVARCHAR(MAX)
 AS
 BEGIN
-    DECLARE @ExpectedMetaData NVARCHAR(MAX); EXEC tSQLt.Private_GetMetaData @ExpectedCommand, @ExpectedMetaData OUTPUT;
+    EXEC tSQLt.AssertNotEqualsString NULL, @ExpectedCommand;
+    EXEC tSQLt.AssertNotEqualsString NULL, @ActualCommand;
 
+    DECLARE @ExpectedMetaData NVARCHAR(MAX); EXEC tSQLt.Private_GetMetaData @ExpectedCommand, @ExpectedMetaData OUTPUT;
     DECLARE @ActualMetaData NVARCHAR(MAX); EXEC tSQLt.Private_GetMetaData @ActualCommand, @ActualMetaData OUTPUT;
 
     IF (@ExpectedMetaData = @ActualMetaData)

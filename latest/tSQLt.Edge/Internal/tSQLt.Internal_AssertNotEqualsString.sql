@@ -1,6 +1,6 @@
-CREATE PROCEDURE tSQLt.Internal_AssertNotEquals
-    @Expected SQL_VARIANT,
-    @Actual SQL_VARIANT,
+CREATE PROCEDURE tSQLt.Internal_AssertNotEqualsString
+    @Expected NVARCHAR(MAX),
+    @Actual NVARCHAR(MAX),
     @Message NVARCHAR(MAX) = ''
 AS
 BEGIN
@@ -13,8 +13,8 @@ BEGIN
         DECLARE @Failed NVARCHAR(MAX) = CONCAT_WS
         (
             ' ',
-            'tSQLt.AssertNotEquals failed.',
-            CONCAT('Expected any value except:<', ISNULL(CONVERT(NVARCHAR(MAX), @Expected), '(null)'), '>.')
+            'tSQLt.AssertNotEqualsString failed.',
+            CONCAT('Expected any value except:<', ISNULL(@Expected, '(null)'), '>.')
         );
         EXEC tSQLt.Fail @Message, @Failed;
     END

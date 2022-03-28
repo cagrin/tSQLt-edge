@@ -11,7 +11,7 @@ GO
 CREATE PROC Test_AssertResultSetsHaveSameMetaData.Test_ActualCommandIsNull
 AS
 BEGIN
-    EXEC tSQLt.ExpectException 'tSQLt.AssertResultSetsHaveSameMetaData failed. Expected:<[Column1] int NOT NULL> has different metadata than Actual:<(null)>.';
+    EXEC tSQLt.ExpectException 'tSQLt.AssertNotEqualsString failed. Expected any value except:<(null)>.';
 
     EXEC tSQLt.AssertResultSetsHaveSameMetaData 'SELECT 1 Column1', NULL;
 END;
@@ -20,7 +20,7 @@ GO
 CREATE PROC Test_AssertResultSetsHaveSameMetaData.Test_ExpectedCommandIsNull
 AS
 BEGIN
-    EXEC tSQLt.ExpectException 'tSQLt.AssertResultSetsHaveSameMetaData failed. Expected:<(null)> has different metadata than Actual:<[Column1] int NOT NULL>.';
+    EXEC tSQLt.ExpectException 'tSQLt.AssertNotEqualsString failed. Expected any value except:<(null)>.';
 
     EXEC tSQLt.AssertResultSetsHaveSameMetaData NULL, 'SELECT 1 Column1';
 END;

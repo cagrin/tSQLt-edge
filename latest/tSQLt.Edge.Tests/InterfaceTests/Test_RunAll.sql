@@ -34,6 +34,7 @@ EXEC [tSQLt].[AssertEqualsTable] @Expected, @Actual, @Message, @FailMsg;
 EXEC [tSQLt].[AssertEqualsTableSchema] @Expected, @Actual, @Message;
 EXEC [tSQLt].[AssertLike] @ExpectedPattern, @Actual, @Message;
 EXEC [tSQLt].[AssertNotEquals] @Expected, @Actual, @Message;
+EXEC [tSQLt].[AssertNotEqualsString] @Expected, @Actual, @Message;
 EXEC [tSQLt].[AssertObjectDoesNotExist] @ObjectName, @Message;
 EXEC [tSQLt].[AssertObjectExists] @ObjectName, @Message;
 EXEC [tSQLt].[AssertResultSetsHaveSameMetaData] @expectedCommand, @actualCommand;
@@ -86,6 +87,7 @@ BEGIN
 [tSQLt].[AssertEqualsTableSchema] @Expected nvarchar(max), @Actual nvarchar(max), @Message nvarchar(max);
 [tSQLt].[AssertLike] @ExpectedPattern nvarchar(max), @Actual nvarchar(max), @Message nvarchar(max);
 [tSQLt].[AssertNotEquals] @Expected sql_variant, @Actual sql_variant, @Message nvarchar(max);
+[tSQLt].[AssertNotEqualsString] @Expected nvarchar(max), @Actual nvarchar(max), @Message nvarchar(max);
 [tSQLt].[AssertObjectDoesNotExist] @ObjectName nvarchar(max), @Message nvarchar(max);
 [tSQLt].[AssertObjectExists] @ObjectName nvarchar(max), @Message nvarchar(max);
 [tSQLt].[AssertResultSetsHaveSameMetaData] @expectedCommand nvarchar(max), @actualCommand nvarchar(max);
