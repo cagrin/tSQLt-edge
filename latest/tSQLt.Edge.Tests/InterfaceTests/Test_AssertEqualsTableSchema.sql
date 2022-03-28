@@ -69,6 +69,28 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE Test_AssertEqualsTableSchema.Test_TempTables_ExpectedNotExists
+AS
+BEGIN
+    CREATE TABLE #TestTable2 (Column1 INT);
+
+    EXEC tSQLt.ExpectException 'tSQLt.AssertObjectExists failed. Object:<#TestTable1> does not exist.';
+
+    EXEC tSQLt.AssertEqualsTableSchema '#TestTable1', '#TestTable2';
+END;
+GO
+
+CREATE PROCEDURE Test_AssertEqualsTableSchema.Test_TempTables_ActualNotExists
+AS
+BEGIN
+    CREATE TABLE #TestTable1 (Column1 INT);
+
+    EXEC tSQLt.ExpectException 'tSQLt.AssertObjectExists failed. Object:<#TestTable2> does not exist.';
+
+    EXEC tSQLt.AssertEqualsTableSchema '#TestTable1', '#TestTable2';
+END;
+GO
+
 CREATE PROCEDURE Test_AssertEqualsTableSchema.Test_SameTypeWithDifferentSchema
 AS
 BEGIN

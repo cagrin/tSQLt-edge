@@ -13,13 +13,13 @@ BEGIN
     END
     ELSE
     BEGIN
-        DECLARE @Failed NVARCHAR(MAX) = CONCAT
+        DECLARE @Failed NVARCHAR(MAX) = CONCAT_WS
         (
-            'tSQLt.AssertResultSetsHaveSameMetaData failed. Expected:<',
-            @ExpectedMetaData,
-            '> has different metadata than Actual:<',
-            @ActualMetaData,
-            '>.'
+            ' ',
+            'tSQLt.AssertResultSetsHaveSameMetaData failed.',
+            CONCAT('Expected:<', ISNULL(@ExpectedMetaData, '(null)'), '>'),
+            'has different metadata than',
+            CONCAT('Actual:<', ISNULL(@ActualMetaData, '(null)'), '>.')
         );
         EXEC tSQLt.Fail @Message0 = @Failed;
     END

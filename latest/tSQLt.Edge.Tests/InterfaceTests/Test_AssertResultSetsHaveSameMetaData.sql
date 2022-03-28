@@ -8,12 +8,21 @@ BEGIN
 END;
 GO
 
-CREATE PROC Test_AssertResultSetsHaveSameMetaData.Test_SelectNullCommand
+CREATE PROC Test_AssertResultSetsHaveSameMetaData.Test_ActualCommandIsNull
 AS
 BEGIN
-    EXEC tSQLt.ExpectException 'Incorrect syntax near '')''.';
+    EXEC tSQLt.ExpectException 'tSQLt.AssertResultSetsHaveSameMetaData failed. Expected:<[Column1] int NOT NULL> has different metadata than Actual:<(null)>.';
 
     EXEC tSQLt.AssertResultSetsHaveSameMetaData 'SELECT 1 Column1', NULL;
+END;
+GO
+
+CREATE PROC Test_AssertResultSetsHaveSameMetaData.Test_ExpectedCommandIsNull
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'tSQLt.AssertResultSetsHaveSameMetaData failed. Expected:<(null)> has different metadata than Actual:<[Column1] int NOT NULL>.';
+
+    EXEC tSQLt.AssertResultSetsHaveSameMetaData NULL, 'SELECT 1 Column1';
 END;
 GO
 

@@ -10,13 +10,12 @@ BEGIN
     END
     ELSE
     BEGIN
-        DECLARE @Failed NVARCHAR(MAX) = CONCAT
+        DECLARE @Failed NVARCHAR(MAX) = CONCAT_WS
         (
-            'tSQLt.AssertEqualsString failed. Expected:<',
-            ISNULL(@Expected, '(null)'),
-            '>. Actual:<',
-            ISNULL(@Actual, '(null)'),
-            '>.'
+            ' ',
+            'tSQLt.AssertEqualsString failed.',
+            CONCAT('Expected:<', ISNULL(@Expected, '(null)'), '>.'),
+            CONCAT('Actual:<', ISNULL(@Actual, '(null)'), '>.')
         );
         EXEC tSQLt.Fail @Message, @Failed;
     END

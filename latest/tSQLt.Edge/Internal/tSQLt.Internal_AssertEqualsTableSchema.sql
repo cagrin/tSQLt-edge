@@ -4,8 +4,10 @@ CREATE PROCEDURE tSQLt.Internal_AssertEqualsTableSchema
     @Message NVARCHAR(MAX) = NULL
 AS
 BEGIN
-    DECLARE @ExpectedColumns NVARCHAR(MAX) = tSQLt.Private_GetColumns (@Expected);
+    EXEC tSQLt.AssertObjectExists @Expected;
+    EXEC tSQLt.AssertObjectExists @Actual;
 
+    DECLARE @ExpectedColumns NVARCHAR(MAX) = tSQLt.Private_GetColumns (@Expected);
     DECLARE @ActualColumns NVARCHAR(MAX) = tSQLt.Private_GetColumns (@Actual);
 
     IF (@ExpectedColumns = @ActualColumns)
@@ -14,13 +16,12 @@ BEGIN
     END
     ELSE
     BEGIN
-        DECLARE @Failed NVARCHAR(MAX) = CONCAT
+        DECLARE @Failed NVARCHAR(MAX) = CONCAT_WS
         (
-            'tSQLt.AssertEqualsTableSchema failed. Expected:<',
-            ISNULL(@ExpectedColumns, '(null)'),
-            '>. Actual:<',
-            ISNULL(@ActualColumns, '(null)'),
-            '>.'
+            ' ',
+            'tSQLt.AssertEqualsTableSchema failed.',
+            CONCAT('Expected:<', ISNULL(@ExpectedColumns, '(null)'), '>.'),
+            CONCAT('Actual:<', ISNULL(@ActualColumns, '(null)'), '>.')
         );
         EXEC tSQLt.Fail @Message, @Failed;
     END

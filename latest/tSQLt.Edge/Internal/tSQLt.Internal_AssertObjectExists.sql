@@ -9,11 +9,12 @@ BEGIN
     END
     ELSE
     BEGIN
-        DECLARE @Failed NVARCHAR(MAX) = CONCAT
+        DECLARE @Failed NVARCHAR(MAX) = CONCAT_WS
         (
-            'tSQLt.AssertObjectExists failed. Object:<',
-            ISNULL(CONVERT(NVARCHAR(MAX), @ObjectName), '(null)'),
-            '> does not exist.'
+            ' ',
+            'tSQLt.AssertObjectExists failed.',
+            CONCAT('Object:<', ISNULL(@ObjectName, '(null)'), '>'),
+            'does not exist.'
         );
         EXEC tSQLt.Fail @Message, @Failed;
     END

@@ -22,7 +22,7 @@ GO
 CREATE PROCEDURE Test_AssertEmptyTable.Test_NonExistsTable
 AS
 BEGIN
-    EXEC tSQLt.ExpectException 'Invalid object name ''dbo.TestTable1''.';
+    EXEC tSQLt.ExpectException 'tSQLt.AssertObjectExists failed. Object:<dbo.TestTable1> does not exist.';
 
     EXEC tSQLt.AssertEmptyTable 'dbo.TestTable1';
 END;
@@ -31,7 +31,7 @@ GO
 CREATE PROCEDURE Test_AssertEmptyTable.Test_NonExistsTempTable
 AS
 BEGIN
-    EXEC tSQLt.ExpectException 'Invalid object name ''#TestTable1''.';
+    EXEC tSQLt.ExpectException 'tSQLt.AssertObjectExists failed. Object:<#TestTable1> does not exist.';
 
     EXEC tSQLt.AssertEmptyTable '#TestTable1';
 END;
@@ -40,7 +40,7 @@ GO
 CREATE PROCEDURE Test_AssertEmptyTable.Test_NullCommand
 AS
 BEGIN
-    EXEC tSQLt.ExpectException 'Incorrect syntax near '')''.';
+    EXEC tSQLt.ExpectException 'tSQLt.AssertObjectExists failed. Object:<(null)> does not exist.';
 
     EXEC tSQLt.AssertEmptyTable NULL;
 END;
