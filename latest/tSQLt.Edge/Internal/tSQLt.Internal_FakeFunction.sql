@@ -4,8 +4,9 @@ CREATE PROCEDURE tSQLt.Internal_FakeFunction
     @FakeDataSource NVARCHAR(MAX) = NULL
 AS
 BEGIN
-    IF @FakeDataSource IS NOT NULL
-        EXEC tSQLt.Fail 'Not implemented yet.';
+    EXEC tSQLt.AssertObjectExists @FunctionName;
+    EXEC tSQLt.AssertObjectExists @FakeFunctionName;
+    EXEC tSQLt.AssertEqualsString NULL, @FakeDataSource, @Message = 'FakeDataSource is not implemented yet.';
 
     DECLARE @ObjectId INT = OBJECT_ID(@FunctionName);
     DECLARE @FunctionType CHAR(2) = tSQLt.Private_GetObjectType (@ObjectId);

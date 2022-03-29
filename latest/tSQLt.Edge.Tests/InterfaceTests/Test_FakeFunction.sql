@@ -4,10 +4,7 @@ GO
 CREATE PROCEDURE Test_FakeFunction.Test_InlineTableValuedFunction
 AS
 BEGIN
-    EXEC('CREATE OR ALTER FUNCTION dbo.TestFunctionIF() RETURNS TABLE AS RETURN SELECT 13 Column1;');
-    EXEC('CREATE FUNCTION dbo.FakeFunction() RETURNS TABLE AS RETURN SELECT 42 Column1;');
-
-    EXEC tSQLt.FakeFunction 'dbo.TestFunctionIF', 'dbo.FakeFunction';
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionIF', 'dbo.FakeFunctionIF';
 
     DECLARE @Actual INT = (SELECT Column1 FROM dbo.TestFunctionIF());
 
@@ -18,10 +15,7 @@ GO
 CREATE PROCEDURE Test_FakeFunction.Test_InlineTableValuedFunctionWithP1
 AS
 BEGIN
-    EXEC('CREATE OR ALTER FUNCTION dbo.TestFunctionIF_P1(@P1 int) RETURNS TABLE AS RETURN SELECT 13+@P1 Column1;');
-    EXEC('CREATE FUNCTION dbo.FakeFunction(@P1 int) RETURNS TABLE AS RETURN SELECT 42+@P1 Column1;');
-
-    EXEC tSQLt.FakeFunction 'dbo.TestFunctionIF_P1', 'dbo.FakeFunction';
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionIF_P1', 'dbo.FakeFunctionIF_P1';
 
     DECLARE @Actual INT = (SELECT Column1 FROM dbo.TestFunctionIF_P1(1));
 
@@ -32,10 +26,7 @@ GO
 CREATE PROCEDURE Test_FakeFunction.Test_MultiStatementTableValuedFunction
 AS
 BEGIN
-    EXEC('CREATE OR ALTER FUNCTION dbo.TestFunctionTF() RETURNS @Result TABLE (Column1 int) AS BEGIN INSERT INTO @Result SELECT 13; RETURN; END;');
-    EXEC('CREATE FUNCTION dbo.FakeFunction() RETURNS @Result TABLE (Column1 int) AS BEGIN INSERT INTO @Result SELECT 42; RETURN; END;');
-
-    EXEC tSQLt.FakeFunction 'dbo.TestFunctionTF', 'dbo.FakeFunction';
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionTF', 'dbo.FakeFunctionTF';
 
     DECLARE @Actual INT = (SELECT Column1 FROM dbo.TestFunctionTF());
 
@@ -46,10 +37,7 @@ GO
 CREATE PROCEDURE Test_FakeFunction.Test_MultiStatementTableValuedFunctionWithP1
 AS
 BEGIN
-    EXEC('CREATE OR ALTER FUNCTION dbo.TestFunctionTF_P1(@P1 int) RETURNS @Result TABLE (Column1 int) AS BEGIN INSERT INTO @Result SELECT 13+@P1; RETURN; END;');
-    EXEC('CREATE FUNCTION dbo.FakeFunction(@P1 int) RETURNS @Result TABLE (Column1 int) AS BEGIN INSERT INTO @Result SELECT 42+@P1; RETURN; END;');
-
-    EXEC tSQLt.FakeFunction 'dbo.TestFunctionTF_P1', 'dbo.FakeFunction';
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionTF_P1', 'dbo.FakeFunctionTF_P1';
 
     DECLARE @Actual INT = (SELECT Column1 FROM dbo.TestFunctionTF_P1(1));
 
@@ -60,10 +48,7 @@ GO
 CREATE PROCEDURE Test_FakeFunction.Test_ScalarFunction
 AS
 BEGIN
-    EXEC('CREATE OR ALTER FUNCTION dbo.TestFunctionScalar() RETURNS INT AS BEGIN RETURN (SELECT 13); END;');
-    EXEC('CREATE FUNCTION dbo.FakeFunction() RETURNS INT AS BEGIN RETURN (SELECT 42); END;');
-
-    EXEC tSQLt.FakeFunction 'dbo.TestFunctionScalar', 'dbo.FakeFunction';
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionScalar', 'dbo.FakeFunctionScalar';
 
     DECLARE @Actual INT = dbo.TestFunctionScalar();
 
@@ -74,13 +59,37 @@ GO
 CREATE PROCEDURE Test_FakeFunction.Test_ScalarFunctionWithP1
 AS
 BEGIN
-    EXEC('CREATE OR ALTER FUNCTION dbo.TestFunctionScalar_P1(@P1 int) RETURNS INT AS BEGIN RETURN (SELECT 13+@P1); END;');
-    EXEC('CREATE FUNCTION dbo.FakeFunction(@P1 int) RETURNS INT AS BEGIN RETURN (SELECT 42+@P1); END;');
-
-    EXEC tSQLt.FakeFunction 'dbo.TestFunctionScalar_P1', 'dbo.FakeFunction';
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionScalar_P1', 'dbo.FakeFunctionScalar_P1';
 
     DECLARE @Actual INT = dbo.TestFunctionScalar_P1(1);
 
     EXEC tSQLt.AssertEquals 43, @Actual;
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_ScalarFunction_FakeFunctionIsNull
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'tSQLt.AssertObjectExists failed. Object:<(null)> does not exist.';
+
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionScalar', NULL;
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_ScalarFunction_FunctionIsNull
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'tSQLt.AssertObjectExists failed. Object:<(null)> does not exist.';
+
+    EXEC tSQLt.FakeFunction NULL, 'dbo.FakeFunctionScalar';
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_InlineTableValuedFunction_DataSourceIsNotNull
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'FakeDataSource is not implemented yet. tSQLt.AssertEqualsString failed. Expected:<(null)>. Actual:<dbo.FakeDataSource>.';
+
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionIF', 'dbo.FakeFunctionIF', 'dbo.FakeDataSource';
 END;
 GO
