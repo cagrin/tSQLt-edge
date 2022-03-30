@@ -6,6 +6,18 @@ CREATE PROCEDURE tSQLt.Internal_FakeTable
     @Defaults BIT = NULL
 AS
 BEGIN
-    PRINT CONCAT_WS(' ', '- tSQLt.FakeTable', @TableName, @SchemaName, '@Identity', '@ComputedColumns', '@Defaults');
+    EXEC tSQLt.AssertObjectExists @TableName;
+
+    DECLARE @ObjectId INT = OBJECT_ID(@TableName);
+    DECLARE @Columns NVARCHAR(MAX) = tSQLt.Private_GetColumns (@TableName);
+
+    DECLARE @CreateFakeTableCommand NVARCHAR(MAX) = CONCAT_WS
+    (
+        ' ',
+        'CREATE TABLE', @TableName, CONCAT('(', REPLACE(@Columns, 'NOT NULL', 'NULL'), ');')
+    );
+
+    EXEC tSQLt.Private_RenameObject @ObjectId;
+    EXEC (@CreateFakeTableCommand);
 END;
 GO
