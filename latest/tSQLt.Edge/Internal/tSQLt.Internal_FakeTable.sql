@@ -7,14 +7,16 @@ CREATE PROCEDURE tSQLt.Internal_FakeTable
 AS
 BEGIN
     EXEC tSQLt.AssertObjectExists @TableName;
+    EXEC tSQLt.AssertNotEquals 1, @ComputedColumns, @Message = 'ComputedColumns = 1 is not implemented yet.';
+    EXEC tSQLt.AssertNotEquals 1, @Defaults, @Message = 'Defaults = 1 is not implemented yet.';
 
     DECLARE @ObjectId INT = OBJECT_ID(@TableName);
-    DECLARE @Columns NVARCHAR(MAX) = tSQLt.Private_GetColumns (@TableName);
+    DECLARE @FakeColumns NVARCHAR(MAX) = tSQLt.Private_GetFakeColumns (@TableName, @Identity, @ComputedColumns, @Defaults);
 
     DECLARE @CreateFakeTableCommand NVARCHAR(MAX) = CONCAT_WS
     (
         ' ',
-        'CREATE TABLE', @TableName, CONCAT('(', REPLACE(@Columns, 'NOT NULL', 'NULL'), ');')
+        'CREATE TABLE', @TableName, CONCAT('(', @FakeColumns, ');')
     );
 
     EXEC tSQLt.Private_RenameObject @ObjectId;

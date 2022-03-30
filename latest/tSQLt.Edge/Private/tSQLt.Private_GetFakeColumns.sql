@@ -1,4 +1,4 @@
-CREATE FUNCTION tSQLt.Private_GetColumns (@ObjectName NVARCHAR(MAX))
+CREATE FUNCTION tSQLt.Private_GetFakeColumns (@ObjectName NVARCHAR(MAX), @Identity BIT, @ComputedColumns BIT, @Defaults BIT)
 RETURNS NVARCHAR(MAX) AS
 BEGIN
     RETURN
@@ -11,8 +11,10 @@ BEGIN
                     ' ',
                     QUOTENAME(name),
                     tSQLt.Private_GetType(user_type_id, max_length, precision, scale, collation_name),
-                    CASE is_identity WHEN 1 THEN tSQLt.Private_GetIdentityColumn(@ObjectName, column_id) ELSE NULL END,
-                    CASE is_nullable WHEN 1 THEN 'NULL' ELSE 'NOT NULL' END
+                    CASE
+                        WHEN @Identity = 1 and is_identity = 1 THEN tSQLt.Private_GetIdentityColumn(@ObjectName, column_id)
+                        ELSE NULL
+                    END
                 ),
                 ', '
             ) WITHIN GROUP (ORDER BY column_id)
