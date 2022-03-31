@@ -108,3 +108,44 @@ BEGIN
     EXEC tSQLt.AssertEqualsTableSchema 'dbo.TestTable2', 'dbo.TestTable1';
 END;
 GO
+
+CREATE PROCEDURE Test_FakeTable.Test_PreserveOnlyCollation
+AS
+BEGIN
+    CREATE TABLE dbo.TestTable1 (Column1 int IDENTITY(1,2) NOT NULL, Column2 AS 2*Column1, Column3 VARCHAR(100) COLLATE Polish_100_CI_AS DEFAULT '-');
+    CREATE TABLE dbo.TestTable2 (Column1 int,                        Column2 int         , Column3 VARCHAR(100) COLLATE Polish_100_CI_AS);
+
+    EXEC tSQLt.FakeTable 'dbo.TestTable1', @Identity = 0, @ComputedColumns = 0, @Defaults = 0;
+
+    EXEC tSQLt.AssertEqualsTableSchema 'dbo.TestTable2', 'dbo.TestTable1';
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_SchemaName
+AS
+BEGIN
+    CREATE TABLE dbo.TestTable1 (Column1 int NOT NULL);
+
+    EXEC tSQLt.ExpectException '@SchemaName parameter preserved for backward compatibility. Do not use. Will be removed soon.';
+
+    EXEC tSQLt.FakeTable @TableName = 'TestTable1', @SchemaName = 'dbo';
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_TableNameIsNull
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'tSQLt.AssertObjectExists failed. Object:<(null)> does not exist.';
+
+    EXEC tSQLt.FakeTable NULL;
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_TableNameNotExists
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'tSQLt.AssertObjectExists failed. Object:<dbo.TestTable1> does not exist.';
+
+    EXEC tSQLt.FakeTable 'dbo.TestTable1';
+END;
+GO
