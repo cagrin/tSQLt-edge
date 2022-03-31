@@ -4,8 +4,8 @@ CREATE PROCEDURE tSQLt.Internal_AssertEqualsTableSchema
     @Message NVARCHAR(MAX) = NULL
 AS
 BEGIN
-    EXEC tSQLt.AssertObjectExists @Expected;
-    EXEC tSQLt.AssertObjectExists @Actual;
+    EXEC tSQLt.Private_ProcessTableName @Expected OUTPUT;
+    EXEC tSQLt.Private_ProcessTableName @Actual OUTPUT;
 
     DECLARE @ExpectedColumns NVARCHAR(MAX) = tSQLt.Private_GetColumns (@Expected);
     DECLARE @ActualColumns NVARCHAR(MAX) = tSQLt.Private_GetColumns (@Actual);

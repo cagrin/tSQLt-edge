@@ -3,7 +3,7 @@ CREATE PROCEDURE tSQLt.Internal_AssertEmptyTable
     @Message NVARCHAR(MAX) = ''
 AS
 BEGIN
-    EXEC tSQLt.AssertObjectExists @TableName;
+    EXEC tSQLt.Private_ProcessTableName @TableName OUTPUT;
 
     DECLARE @IsEmpty BIT; EXEC tSQLt.Private_IsEmptyTable @TableName, @IsEmpty OUTPUT;
 

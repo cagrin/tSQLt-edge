@@ -120,19 +120,22 @@ BEGIN
     EXEC tSQLt.AssertEqualsTableSchema 'dbo.TestTable2', 'dbo.TestTable1';
 END;
 GO
-/*
+
 CREATE PROCEDURE Test_FakeTable.Test_CanFakeTempTable
 AS
 BEGIN
     CREATE TABLE #TestTable1 (Column1 int IDENTITY(1,2) NOT NULL, Column2 AS 2*Column1, Column3 VARCHAR(100) COLLATE Polish_100_CI_AS DEFAULT '-');
     CREATE TABLE #TestTable2 (Column1 int,                        Column2 int         , Column3 VARCHAR(100) COLLATE Polish_100_CI_AS);
 
+    -- Not implemented.
+    EXEC tSQLt.ExpectException 'Either the parameter @objname is ambiguous or the claimed @objtype (OBJECT) is wrong.'
+
     EXEC tSQLt.FakeTable '#TestTable1';
 
-    EXEC tSQLt.AssertEqualsTableSchema '#TestTable2', '#TestView1';
+    EXEC tSQLt.AssertEqualsTableSchema '#TestTable2', '#TestTable1';
 END;
 GO
-*/
+
 CREATE PROCEDURE Test_FakeTable.Test_CanFakeView
 AS
 BEGIN
@@ -146,7 +149,7 @@ BEGIN
     EXEC tSQLt.AssertEqualsTableSchema 'dbo.TestTable2', 'dbo.TestView1';
 END;
 GO
-/*
+
 CREATE PROCEDURE Test_FakeTable.Test_CanFakeSynonymForTable
 AS
 BEGIN
@@ -160,8 +163,7 @@ BEGIN
     EXEC tSQLt.AssertEqualsTableSchema 'dbo.TestTable2', 'dbo.TestSynonym1';
 END;
 GO
-*/
-/*
+
 CREATE PROCEDURE Test_FakeTable.Test_CanFakeSynonymForView
 AS
 BEGIN
@@ -176,7 +178,7 @@ BEGIN
     EXEC tSQLt.AssertEqualsTableSchema 'dbo.TestTable2', 'dbo.TestSynonym1';
 END;
 GO
-*/
+
 CREATE PROCEDURE Test_FakeFunction.Test_SchemaName
 AS
 BEGIN

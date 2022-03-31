@@ -5,8 +5,8 @@ CREATE PROCEDURE tSQLt.Internal_AssertEqualsTable
     @FailMsg NVARCHAR(MAX) = 'Unexpected/missing resultset rows!'
 AS
 BEGIN
-    EXEC tSQLt.AssertObjectExists @Expected;
-    EXEC tSQLt.AssertObjectExists @Actual;
+    EXEC tSQLt.Private_ProcessTableName @Expected OUTPUT;
+    EXEC tSQLt.Private_ProcessTableName @Actual OUTPUT;
 
     DECLARE @Diffs INT = 0;
     EXEC tSQLt.Private_CompareTables @Expected, @Actual, @Diffs OUTPUT;

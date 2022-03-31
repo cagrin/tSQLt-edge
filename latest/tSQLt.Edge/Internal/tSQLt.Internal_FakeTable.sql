@@ -9,7 +9,7 @@ BEGIN
     IF @SchemaName IS NOT NULL
         EXEC tSQLt.Fail '@SchemaName parameter preserved for backward compatibility. Do not use. Will be removed soon.';
 
-    EXEC tSQLt.AssertObjectExists @TableName;
+    EXEC tSQLt.Private_ProcessTableName @TableName OUTPUT;
 
     DECLARE @FakeColumns NVARCHAR(MAX) = tSQLt.Private_GetFakeColumns (@TableName, @Identity, @ComputedColumns, @Defaults);
 
