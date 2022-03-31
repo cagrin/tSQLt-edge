@@ -40,7 +40,7 @@ BEGIN
         'RETURN; END;'
     );
 
-    EXEC tSQLt.Private_RenameObject @ObjectId;
+    EXEC tSQLt.Private_RenameObject @ProcedureName;
     EXEC (@CreateLogTableCommand);
     EXEC (@CreateProcedureCommand);
 END;

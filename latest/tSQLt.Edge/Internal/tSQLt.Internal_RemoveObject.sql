@@ -4,11 +4,9 @@ CREATE PROCEDURE tSQLt.Internal_RemoveObject
     @IfExists INT = 0
 AS
 BEGIN
-    DECLARE @ObjectId INT = OBJECT_ID(@ObjectName);
-
-    IF (@ObjectId IS NOT NULL)
+    IF (OBJECT_ID(@ObjectName) IS NOT NULL) OR (OBJECT_ID(CONCAT('tempdb..', @ObjectName)) IS NOT NULL)
     BEGIN
-        EXEC tSQLt.Private_RenameObject @ObjectId, @NewName OUTPUT;
+        EXEC tSQLt.Private_RenameObject @ObjectName, @NewName OUTPUT;
     END
     ELSE
     BEGIN

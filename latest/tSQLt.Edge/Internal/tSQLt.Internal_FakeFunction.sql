@@ -44,7 +44,7 @@ BEGIN
     ELSE
         EXEC tSQLt.Fail 'Unsupported function type', @FunctionType;
 
-    EXEC tSQLt.Private_RenameObject @ObjectId;
+    EXEC tSQLt.Private_RenameObject @FunctionName;
     EXEC (@CreateFakeFunctionCommand);
 END;
 GO

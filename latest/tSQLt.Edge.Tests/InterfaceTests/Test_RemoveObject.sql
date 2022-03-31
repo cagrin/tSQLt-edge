@@ -23,6 +23,17 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE Test_RemoveObject.Test_TempTable
+AS
+BEGIN
+    CREATE TABLE #NewTable (Id int);
+
+    EXEC tSQLt.RemoveObject '#NewTable';
+
+    EXEC tSQLt.AssertObjectDoesNotExist '#NewTable';
+END;
+GO
+
 CREATE PROCEDURE Test_RemoveObject.Test_Table_NotExists
 AS
 BEGIN

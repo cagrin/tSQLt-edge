@@ -1,20 +1,28 @@
 CREATE PROCEDURE tSQLt.Private_RenameObject
-    @ObjectId INT,
+    @ObjectName NVARCHAR(MAX),
     @NewName NVARCHAR(MAX) = NULL OUTPUT
 AS
 BEGIN
-    SET @NewName = ISNULL(@NewName, NEWID());
+    DECLARE @Command NVARCHAR(MAX);
 
-    DECLARE @Command NVARCHAR(MAX) = CONCAT
-    (
-        'EXEC sp_rename ''',
-        QUOTENAME(OBJECT_SCHEMA_NAME(@ObjectId)),
-        '.',
-        QUOTENAME(OBJECT_NAME(@ObjectId)),
-        ''', ''',
-        @NewName,
-        ''', ''OBJECT'';'
-    );
+    IF (OBJECT_ID(CONCAT('tempdb..', @ObjectName)) IS NOT NULL)
+    BEGIN
+        SET @Command = CONCAT('DROP TABLE ', @ObjectName);
+    END
+    ELSE
+    BEGIN
+        SET @NewName = ISNULL(@NewName, NEWID());
+        SET @Command = CONCAT
+        (
+            'EXEC sp_rename ''',
+            QUOTENAME(PARSENAME(@ObjectName, 2)),
+            '.',
+            QUOTENAME(PARSENAME(@ObjectName, 1)),
+            ''', ''',
+            @NewName,
+            ''', ''OBJECT'';'
+        );
+    END
 
     EXEC (@Command);
 END;
