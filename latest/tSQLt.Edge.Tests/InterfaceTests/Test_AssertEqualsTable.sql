@@ -139,6 +139,8 @@ AS
 BEGIN
     CREATE TABLE #TestTable1 (Column1 INT);
     CREATE TABLE #TestTable2 (Column1 INT);
+    INSERT INTO #TestTable1 (Column1) VALUES (1);
+    INSERT INTO #TestTable2 (Column1) VALUES (1);
 
     EXEC tSQLt.AssertEqualsTable '#TestTable1', '#TestTable2';
 END;
@@ -171,6 +173,8 @@ AS
 BEGIN
     CREATE TABLE dbo.TestTable1 (Column1 INT);
     CREATE TABLE dbo.TestTable2 (Column1 INT);
+    INSERT INTO dbo.TestTable1 (Column1) VALUES (1);
+    INSERT INTO dbo.TestTable2 (Column1) VALUES (1);
 
     EXEC ('CREATE VIEW dbo.TestView1 AS SELECT * FROM dbo.TestTable1;')
     EXEC ('CREATE VIEW dbo.TestView2 AS SELECT * FROM dbo.TestTable2;')
@@ -184,6 +188,8 @@ AS
 BEGIN
     CREATE TABLE dbo.TestTable1 (Column1 INT);
     CREATE TABLE dbo.TestTable2 (Column1 INT);
+    INSERT INTO dbo.TestTable1 (Column1) VALUES (1);
+    INSERT INTO dbo.TestTable2 (Column1) VALUES (1);
 
     EXEC ('CREATE SYNONYM dbo.TestSynonym1 FOR dbo.TestTable1;')
     EXEC ('CREATE SYNONYM dbo.TestSynonym2 FOR dbo.TestTable2;')
@@ -197,6 +203,8 @@ AS
 BEGIN
     CREATE TABLE dbo.TestTable1 (Column1 INT);
     CREATE TABLE dbo.TestTable2 (Column1 INT);
+    INSERT INTO dbo.TestTable1 (Column1) VALUES (1);
+    INSERT INTO dbo.TestTable2 (Column1) VALUES (1);
 
     EXEC ('CREATE VIEW dbo.TestView1 AS SELECT * FROM dbo.TestTable1;')
     EXEC ('CREATE VIEW dbo.TestView2 AS SELECT * FROM dbo.TestTable2;')
