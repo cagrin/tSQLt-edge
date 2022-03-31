@@ -81,3 +81,37 @@ BEGIN
     EXEC tSQLt.AssertEmptyTable '#TestTable1';
 END;
 GO
+
+CREATE PROCEDURE Test_AssertEmptyTable.Test_CanDoView
+AS
+BEGIN
+    CREATE TABLE dbo.TestTable1 (Column1 INT);
+
+    EXEC ('CREATE VIEW dbo.TestView1 AS SELECT * FROM dbo.TestTable1;')
+
+    EXEC tSQLt.AssertEmptyTable 'dbo.TestView1';
+END;
+GO
+
+CREATE PROCEDURE Test_AssertEmptyTable.Test_CanDoSynonymForTable
+AS
+BEGIN
+    CREATE TABLE dbo.TestTable1 (Column1 INT);
+
+    EXEC ('CREATE SYNONYM dbo.TestSynonym1 FOR dbo.TestTable1;')
+
+    EXEC tSQLt.AssertEmptyTable 'dbo.TestSynonym1';
+END;
+GO
+
+CREATE PROCEDURE Test_AssertEmptyTable.Test_CanDoSynonymForView
+AS
+BEGIN
+    CREATE TABLE dbo.TestTable1 (Column1 INT);
+
+    EXEC ('CREATE VIEW dbo.TestView1 AS SELECT * FROM dbo.TestTable1;')
+    EXEC ('CREATE SYNONYM dbo.TestSynonym1 FOR dbo.TestView1;')
+
+    EXEC tSQLt.AssertEmptyTable 'dbo.TestSynonym1';
+END;
+GO

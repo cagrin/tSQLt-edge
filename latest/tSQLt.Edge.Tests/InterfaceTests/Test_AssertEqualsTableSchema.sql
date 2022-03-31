@@ -118,3 +118,45 @@ BEGIN
     EXEC tSQLt.AssertEqualsTableSchema '[Schema A].[Table A]', '[Schema B].[Table B]';
 END;
 GO
+
+CREATE PROCEDURE Test_AssertEqualsTableSchema.Test_CanDoView
+AS
+BEGIN
+    CREATE TABLE dbo.TestTable1 (Column1 INT);
+    CREATE TABLE dbo.TestTable2 (Column1 INT);
+
+    EXEC ('CREATE VIEW dbo.TestView1 AS SELECT * FROM dbo.TestTable1;')
+    EXEC ('CREATE VIEW dbo.TestView2 AS SELECT * FROM dbo.TestTable2;')
+
+    EXEC tSQLt.AssertEqualsTableSchema 'dbo.TestView1', 'dbo.TestView2';
+END;
+GO
+
+CREATE PROCEDURE Test_AssertEqualsTableSchema.Test_CanDoSynonymForTable
+AS
+BEGIN
+    CREATE TABLE dbo.TestTable1 (Column1 INT);
+    CREATE TABLE dbo.TestTable2 (Column1 INT);
+
+    EXEC ('CREATE SYNONYM dbo.TestSynonym1 FOR dbo.TestTable1;')
+    EXEC ('CREATE SYNONYM dbo.TestSynonym2 FOR dbo.TestTable2;')
+
+    EXEC tSQLt.AssertEqualsTableSchema 'dbo.TestSynonym1', 'dbo.TestSynonym2';
+END;
+GO
+
+CREATE PROCEDURE Test_AssertEqualsTableSchema.Test_CanDoSynonymForView
+AS
+BEGIN
+    CREATE TABLE dbo.TestTable1 (Column1 INT);
+    CREATE TABLE dbo.TestTable2 (Column1 INT);
+
+    EXEC ('CREATE VIEW dbo.TestView1 AS SELECT * FROM dbo.TestTable1;')
+    EXEC ('CREATE VIEW dbo.TestView2 AS SELECT * FROM dbo.TestTable2;')
+
+    EXEC ('CREATE SYNONYM dbo.TestSynonym1 FOR dbo.TestView1;')
+    EXEC ('CREATE SYNONYM dbo.TestSynonym2 FOR dbo.TestView2;')
+
+    EXEC tSQLt.AssertEqualsTableSchema 'dbo.TestSynonym1', 'dbo.TestSynonym2';
+END;
+GO
