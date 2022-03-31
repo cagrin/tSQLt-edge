@@ -91,3 +91,29 @@ BEGIN
     EXEC tSQLt.AssertEqualsTableSchema 'dbo.ExpectedFakeTable1', 'dbo.TestTable1';
 END;
 GO
+
+CREATE PROCEDURE Test_FakeTable.Test_DefaultFalse
+AS
+BEGIN
+    EXEC ('CREATE TABLE dbo.TestTable1 (Column1 int DEFAULT 1)');
+
+    EXEC tSQLt.FakeTable 'dbo.TestTable1';
+
+    EXEC ('CREATE TABLE dbo.ExpectedFakeTable1 (Column1 int NULL)');
+
+    EXEC tSQLt.AssertEqualsTableSchema 'dbo.ExpectedFakeTable1', 'dbo.TestTable1';
+END;
+GO
+
+CREATE PROCEDURE Test_FakeTable.Test_DefaultTrue
+AS
+BEGIN
+    EXEC ('CREATE TABLE dbo.TestTable1 (Column1 int DEFAULT 1)');
+
+    EXEC tSQLt.FakeTable 'dbo.TestTable1', @Defaults = 1;
+
+    EXEC ('CREATE TABLE dbo.ExpectedFakeTable1 (Column1 int DEFAULT 1)');
+
+    EXEC tSQLt.AssertEqualsTableSchema 'dbo.ExpectedFakeTable1', 'dbo.TestTable1';
+END;
+GO

@@ -11,12 +11,12 @@ BEGIN
                     ' ',
                     QUOTENAME(name),
                     CASE
-                        WHEN @ComputedColumns = 1 and is_computed = 1 THEN tSQLt.Private_GetComputedColumn(@ObjectName, column_id)
+                        WHEN @ComputedColumns = 1 AND is_computed = 1 THEN tSQLt.Private_GetComputedColumn(@ObjectName, column_id)
                         ELSE CONCAT_WS
                         (
-                            ' ',
-                            tSQLt.Private_GetType(user_type_id, max_length, precision, scale, collation_name),
-                            CASE WHEN @Identity = 1 and is_identity = 1 THEN tSQLt.Private_GetIdentityColumn(@ObjectName, column_id) ELSE NULL END
+                            ' ', tSQLt.Private_GetType(user_type_id, max_length, precision, scale, collation_name),
+                            CASE WHEN @Identity = 1 AND is_identity = 1 THEN tSQLt.Private_GetIdentityColumn(@ObjectName, column_id) END,
+                            CASE WHEN @Defaults = 1 AND default_object_id > 0 THEN tSQLt.Private_GetDefaultConstraints(@ObjectName, column_id) END
                         )
                     END
                 ),
