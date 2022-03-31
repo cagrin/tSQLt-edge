@@ -28,6 +28,9 @@ AS
 BEGIN
     CREATE TABLE #NewTable (Id int);
 
+    -- Not implemented.
+    EXEC tSQLt.ExpectException 'Either the parameter @objname is ambiguous or the claimed @objtype (OBJECT) is wrong.'
+
     EXEC tSQLt.RemoveObject '#NewTable';
 
     EXEC tSQLt.AssertObjectDoesNotExist '#NewTable';
