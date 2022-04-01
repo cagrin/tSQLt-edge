@@ -11,7 +11,7 @@ BEGIN
                 (
                     CAST('' AS NVARCHAR(MAX)),
                     'EXEC tSQLt.Private_Run @TestName = ''',
-                    TestName,
+                    REPLACE(TestName, '''', ''''''),
                     ''';'
                 ),
                 NCHAR(10)
