@@ -2,6 +2,6 @@ CREATE PROCEDURE tSQLt.Internal_DropClass
     @ClassName NVARCHAR(MAX)
 AS
 BEGIN
-    PRINT CONCAT_WS(' ', '- tSQLt.DropClass', @ClassName);
+    EXEC tSQLt.Fail 'tSQLt.DropClass is not supported.';
 END;
 GO

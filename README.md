@@ -16,13 +16,15 @@ Detailed principles:
 - Use tSQLt assertions in internal tests
 
 ## Compatibility
-[tSQLt-edge 0.5.0](https://www.nuget.org/packages/tSQLt.Edge/0.5.0) is partially compatible with tSQLt unit testing framework. See [full user guide](https://tsqlt.org/full-user-guide/) for more details about tSQLt.
+[tSQLt-edge 0.5.0](https://www.nuget.org/packages/tSQLt.Edge/0.5.0) is mostly fully compatible with tSQLt unit testing framework. See [full user guide](https://tsqlt.org/full-user-guide/) for more details about tSQLt.
+
+> The default method of calling tSQLt.NewTestClass to create a tSQLt test class (the schema to organize your unit tests) does not work either in Visual Studio database projects nor MSBuild.SDK.SqlProj projects. That is why tSQLt-edge entirely drop support for NewTestClass, DropClass and RenameClass.
 
 ||Status|
 |--- |---|
 |![](https://img.shields.io/badge/--green)|Fully compatible|
-|![](https://img.shields.io/badge/--yellow)|Initial support|
-|![](https://img.shields.io/badge/--red)|Not implemented|
+|![](https://img.shields.io/badge/--yellow)|Large or partial support|
+|![](https://img.shields.io/badge/--red)|Unsupported|
 
 #### Test creation and execution:
 
@@ -42,7 +44,7 @@ Detailed principles:
 - ![](https://img.shields.io/badge/AssertNotEquals--green)
 - ![](https://img.shields.io/badge/AssertObjectDoesNotExist--green)
 - ![](https://img.shields.io/badge/AssertObjectExists--green)
-- ![](https://img.shields.io/badge/AssertResultSetsHaveSameMetaData--green)
+- ![](https://img.shields.io/badge/AssertResultSetsHaveSameMetaData--yellow)
 - ![](https://img.shields.io/badge/Fail--green)
 - ![](https://img.shields.io/badge/AssertLike--green)
 
@@ -54,10 +56,10 @@ Detailed principles:
 #### Isolating dependencies:
 
 - ![](https://img.shields.io/badge/ApplyConstraint--red)
-- ![](https://img.shields.io/badge/FakeFunction--red)
-- ![](https://img.shields.io/badge/FakeTable--red)
+- ![](https://img.shields.io/badge/FakeFunction--yellow)
+- ![](https://img.shields.io/badge/FakeTable--yellow)
 - ![](https://img.shields.io/badge/RemoveObjectIfExists--green)
-- ![](https://img.shields.io/badge/SpyProcedure--green)
+- ![](https://img.shields.io/badge/SpyProcedure--yellow)
 - ![](https://img.shields.io/badge/ApplyTrigger--red)
 - ![](https://img.shields.io/badge/RemoveObject--green)
 
