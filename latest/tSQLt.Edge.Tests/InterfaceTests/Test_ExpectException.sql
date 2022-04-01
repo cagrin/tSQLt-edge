@@ -139,3 +139,21 @@ BEGIN
         @ExpectedMessage = 'Expected an exception to be raised. ExpectedSeverity:<16>. ExpectedState:<1>. ExpectedMessagePattern:<Divide by %>. ExpectedErrorNumber:<8134>.';
 END;
 GO
+
+CREATE PROCEDURE Test_ExpectException.Test_BadSelectWithNoneExpected
+AS
+BEGIN
+    EXEC tSQLt.ExpectException;
+
+    SELECT 1/0 A INTO #Fail;
+END;
+GO
+
+CREATE PROCEDURE Test_ExpectException.Test_GoodSelectWithNoneExpected
+AS
+BEGIN
+    EXEC Test_Extensions.AssertCommandFails
+        @Command = 'EXEC tSQLt.ExpectException; SELECT 1.0 A INTO #Fail;',
+        @ExpectedMessage = 'Expected an exception to be raised.';
+END;
+GO
