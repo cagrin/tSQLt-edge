@@ -16,7 +16,7 @@ Detailed principles:
 - Use tSQLt assertions in internal tests
 
 ## Compatibility
-[tSQLt-edge 0.5.0](https://www.nuget.org/packages/tSQLt.Edge/0.5.0) is mostly fully compatible with tSQLt unit testing framework. See [full user guide](https://tsqlt.org/full-user-guide/) for more details about tSQLt.
+[tSQLt-edge 0.6.0](https://www.nuget.org/packages/tSQLt.Edge/0.6.0) is mostly fully compatible with tSQLt unit testing framework. See [full user guide](https://tsqlt.org/full-user-guide/) for more details about tSQLt.
 
 > The default method of calling tSQLt.NewTestClass to create a tSQLt test class (the schema to organize your unit tests) does not work either in Visual Studio database projects nor MSBuild.SDK.SqlProj projects. That is why tSQLt-edge entirely drop support for NewTestClass, DropClass and RenameClass.
 
