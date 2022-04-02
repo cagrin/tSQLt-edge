@@ -1,4 +1,4 @@
-param ([int] $retest)
+param ([int] $retest, [int] $debug)
 
 $SA_PASSWORD='A.794613'
 $Collation='Polish_CI_AS'
@@ -11,6 +11,13 @@ if ($retest -ne 1)
     Start-Sleep -Second 30
 }
 
-$TEST_NAME='tSQLt.Edge.Tests'
+if ($debug -ne 1)
+{
+    $TEST_NAME='tSQLt.Edge.Tests'
+    dotnet publish ./$TEST_NAME /p:TargetServerName=localhost /p:TargetPort=51433 /p:TargetDatabaseName=$TEST_NAME /p:TargetUser=sa /p:TargetPassword=$SA_PASSWORD
+    Invoke-Sqlcmd -ServerInstance "localhost,51433" -Database "$TEST_NAME" -Username "sa" -Password "$SA_PASSWORD" -Query "EXEC tSQLt.RunAll" -Verbose
+}
+
+$TEST_NAME='tSQLt.Original.Tests'
 dotnet publish ./$TEST_NAME /p:TargetServerName=localhost /p:TargetPort=51433 /p:TargetDatabaseName=$TEST_NAME /p:TargetUser=sa /p:TargetPassword=$SA_PASSWORD
-Invoke-Sqlcmd -ServerInstance "localhost,51433" -Database "$TEST_NAME" -Username "sa" -Password "$SA_PASSWORD" -Query "EXEC tSQLt.RunAll" -Verbose
+Invoke-Sqlcmd -ServerInstance "localhost,51433" -Database "$TEST_NAME" -Username "sa" -Password "$SA_PASSWORD" -Query "EXEC tSQLt.Debug; EXEC tSQLt.RunAll" -Verbose
