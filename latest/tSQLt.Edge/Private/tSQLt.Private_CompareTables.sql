@@ -9,20 +9,20 @@ BEGIN
     DECLARE @DiffsCommand NVARCHAR(MAX) = CONCAT_WS
     (
         ' ',
-        'SELECT _row_ = ROW_NUMBER() OVER(ORDER BY', @ColumnsNames, '), * INTO #Expected FROM', @Expected,
-        'SELECT _row_ = ROW_NUMBER() OVER(ORDER BY', @ColumnsNames, '), * INTO #Actual FROM', @Actual,
+        'SELECT _row_ = ROW_NUMBER() OVER(ORDER BY', @ColumnsNames, '), * INTO #Expecte_d FROM', @Expected,
+        'SELECT _row_ = ROW_NUMBER() OVER(ORDER BY', @ColumnsNames, '), * INTO #Actua___l FROM', @Actual,
         'SELECT @Diffs = COUNT(1) FROM',
         '(',
             '(',
-                'SELECT * FROM #Expected',
+                'SELECT * FROM #Expecte_d',
                 'EXCEPT',
-                'SELECT * FROM #Actual',
+                'SELECT * FROM #Actua___l',
             ')',
             'UNION ALL',
             '(',
-                'SELECT * FROM #Actual',
+                'SELECT * FROM #Actua___l',
                 'EXCEPT',
-                'SELECT * FROM #Expected',
+                'SELECT * FROM #Expecte_d',
             ')',
         ') A'
     );
