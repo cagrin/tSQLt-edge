@@ -115,3 +115,21 @@ BEGIN
     EXEC tSQLt.AssertEmptyTable 'dbo.TestSynonym1';
 END;
 GO
+
+CREATE PROCEDURE Test_AssertEmptyTable.Test_QuotedEmptyTable
+AS
+BEGIN
+    CREATE TABLE dbo.TestTable1 (Column1 INT);
+
+    EXEC tSQLt.AssertEmptyTable '[dbo].[TestTable1]';
+END;
+GO
+
+CREATE PROCEDURE Test_AssertEmptyTable.Test_QuotedEmptyTempTable
+AS
+BEGIN
+    CREATE TABLE #TestTable1 (Column1 INT);
+
+    EXEC tSQLt.AssertEmptyTable '[#TestTable1]';
+END;
+GO

@@ -39,9 +39,7 @@ END;
 ';
     EXEC (@AlterFakeTable);
 
-    EXEC ('DROP PROCEDURE [AssertEmptyTableTests].[test handles odd names]'); --todo
-    EXEC ('DROP PROCEDURE [AssertEmptyTableTests].[test uses tSQLt.TableToText]');
-    EXEC ('DROP PROCEDURE [AssertEmptyTableTests].[test works with empty quotable #temptable]'); --todo
+    --EXEC ('DROP PROCEDURE [AssertEmptyTableTests].[test uses tSQLt.TableToText]');
 
     EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test all unsupported 2008 data types]');
     EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test all unsupported data types]');

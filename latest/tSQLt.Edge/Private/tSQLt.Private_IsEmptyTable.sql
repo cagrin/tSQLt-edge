@@ -3,6 +3,8 @@ CREATE PROCEDURE tSQLt.Private_IsEmptyTable
     @IsEmpty BIT OUTPUT
 AS
 BEGIN
+    SET @TableName = tSQLt.Private_GetQuotedObjectName (@TableName);
+
     DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
     (
         ' ',
