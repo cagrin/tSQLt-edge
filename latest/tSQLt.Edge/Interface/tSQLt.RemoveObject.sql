@@ -7,7 +7,7 @@ BEGIN
     DECLARE @Command NVARCHAR(MAX) = 'tSQLt.Internal_RemoveObject';
     EXEC @Command
     @ObjectName = @ObjectName,
-    @NewName = @NewName,
+    @NewName = @NewName OUTPUT,
     @IfExists = @IfExists;
 END;
 GO

@@ -130,9 +130,6 @@ END;
 
     EXEC ('DROP PROCEDURE [RemoveObjectTests].[test RemoveObject raises approporate error if object doesn''t exists'']'); --todo
 
-    EXEC ('DROP PROCEDURE [RemoveObjectIfExistsTests].[test calls tSQLt.RemoveObject passes @NewName back]'); --todo
-    EXEC ('DROP PROCEDURE [RemoveObjectIfExistsTests].[test calls tSQLt.RemoveObject with @IfExists = 1]'); --todo
-
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test @SpyProcedureOriginalObjectName contains original proc name even if it has single quotes, dots, or spaces]'); --todo
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test @SpyProcedureOriginalObjectName contains original proc name inside spy even if quoting is required]'); --todo
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test @SpyProcedureOriginalObjectName contains original proc name inside spy]'); --todo
