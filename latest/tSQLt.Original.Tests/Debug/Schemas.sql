@@ -24,3 +24,11 @@ CREATE SCHEMA FailTests;
 GO
 CREATE SCHEMA FakeFunctionTests;
 GO
+CREATE SCHEMA FakeTableTests;
+GO
+CREATE SCHEMA RemoveObjectTests;
+GO
+CREATE SCHEMA RemoveObjectIfExistsTests;
+GO
+CREATE SCHEMA SpyProcedureTests;
+GO

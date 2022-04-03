@@ -3,42 +3,17 @@ AS
 BEGIN
     DECLARE @Private_ProcessErrorMessage NVARCHAR(MAX) =
 '
-ALTER PROCEDURE tSQLt.Private_ProcessErrorMessage
-    @ErrorMessage NVARCHAR(4000) OUTPUT,
-    @ErrorSeverity INT,
-    @ErrorState INT,
-    @ErrorNumber INT
+ALTER PROCEDURE tSQLt.ExpectException
+    @ExpectedMessage NVARCHAR(MAX) = NULL,
+    @ExpectedSeverity INT = NULL,
+    @ExpectedState INT = NULL,
+    @Message NVARCHAR(MAX) = NULL,
+    @ExpectedMessagePattern NVARCHAR(MAX) = NULL,
+    @ExpectedErrorNumber INT = NULL
 AS
 BEGIN
-    DECLARE @ExpectException BIT;
-    DECLARE @ExpectedNoExceptionMessage NVARCHAR(MAX) = ''Expected no exception to be raised.'';
-    DECLARE @ExpectedExceptionMessage NVARCHAR(MAX) = ''Expected an exception to be raised.'';
-
-    SELECT
-        @ExpectException  = ExpectException
-    FROM #ExpectException
-
-    IF @ExpectException = 0
-    BEGIN
-        IF @ErrorMessage IS NOT NULL
-        BEGIN
-            SET @ErrorMessage = @ExpectedNoExceptionMessage
-        END
-    END
-
-    IF @ExpectException = 1
-    BEGIN
-        IF @ErrorMessage IS NOT NULL
-        BEGIN
-            SET @ErrorMessage = NULL;
-        END
-        ELSE
-        BEGIN
-            SET @ErrorMessage = @ExpectedExceptionMessage
-        END
-    END
-
-    DELETE FROM #ExpectException;
+    DECLARE @Command NVARCHAR(MAX) = ''tSQLt.Internal_ExpectException'';
+    EXEC @Command;
 END;
 ';
     EXEC (@Private_ProcessErrorMessage);
@@ -113,5 +88,59 @@ END;
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test Private_PrepareFakeFunctionOutputTable returns table with VALUES]');
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test tSQLt.Private_GetFullTypeName is used for return type]');
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test tSQLt.Private_GetFullTypeName is used to build parameter list]');
+
+    EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable calls tSQLt.Private_MarktSQLtTempObject on new object]');
+    EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable doesn''t produce output]');
+    EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable raises appropriate error if called with NULL parameters]'); --todo
+    EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable raises appropriate error if it was called with a single parameter]'); --todo
+    EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable raises appropriate error if schema does not exist]');
+    EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable raises appropriate error if table does not exist]'); --todo
+    EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable takes 2 nameless parameters containing schema and table name]');
+    EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable works if new name of original table requires quoting]'); --todo
+    EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable works with two parameters, if they are quoted]'); --todo
+    EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility accepts full name as 1st parm if 2nd parm is null]');
+    EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility accepts parms in wrong order]');
+    EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility can handle quoted names]');
+    EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility returns NULL schema name when table does not exist]');
+    EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility returns NULL table name when table does not exist]');
+    EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility returns NULLs when table name has special char]');
+    EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility returns quoted schema when schema and table provided]');
+    EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility returns quoted table when schema and table provided]');
+
+    EXEC ('DROP PROCEDURE [RemoveObjectTests].[test RemoveObject raises approporate error if object doesn''t exists'']'); --todo
+
+    EXEC ('DROP PROCEDURE [RemoveObjectIfExistsTests].[test calls tSQLt.RemoveObject passes @NewName back]'); --todo
+    EXEC ('DROP PROCEDURE [RemoveObjectIfExistsTests].[test calls tSQLt.RemoveObject with @IfExists = 1]'); --todo
+
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test @SpyProcedureOriginalObjectName contains original proc name even if it has single quotes, dots, or spaces]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test @SpyProcedureOriginalObjectName contains original proc name inside spy even if quoting is required]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test @SpyProcedureOriginalObjectName contains original proc name inside spy]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test calls original procedure with cursor parameters if @CallOriginal = 1]');
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test calls original procedure with OUTPUT parameters if @CallOriginal = 1]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test calls original procedure with parameters if @CallOriginal = 1]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test calls original procedure with table valued parameters if @CallOriginal = 1]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test calls the original procedure after @CommandToExecute if @CallOriginal = 1]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test calls the original procedure even if @CommandToExecute contains inline comment]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test calls the original procedure if @CallOriginal = 1 even if schema or procedure name require quoting]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test calls the original procedure if @CallOriginal = 1]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test can handle existing SpyProcedureLog table]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test does not call the original procedure if @CallOriginal = 0]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test does not call the original procedure if @CallOriginal = NULL]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test new Procedure Spy is marked as tSQLt.IsTempObject]');
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test new SpyProcedureLog table is marked as tSQLt.IsTempObject]');
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test Private_CreateProcedureSpy does create spy when @LogTableName is NULL]');
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test Private_GenerateCreateProcedureSpyStatement does not create log table when @LogTableName is NULL]');
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure calls tSQLt.Private_MarktSQLtTempObject on new objects]');
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure calls tSQLt.Private_RenameObjectToUniqueName on original proc]');
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure can have a cursor output parameter]');
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure can have a table type parameter]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure fails with error if spyee has more than 1020 parameters]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure handles procedure and schema names with single quotes]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure raises appropriate error if the procedure does not exist]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure raises appropriate error if the procedure name given references another type of object]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure should allow NULL values for sysname parms]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure should allow NULL values for user defined types created as not nullable]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure works if spyee has 100 parameters with 8000 bytes each]'); --todo
+    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure works with CLR procedures]');
 END;
 GO
