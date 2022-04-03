@@ -1,7 +1,7 @@
 CREATE PROCEDURE tSQLt.Debug
 AS
 BEGIN
-    DECLARE @Private_ProcessErrorMessage NVARCHAR(MAX) =
+    DECLARE @AlterExpectException NVARCHAR(MAX) =
 '
 ALTER PROCEDURE tSQLt.ExpectException
     @ExpectedMessage NVARCHAR(MAX) = NULL,
@@ -16,7 +16,28 @@ BEGIN
     EXEC @Command;
 END;
 ';
-    EXEC (@Private_ProcessErrorMessage);
+    EXEC (@AlterExpectException);
+
+    DECLARE @AlterFakeTable NVARCHAR(MAX) =
+'
+ALTER PROCEDURE tSQLt.FakeTable
+    @TableName NVARCHAR(MAX),
+    @SchemaName NVARCHAR(MAX) = NULL, --parameter preserved for backward compatibility. Do not use. Will be removed soon.
+    @Identity BIT = NULL,
+    @ComputedColumns BIT = NULL,
+    @Defaults BIT = NULL
+AS
+BEGIN
+    DECLARE @Command NVARCHAR(MAX) = ''tSQLt.Internal_FakeTableDebug'';
+    EXEC @Command
+    @TableName = @TableName,
+    @SchemaName = @SchemaName,
+    @Identity = @Identity,
+    @ComputedColumns = @ComputedColumns,
+    @Defaults = @Defaults;
+END;
+';
+    EXEC (@AlterFakeTable);
 
     EXEC ('DROP PROCEDURE [AssertEmptyTableTests].[test handles odd names]'); --todo
     EXEC ('DROP PROCEDURE [AssertEmptyTableTests].[test uses tSQLt.TableToText]');
@@ -91,10 +112,10 @@ END;
 
     EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable calls tSQLt.Private_MarktSQLtTempObject on new object]');
     EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable doesn''t produce output]');
-    EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable raises appropriate error if called with NULL parameters]'); --todo
-    EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable raises appropriate error if it was called with a single parameter]'); --todo
+    --EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable raises appropriate error if called with NULL parameters]'); --todo
+    --EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable raises appropriate error if it was called with a single parameter]'); --todo
     EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable raises appropriate error if schema does not exist]');
-    EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable raises appropriate error if table does not exist]'); --todo
+    --EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable raises appropriate error if table does not exist]'); --todo
     EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable takes 2 nameless parameters containing schema and table name]');
     EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable works if new name of original table requires quoting]'); --todo
     EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable works with two parameters, if they are quoted]'); --todo
