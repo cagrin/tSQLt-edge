@@ -52,3 +52,29 @@ BEGIN
     EXEC tSQLt.RemoveObject 'dbo.NewTable', @IfExists = 1;
 END;
 GO
+
+CREATE PROCEDURE Test_RemoveObject.Test_NewNameIsEmpty
+AS
+BEGIN
+    EXEC ('CREATE TABLE dbo.NewTable (Id int);');
+
+    DECLARE @NewName NVARCHAR(MAX);
+
+    EXEC tSQLt.RemoveObject 'dbo.NewTable', @NewName OUTPUT;
+
+    EXEC tSQLt.AssertNotEqualsString NULL, @NewName;
+END;
+GO
+
+CREATE PROCEDURE Test_RemoveObject.Test_NewNameIsNotEmpty
+AS
+BEGIN
+    EXEC ('CREATE TABLE dbo.NewTable (Id int);');
+
+    DECLARE @NewName NVARCHAR(MAX) = 'NewName';
+
+    EXEC tSQLt.RemoveObject 'dbo.NewTable', @NewName OUTPUT;
+
+    EXEC tSQLt.AssertEqualsString 'NewName', @NewName;
+END;
+GO

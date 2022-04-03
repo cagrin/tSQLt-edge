@@ -18,6 +18,9 @@ if ($debug -ne 1)
     Invoke-Sqlcmd -ServerInstance "localhost,51433" -Database "$TEST_NAME" -Username "sa" -Password "$SA_PASSWORD" -Query "EXEC tSQLt.RunAll" -Verbose
 }
 
-$TEST_NAME='tSQLt.Original.Tests'
-dotnet publish ./$TEST_NAME /p:TargetServerName=localhost /p:TargetPort=51433 /p:TargetDatabaseName=$TEST_NAME /p:TargetUser=sa /p:TargetPassword=$SA_PASSWORD
-Invoke-Sqlcmd -ServerInstance "localhost,51433" -Database "$TEST_NAME" -Username "sa" -Password "$SA_PASSWORD" -Query "EXEC tSQLt.Debug; EXEC tSQLt.RunAll" -Verbose
+if ($debug -ne -1)
+{
+    $TEST_NAME='tSQLt.Original.Tests'
+    dotnet publish ./$TEST_NAME /p:TargetServerName=localhost /p:TargetPort=51433 /p:TargetDatabaseName=$TEST_NAME /p:TargetUser=sa /p:TargetPassword=$SA_PASSWORD
+    Invoke-Sqlcmd -ServerInstance "localhost,51433" -Database "$TEST_NAME" -Username "sa" -Password "$SA_PASSWORD" -Query "EXEC tSQLt.Debug; EXEC tSQLt.RunAll" -Verbose
+}
