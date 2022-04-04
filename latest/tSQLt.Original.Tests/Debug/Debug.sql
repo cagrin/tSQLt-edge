@@ -65,9 +65,6 @@ END;
     EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test multiple rows with multiple mismatching rows]');
     EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test RC table is created in the tSQLt schema]');
     EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test RC table is marked as tSQLt.IsTempObject]');
-    EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test_AssertEqualsTable_works_with_actual_having_identity_column]'); --todo
-    EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test_AssertEqualsTable_works_with_equal_temptables]'); --todo
-    EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test_AssertEqualsTable_works_with_expected_having_identity_column]'); --todo
 
     --EXEC ('DROP PROCEDURE [AssertNotEqualsTests].[test AssertNotEquals should give meaningfull failmessage]');
 
