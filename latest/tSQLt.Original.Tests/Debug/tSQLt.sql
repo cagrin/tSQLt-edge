@@ -41,3 +41,11 @@ BEGIN
     SET @CreateLogTableStatement = '';
 END;
 GO
+
+CREATE FUNCTION tSQLt.Private_SqlVariantFormatter(@Value SQL_VARIANT)
+RETURNS NVARCHAR(MAX)
+AS
+BEGIN
+    RETURN '';
+END;
+GO
