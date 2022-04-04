@@ -8,9 +8,7 @@ BEGIN
     DECLARE @Command NVARCHAR(MAX) = CONCAT
     (
         'EXEC sp_rename ''',
-        QUOTENAME(PARSENAME(@ObjectName, 2)),
-        '.',
-        QUOTENAME(PARSENAME(@ObjectName, 1)),
+        tSQLt.Private_GetQuotedObjectName(@ObjectName),
         ''', ''',
         @NewName,
         ''', ''OBJECT'';'
