@@ -39,6 +39,23 @@ END;
 ';
     EXEC (@AlterFakeTable);
 
+    DECLARE @AlterRemoveObject NVARCHAR(MAX) =
+'
+ALTER PROCEDURE tSQLt.RemoveObject
+    @ObjectName NVARCHAR(MAX),
+    @NewName NVARCHAR(MAX) = NULL OUTPUT,
+    @IfExists INT = 0
+AS
+BEGIN
+    DECLARE @Command NVARCHAR(MAX) = ''tSQLt.Internal_RemoveObjectDebug'';
+    EXEC @Command
+    @ObjectName = @ObjectName,
+    @NewName = @NewName OUTPUT,
+    @IfExists = @IfExists;
+END;
+';
+    EXEC (@AlterRemoveObject);
+
     --EXEC ('DROP PROCEDURE [AssertEmptyTableTests].[test uses tSQLt.TableToText]');
 
     EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test all unsupported 2008 data types]');
@@ -126,7 +143,7 @@ END;
     EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility returns quoted schema when schema and table provided]');
     EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility returns quoted table when schema and table provided]');
 
-    EXEC ('DROP PROCEDURE [RemoveObjectTests].[test RemoveObject raises approporate error if object doesn''t exists'']'); --todo
+    --EXEC ('DROP PROCEDURE [RemoveObjectTests].[test RemoveObject raises approporate error if object doesn''t exists'']'); --todo
 
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test @SpyProcedureOriginalObjectName contains original proc name even if it has single quotes, dots, or spaces]'); --todo
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test @SpyProcedureOriginalObjectName contains original proc name inside spy even if quoting is required]'); --todo
