@@ -4,6 +4,9 @@ CREATE PROCEDURE tSQLt.Internal_AssertLike
     @Message NVARCHAR(MAX) = ''
 AS
 BEGIN
+    IF LEN(@ExpectedPattern) > 4000
+        EXEC tSQLt.Fail '@ExpectedPattern may not exceed 4000 characters.';
+
     IF (@Actual LIKE @ExpectedPattern) OR (@Actual IS NULL AND @ExpectedPattern IS NULL)
     BEGIN
         RETURN;

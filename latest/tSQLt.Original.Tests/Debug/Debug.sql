@@ -69,8 +69,6 @@ END;
     EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test_AssertEqualsTable_works_with_equal_temptables]'); --todo
     EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test_AssertEqualsTable_works_with_expected_having_identity_column]'); --todo
 
-    EXEC ('DROP PROCEDURE [AssertLikeTests].[test AssertLike errors when length of @ExpectedPattern is over 4000 characters]'); --todo
-
     EXEC ('DROP PROCEDURE [AssertNotEqualsTests].[test AssertNotEquals should give meaningfull failmessage]');
 
     EXEC ('DROP PROCEDURE [AssertObjectExistsTests].[test_AssertObjectExists_does_not_call_fail_when_table_exists]'); --todo

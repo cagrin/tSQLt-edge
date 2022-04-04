@@ -64,3 +64,14 @@ BEGIN
     EXEC tSQLt.AssertLike 'H%o', NULL;
 END;
 GO
+
+CREATE PROCEDURE Test_AssertLike.Test_TooLongPattern
+AS
+BEGIN
+    EXEC tSQLt.ExpectException '@ExpectedPattern may not exceed 4000 characters.';
+
+    DECLARE @TooLongPattern NVARCHAR(MAX) = REPLICATE('x', 4001);
+
+    EXEC tSQLt.AssertLike @TooLongPattern, 'Hello';
+END;
+GO
