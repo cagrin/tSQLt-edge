@@ -68,9 +68,6 @@ END;
 
     --EXEC ('DROP PROCEDURE [AssertNotEqualsTests].[test AssertNotEquals should give meaningfull failmessage]');
 
-    EXEC ('DROP PROCEDURE [AssertObjectExistsTests].[test_AssertObjectExists_does_not_call_fail_when_table_exists]'); --todo
-    EXEC ('DROP PROCEDURE [AssertObjectExistsTests].[test_AssertObjectExists_does_not_call_fail_when_table_is_temp_table]'); --todo
-
     EXEC ('DROP PROCEDURE [tSQLt_test_AssertResultSetsHaveSameMetaData].[test AssertResultSetsHaveSameMetaData does not compare hidden columns]'); --todo
     EXEC ('DROP PROCEDURE [tSQLt_test_AssertResultSetsHaveSameMetaData].[test AssertResultSetsHaveSameMetaData fails when one result set has no rows for versions before SQL Server 2012]');
 
