@@ -8,7 +8,8 @@ BEGIN
             (
                 tSQLt.Private_GetTypeName(@TypeId),
                 CASE
-                WHEN @Length = -1 AND TYPE_NAME(@TypeId) NOT IN ('xml')               THEN '(max)'
+                WHEN @Length = -1 AND TYPE_NAME(@TypeId) IN ('nchar', 'nvarchar',
+                                            'char', 'varchar', 'binary', 'varbinary') THEN '(max)'
                 WHEN TYPE_NAME(@TypeId) IN ('nchar', 'nvarchar')                      THEN CONCAT('(', @Length / 2, ')')
                 WHEN TYPE_NAME(@TypeId) IN ('char', 'varchar', 'binary', 'varbinary') THEN CONCAT('(', @Length, ')')
                 WHEN TYPE_NAME(@TypeId) IN ('decimal', 'numeric')                     THEN CONCAT('(', @Precision, ',', @Scale, ')')

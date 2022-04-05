@@ -108,13 +108,55 @@ GO
 CREATE PROCEDURE Test_FakeFunction.Test_InlineTableValuedFunction_DataSourceIsTable
 AS
 BEGIN
-    CREATE TABLE dbo.FakeDataSourceIF (Column1 int);
-    INSERT INTO dbo.FakeDataSourceIF VALUES (6);
+    INSERT INTO dbo.FakeDataSource VALUES (6);
 
-    EXEC tSQLt.FakeFunction 'dbo.TestFunctionIF', @FakeDataSource = 'dbo.FakeDataSourceIF';
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionIF', @FakeDataSource = 'dbo.FakeDataSource';
 
     DECLARE @Actual INT = (SELECT Column1 FROM dbo.TestFunctionIF());
 
     EXEC tSQLt.AssertEquals 6, @Actual;
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_InlineTableValuedFunctionWithP1_TT
+AS
+BEGIN
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionIF_P1_TT', 'dbo.FakeFunctionIF_P1_TT';
+
+    DECLARE @P1 int = 1;
+    DECLARE @P2 dbo.TestType;
+    INSERT INTO @P2(Column1) VALUES (2);
+
+    DECLARE @Actual INT = (SELECT Column1 FROM dbo.TestFunctionIF_P1_TT(@P1, @P2));
+
+    EXEC tSQLt.AssertEquals 45, @Actual;
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_MultiStatementTableValuedFunctionWithP1_TT
+AS
+BEGIN
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionTF_P1_TT', 'dbo.FakeFunctionTF_P1_TT';
+
+    DECLARE @P1 int = 1;
+    DECLARE @P2 dbo.TestType;
+    INSERT INTO @P2(Column1) VALUES (2);
+    DECLARE @Actual INT = (SELECT Column1 FROM dbo.TestFunctionTF_P1_TT(@P1, @P2));
+
+    EXEC tSQLt.AssertEquals 45, @Actual;
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_ScalarFunctionWithP1_TT
+AS
+BEGIN
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionScalar_P1_TT', 'dbo.FakeFunctionScalar_P1_TT';
+
+    DECLARE @P1 int = 1;
+    DECLARE @P2 dbo.TestType;
+    INSERT INTO @P2(Column1) VALUES (2);
+    DECLARE @Actual INT = dbo.TestFunctionScalar_P1_TT(@P1, @P2);
+
+    EXEC tSQLt.AssertEquals 45, @Actual;
 END;
 GO

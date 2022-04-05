@@ -11,7 +11,7 @@ BEGIN
                     ' ',
                     name,
                     tSQLt.Private_GetType(user_type_id, max_length, precision, scale, NULL),
-                    '= NULL',
+                    CASE WHEN is_readonly = 1 THEN 'READONLY' ELSE '= NULL' END,
                     CASE WHEN is_output = 1 THEN 'OUTPUT' ELSE NULL END
                 ),
                 ', '
