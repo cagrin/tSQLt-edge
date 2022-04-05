@@ -121,16 +121,9 @@ END;
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test @SpyProcedureOriginalObjectName contains original proc name inside spy even if quoting is required]'); --todo
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test @SpyProcedureOriginalObjectName contains original proc name inside spy]'); --todo
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test calls original procedure with cursor parameters if @CallOriginal = 1]');
-    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test calls original procedure with OUTPUT parameters if @CallOriginal = 1]'); --todo
-    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test calls original procedure with parameters if @CallOriginal = 1]'); --todo
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test calls original procedure with table valued parameters if @CallOriginal = 1]'); --todo
-    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test calls the original procedure after @CommandToExecute if @CallOriginal = 1]'); --todo
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test calls the original procedure even if @CommandToExecute contains inline comment]'); --todo
-    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test calls the original procedure if @CallOriginal = 1 even if schema or procedure name require quoting]'); --todo
-    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test calls the original procedure if @CallOriginal = 1]'); --todo
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test can handle existing SpyProcedureLog table]'); --todo
-    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test does not call the original procedure if @CallOriginal = 0]'); --todo
-    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test does not call the original procedure if @CallOriginal = NULL]'); --todo
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test new Procedure Spy is marked as tSQLt.IsTempObject]');
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test new SpyProcedureLog table is marked as tSQLt.IsTempObject]');
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test Private_CreateProcedureSpy does create spy when @LogTableName is NULL]');
