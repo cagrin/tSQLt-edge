@@ -4,6 +4,7 @@ CREATE PROCEDURE tSQLt.Internal_SpyProcedure
     @CallOriginal BIT = 0
 AS
 BEGIN
+    DECLARE @NewName NVARCHAR(MAX) = NEWID();
     DECLARE @ObjectId INT = OBJECT_ID(@ProcedureName);
     DECLARE @Parameters NVARCHAR(MAX) = tSQLt.Private_GetParameters (@Objectid);
     DECLARE @ParametersNames NVARCHAR(MAX) = tSQLt.Private_GetParametersNames (@Objectid);
@@ -16,6 +17,15 @@ BEGIN
         'INSERT INTO ',
         @LogTableName,
         CASE WHEN @ParametersNames IS NULL THEN ' DEFAULT VALUES' ELSE CONCAT(' (', @ParametersNames, ') SELECT ', @Parameters) END,
+        ';'
+    );
+
+    DECLARE @CallOriginalCommand NVARCHAR(MAX) = CONCAT
+    (
+        'EXEC ',
+        QUOTENAME(OBJECT_SCHEMA_NAME(@ObjectId)), '.', QUOTENAME(@NewName),
+        ' ',
+        @Parameters,
         ';'
     );
 
@@ -38,10 +48,11 @@ BEGIN
         'AS BEGIN',
         @InsertIntoLogTableCommand,
         @CommandToExecute,
+        CASE WHEN @CallOriginal = 1 THEN @CallOriginalCommand END,
         'RETURN; END;'
     );
 
-    EXEC tSQLt.Private_RenameObject @ProcedureName;
+    EXEC tSQLt.Private_RenameObject @ProcedureName, @NewName OUTPUT;
     EXEC (@CreateLogTableCommand);
     EXEC (@CreateProcedureCommand);
 END;

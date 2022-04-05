@@ -45,8 +45,8 @@ EXEC [tSQLt].[Fail] @Message0, @Message1, @Message2, @Message3, @Message4, @Mess
 EXEC [tSQLt].[FakeFunction] @FunctionName, @FakeFunctionName, @FakeDataSource;
 EXEC [tSQLt].[FakeTable] @TableName, @SchemaName, @Identity, @ComputedColumns, @Defaults;
 EXEC [tSQLt].[NewTestClass] @ClassName;
-EXEC [tSQLt].[RemoveObject] @ObjectName, @NewName, @IfExists;
-EXEC [tSQLt].[RemoveObjectIfExists] @ObjectName, @NewName;
+EXEC [tSQLt].[RemoveObject] @ObjectName, @NewName OUTPUT, @IfExists;
+EXEC [tSQLt].[RemoveObjectIfExists] @ObjectName, @NewName OUTPUT;
 EXEC [tSQLt].[RenameClass] @SchemaName, @NewSchemaName;
 EXEC [tSQLt].[Run] @TestName;
 EXEC [tSQLt].[SpyProcedure] @ProcedureName, @CommandToExecute, @CallOriginal;';

@@ -6,7 +6,12 @@ BEGIN
         SELECT
             STRING_AGG
             (
-                name,
+                CONCAT_WS
+                (
+                    ' ',
+                    name,
+                    CASE WHEN is_output = 1 THEN 'OUTPUT' ELSE NULL END
+                ),
                 ', '
             ) WITHIN GROUP (ORDER BY parameter_id)
         FROM tSQLt.System_Parameters(@ObjectId)

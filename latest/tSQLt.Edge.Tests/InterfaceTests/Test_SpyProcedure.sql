@@ -84,3 +84,22 @@ BEGIN
     EXEC tSQLt.AssertEquals 2, @P1, '@P1 should equals 2.';
 END;
 GO
+
+CREATE PROCEDURE Test_SpyProcedure.Test_ProcedureWithP1_CallOriginal
+AS
+BEGIN
+    EXEC ('CREATE OR ALTER PROCEDURE dbo.TestProcedure @P1 int OUTPUT AS BEGIN SET @P1 = 3; RETURN; END;');
+
+    EXEC tSQLt.SpyProcedure 'dbo.TestProcedure', 'SET @P1 = 2;', @CallOriginal = 1;
+
+    DECLARE @P1 int = 1;
+    EXEC dbo.TestProcedure @P1 = @P1 OUTPUT;
+
+    IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = 1)
+    BEGIN
+        EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should exists.';
+    END
+
+    EXEC tSQLt.AssertEquals 3, @P1, '@P1 should equals 3.';
+END;
+GO
