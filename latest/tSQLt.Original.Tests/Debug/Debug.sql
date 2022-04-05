@@ -89,12 +89,6 @@ END;
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test can fake ITVF WITH CLR TVF]');
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test can fake MSTVF WITH CLR TVF]');
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors if function is a CLR SVF and @FakeDataSource is used]');
-    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when parameters of the functions don''t match in max_length]'); --todo
-    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when parameters of the functions don''t match in name]'); --todo
-    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when parameters of the functions don''t match in precision]'); --todo
-    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when parameters of the functions don''t match in scale]'); --todo
-    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when parameters of the functions don''t match in their order]'); --todo
-    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when type of return value for scalar functions doesn''t match]'); --todo
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test Fake can be CLR function]');
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test Fakee can be CLR function]');
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test FakeFunction calls tSQLt.Private_MarktSQLtTempObject on new object]');
