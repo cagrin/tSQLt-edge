@@ -89,9 +89,6 @@ END;
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test can fake ITVF WITH CLR TVF]');
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test can fake MSTVF WITH CLR TVF]');
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors if function is a CLR SVF and @FakeDataSource is used]');
-    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when function is SVF and fake is ITVF]'); --todo
-    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when function is SVF and fake is MSTVF]'); --todo
-    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when function is SVF and fake is not a function]'); --todo
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when parameters of the functions don''t match in max_length]'); --todo
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when parameters of the functions don''t match in name]'); --todo
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when parameters of the functions don''t match in precision]'); --todo

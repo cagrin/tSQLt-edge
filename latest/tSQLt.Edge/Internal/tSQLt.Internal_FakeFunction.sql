@@ -17,9 +17,10 @@ BEGIN
 
     DECLARE @ObjectId INT = OBJECT_ID(@FunctionName);
     DECLARE @FunctionType CHAR(2) = tSQLt.Private_GetObjectType (@ObjectId);
+    DECLARE @FakeFunctionType CHAR(2) = tSQLt.Private_GetObjectType (OBJECT_ID(@FakeFunctionName));
 
     DECLARE @CreateFakeFunctionCommand NVARCHAR(MAX);
-    IF @FunctionType IN ('IF', 'TF')
+    IF @FunctionType IN ('IF', 'TF') AND (@FakeFunctionType IN ('IF', 'TF') OR @FakeDataSource IS NOT NULL)
     BEGIN
         DECLARE @Parameters NVARCHAR(MAX) = tSQLt.Private_GetParameters (@Objectid);
         DECLARE @ParametersWithTypesDefaultNulls NVARCHAR(MAX) = tSQLt.Private_GetParametersWithTypesDefaultNulls (@Objectid);
@@ -44,7 +45,7 @@ BEGIN
             'RETURNS TABLE AS RETURN', @FakeDataSource
         );
     END
-    ELSE IF @FunctionType IN ('FN')
+    ELSE IF @FunctionType IN ('FN') AND @FakeFunctionType IN ('FN') AND @FakeDataSource IS NULL
     BEGIN
         DECLARE @ScalarReturnType NVARCHAR(MAX) = tSQLt.Private_GetScalarReturnType (@Objectid);
         DECLARE @ScalarParameters NVARCHAR(MAX) = tSQLt.Private_GetScalarParameters (@Objectid);
@@ -61,7 +62,7 @@ BEGIN
         );
     END
     ELSE
-        EXEC tSQLt.Fail 'Unsupported function type', @FunctionType;
+        EXEC tSQLt.Fail 'Both parameters must contain the name of either scalar or table valued functions', @FunctionType, @FakeFunctionType;
 
     EXEC tSQLt.Private_RenameObject @FunctionName;
     EXEC (@CreateFakeFunctionCommand);
