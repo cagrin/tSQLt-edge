@@ -160,3 +160,30 @@ BEGIN
     EXEC tSQLt.AssertEquals 45, @Actual;
 END;
 GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_InlineTableValuedFunctionWithP1_TT_Mismatch
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'Parameters of both functions must match! (This includes the return type for scalar functions.)';
+
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionIF_P1', 'dbo.FakeFunctionIF_P1_TT';
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_MultiStatementTableValuedFunctionWithP1_TT_Mismatch
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'Parameters of both functions must match! (This includes the return type for scalar functions.)';
+
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionTF_P1', 'dbo.FakeFunctionTF_P1_TT';
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_ScalarFunctionWithP1_TT_Mismatch
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'Parameters of both functions must match! (This includes the return type for scalar functions.)';
+
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionScalar_P1', 'dbo.FakeFunctionScalar_P1_TT';
+END;
+GO
