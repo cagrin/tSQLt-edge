@@ -86,20 +86,10 @@ END;
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test can fake CLR TVF WITH CLR TVF]');
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test can fake CLR TVF WITH ITVF]');
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test can fake CLR TVF with MSTVF]');
-    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test can fake function with multiple parameters]'); --todo
-    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test can fake function with one parameter]'); --todo
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test can fake function with table-type parameter]'); --todo
-    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test can fake function with two part named table as fake data source]'); --todo
-    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test can fake function with VALUES clause as fake data source]'); --todo
-    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test can fake Inline table function using a table as fake data source]'); --todo
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test can fake ITVF WITH CLR TVF]');
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test can fake MSTVF WITH CLR TVF]');
-    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test can fake multi-statement table function using a table as fake data source]'); --todo
-    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test can fake with data source table that starts with select]'); --todo
-    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test can fake with derived table]'); --todo
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors if function is a CLR SVF and @FakeDataSource is used]');
-    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors if function is a SVF and @FakeDataSource is used]'); --todo
-    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when both @FakeFunctionName and @FakeDataSource are passed]'); --todo
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when function is SVF and fake is ITVF]'); --todo
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when function is SVF and fake is MSTVF]'); --todo
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when function is SVF and fake is not a function]'); --todo
