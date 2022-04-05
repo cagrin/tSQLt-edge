@@ -161,7 +161,16 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE Test_FakeFunction.Test_InlineTableValuedFunctionWithP1_TT_Mismatch
+CREATE PROCEDURE Test_FakeFunction.Test_InlineTableValuedFunction_Mismatch
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'Parameters of both functions must match! (This includes the return type for scalar functions.)';
+
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionIF', 'dbo.FakeFunctionIF_P1';
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_InlineTableValuedFunctionWithP1_Mismatch
 AS
 BEGIN
     EXEC tSQLt.ExpectException 'Parameters of both functions must match! (This includes the return type for scalar functions.)';
@@ -170,7 +179,25 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE Test_FakeFunction.Test_MultiStatementTableValuedFunctionWithP1_TT_Mismatch
+CREATE PROCEDURE Test_FakeFunction.Test_InlineTableValuedFunctionWithP1_TT_Mismatch
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'Parameters of both functions must match! (This includes the return type for scalar functions.)';
+
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionIF_P1_TT', 'dbo.FakeFunctionIF';
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_MultiStatementTableValuedFunction_Mismatch
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'Parameters of both functions must match! (This includes the return type for scalar functions.)';
+
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionTF', 'dbo.FakeFunctionTF_P1';
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_MultiStatementTableValuedFunctionWithP1_Mismatch
 AS
 BEGIN
     EXEC tSQLt.ExpectException 'Parameters of both functions must match! (This includes the return type for scalar functions.)';
@@ -179,11 +206,38 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE Test_FakeFunction.Test_ScalarFunctionWithP1_TT_Mismatch
+CREATE PROCEDURE Test_FakeFunction.Test_MultiStatementTableValuedFunctionWithP1_TT_Mismatch
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'Parameters of both functions must match! (This includes the return type for scalar functions.)';
+
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionTF_P1_TT', 'dbo.FakeFunctionTF';
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_ScalarFunction_Mismatch
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'Parameters of both functions must match! (This includes the return type for scalar functions.)';
+
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionScalar', 'dbo.FakeFunctionScalar_P1';
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_ScalarFunctionWithP1_Mismatch
 AS
 BEGIN
     EXEC tSQLt.ExpectException 'Parameters of both functions must match! (This includes the return type for scalar functions.)';
 
     EXEC tSQLt.FakeFunction 'dbo.TestFunctionScalar_P1', 'dbo.FakeFunctionScalar_P1_TT';
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_ScalarFunctionWithP1_TT_Mismatch
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'Parameters of both functions must match! (This includes the return type for scalar functions.)';
+
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionScalar_P1_TT', 'dbo.FakeFunctionScalar';
 END;
 GO

@@ -13,28 +13,27 @@ BEGIN
     EXEC tSQLt.AssertObjectExists @FunctionName;
 
     DECLARE @ObjectId INT = OBJECT_ID(@FunctionName);
-    DECLARE @FunctionType CHAR(2) = tSQLt.Private_GetObjectType (@ObjectId);
+    DECLARE @FakeObjectId INT = OBJECT_ID(@FakeFunctionName);
 
     IF @FakeDataSource IS NULL
     BEGIN
         EXEC tSQLt.AssertObjectExists @FakeFunctionName;
 
-        DECLARE @FakeObjectId INT = OBJECT_ID(@FakeFunctionName);
-        DECLARE @FakeFunctionType CHAR(2) = tSQLt.Private_GetObjectType (@FakeObjectId);
-
-        DECLARE @ParametersWithTypes NVARCHAR(MAX) = tSQLt.Private_GetParametersWithTypes (@Objectid);
-        DECLARE @FakeParametersWithTypes NVARCHAR(MAX) = tSQLt.Private_GetParametersWithTypes (@FakeObjectId);
+        DECLARE @ParametersWithTypes NVARCHAR(MAX) = ISNULL(tSQLt.Private_GetParametersWithTypes(@Objectid), '');
+        DECLARE @FakeParametersWithTypes NVARCHAR(MAX) = ISNULL(tSQLt.Private_GetParametersWithTypes(@FakeObjectId), '');
 
         IF @ParametersWithTypes <> @FakeParametersWithTypes
             EXEC tSQLt.Fail 'Parameters of both functions must match! (This includes the return type for scalar functions.)';
     END
 
-    DECLARE @CreateFakeFunctionCommand NVARCHAR(MAX);
+    DECLARE @FunctionType CHAR(2) = tSQLt.Private_GetObjectType(@ObjectId);
+    DECLARE @FakeFunctionType CHAR(2) = tSQLt.Private_GetObjectType(@FakeObjectId);
+
     IF @FunctionType IN ('IF', 'TF') AND (@FakeFunctionType IN ('IF', 'TF') OR @FakeDataSource IS NOT NULL)
     BEGIN
         IF @FakeDataSource IS NULL
         BEGIN
-            DECLARE @Parameters NVARCHAR(MAX) = tSQLt.Private_GetParameters (@Objectid);
+            DECLARE @Parameters NVARCHAR(MAX) = tSQLt.Private_GetParameters(@Objectid);
             SET @FakeDataSource = CONCAT('SELECT * FROM ', @FakeFunctionName, ' (', @Parameters, ');');
         END
         ELSE
