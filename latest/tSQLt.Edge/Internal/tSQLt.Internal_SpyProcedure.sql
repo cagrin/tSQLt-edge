@@ -1,6 +1,7 @@
 CREATE PROCEDURE tSQLt.Internal_SpyProcedure
     @ProcedureName NVARCHAR(MAX),
-    @CommandToExecute NVARCHAR(MAX) = NULL
+    @CommandToExecute NVARCHAR(MAX) = NULL,
+    @CallOriginal BIT = 0
 AS
 BEGIN
     DECLARE @ObjectId INT = OBJECT_ID(@ProcedureName);
