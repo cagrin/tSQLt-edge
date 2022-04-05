@@ -70,7 +70,7 @@ GO
 CREATE PROCEDURE Test_FakeFunction.Test_ScalarFunction_FakeFunctionIsNull
 AS
 BEGIN
-    EXEC tSQLt.ExpectException 'tSQLt.AssertObjectExists failed. Object:<(null)> does not exist.';
+    EXEC tSQLt.ExpectException 'Either @FakeFunctionName or @FakeDataSource must be provided.';
 
     EXEC tSQLt.FakeFunction 'dbo.TestFunctionScalar', NULL;
 END;
@@ -88,8 +88,33 @@ GO
 CREATE PROCEDURE Test_FakeFunction.Test_InlineTableValuedFunction_DataSourceIsNotNull
 AS
 BEGIN
-    EXEC tSQLt.ExpectException 'FakeDataSource is not implemented yet. tSQLt.AssertEqualsString failed. Expected:<(null)>. Actual:<dbo.FakeDataSource>.';
+    EXEC tSQLt.ExpectException 'Both @FakeFunctionName and @FakeDataSource are valued. Please use only one.';
 
     EXEC tSQLt.FakeFunction 'dbo.TestFunctionIF', 'dbo.FakeFunctionIF', 'dbo.FakeDataSource';
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_InlineTableValuedFunction_DataSourceIsSelect
+AS
+BEGIN
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionIF', @FakeDataSource = 'SELECT 5 AS Column1';
+
+    DECLARE @Actual INT = (SELECT Column1 FROM dbo.TestFunctionIF());
+
+    EXEC tSQLt.AssertEquals 5, @Actual;
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_InlineTableValuedFunction_DataSourceIsTable
+AS
+BEGIN
+    CREATE TABLE dbo.FakeDataSourceIF (Column1 int);
+    INSERT INTO dbo.FakeDataSourceIF VALUES (6);
+
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionIF', @FakeDataSource = 'dbo.FakeDataSourceIF';
+
+    DECLARE @Actual INT = (SELECT Column1 FROM dbo.TestFunctionIF());
+
+    EXEC tSQLt.AssertEquals 6, @Actual;
 END;
 GO
