@@ -8,7 +8,8 @@ BEGIN
     DECLARE @ObjectId INT = OBJECT_ID(@ProcedureName);
     DECLARE @Parameters NVARCHAR(MAX) = tSQLt.Private_GetParameters (@Objectid);
     DECLARE @ParametersNames NVARCHAR(MAX) = tSQLt.Private_GetParametersNames (@Objectid);
-    DECLARE @ParametersNamesWithTypes NVARCHAR(MAX) = tSQLt.Private_GetParametersNamesWithTypes (@Objectid);
+    DECLARE @SpyProcedureLogSelect NVARCHAR(MAX) = tSQLt.Private_GetSpyProcedureLogSelect (@Objectid);
+    DECLARE @SpyProcedureLogColumns NVARCHAR(MAX) = tSQLt.Private_GetSpyProcedureLogColumns (@Objectid);
     DECLARE @ParametersWithTypesDefaultNulls NVARCHAR(MAX) = tSQLt.Private_GetParametersWithTypesDefaultNulls (@Objectid);
     DECLARE @LogTableName NVARCHAR(MAX) = CONCAT(QUOTENAME(OBJECT_SCHEMA_NAME(@ObjectId)), '.', QUOTENAME(CONCAT(OBJECT_NAME(@ObjectId), '_SpyProcedureLog')));
 
@@ -16,7 +17,7 @@ BEGIN
     (
         'INSERT INTO ',
         @LogTableName,
-        CASE WHEN @ParametersNames IS NULL THEN ' DEFAULT VALUES' ELSE CONCAT(' (', @ParametersNames, ') SELECT ', @Parameters) END,
+        CASE WHEN @ParametersNames IS NULL THEN ' DEFAULT VALUES' ELSE CONCAT(' (', @ParametersNames, ') SELECT ', @SpyProcedureLogSelect) END,
         ';'
     );
 
@@ -35,7 +36,7 @@ BEGIN
         'CREATE TABLE',
         @LogTableName,
         '(_id_ int IDENTITY(1, 1) PRIMARY KEY CLUSTERED',
-        CASE WHEN @ParametersNamesWithTypes IS NULL THEN '' ELSE CONCAT(', ', @ParametersNamesWithTypes) END,
+        CASE WHEN @SpyProcedureLogColumns IS NULL THEN '' ELSE CONCAT(', ', @SpyProcedureLogColumns) END,
         ');'
     );
 

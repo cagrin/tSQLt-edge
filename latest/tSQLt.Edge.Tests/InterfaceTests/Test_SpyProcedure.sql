@@ -103,3 +103,23 @@ BEGIN
     EXEC tSQLt.AssertEquals 3, @P1, '@P1 should equals 3.';
 END;
 GO
+
+CREATE PROCEDURE Test_SpyProcedure.Test_ProcedureWithP1_TableType
+AS
+BEGIN
+    EXEC ('CREATE OR ALTER PROCEDURE dbo.TestProcedure @P1 int OUTPUT, @P2 dbo.TestType READONLY AS BEGIN SET @P1 = 4 * (SELECT SUM(Column1) FROM @P2); RETURN; END;');
+
+    EXEC tSQLt.SpyProcedure 'dbo.TestProcedure', 'SET @P1 = 3;', @CallOriginal = 1;
+
+    DECLARE @P1 int = 1;
+    DECLARE @P2 dbo.TestType; INSERT INTO @P2 (Column1) VALUES (2);
+    EXEC dbo.TestProcedure @P1 OUTPUT, @P2;
+
+    IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = 1 AND CONVERT(NVARCHAR(MAX), P2) = '<P2><row><Column1>2</Column1></row></P2>')
+    BEGIN
+        EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should exists.';
+    END
+
+    EXEC tSQLt.AssertEquals 8, @P1, '@P1 should equals 8.';
+END;
+GO
