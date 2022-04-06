@@ -121,7 +121,6 @@ END;
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test @SpyProcedureOriginalObjectName contains original proc name inside spy even if quoting is required]'); --todo
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test @SpyProcedureOriginalObjectName contains original proc name inside spy]'); --todo
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test calls original procedure with cursor parameters if @CallOriginal = 1]');
-    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test calls original procedure with table valued parameters if @CallOriginal = 1]'); --todo
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test calls the original procedure even if @CommandToExecute contains inline comment]'); --todo
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test can handle existing SpyProcedureLog table]'); --todo
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test new Procedure Spy is marked as tSQLt.IsTempObject]');
@@ -131,7 +130,6 @@ END;
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure calls tSQLt.Private_MarktSQLtTempObject on new objects]');
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure calls tSQLt.Private_RenameObjectToUniqueName on original proc]');
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure can have a cursor output parameter]');
-    EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure can have a table type parameter]'); --todo
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure fails with error if spyee has more than 1020 parameters]'); --todo
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure handles procedure and schema names with single quotes]'); --todo
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure raises appropriate error if the procedure does not exist]'); --todo
