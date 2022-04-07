@@ -48,7 +48,7 @@ BEGIN
         @ParametersWithTypesDefaultNulls,
         'AS BEGIN',
         @InsertIntoLogTableCommand,
-        @CommandToExecute,
+        @CommandToExecute, NCHAR(10),
         CASE WHEN @CallOriginal = 1 THEN @CallOriginalCommand END,
         'RETURN; END;'
     );
