@@ -13,7 +13,8 @@ BEGIN
                     CASE
                         WHEN is_table_type = 1 THEN 'xml'
                         ELSE tSQLt.Private_GetType(user_type_id, max_length, precision, scale, NULL)
-                    END
+                    END,
+                    'NULL'
                 ),
                 ', '
             ) WITHIN GROUP (ORDER BY parameter_id)

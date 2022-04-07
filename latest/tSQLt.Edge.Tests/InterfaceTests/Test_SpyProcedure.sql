@@ -160,3 +160,19 @@ BEGIN
     END
 END;
 GO
+
+CREATE PROCEDURE Test_SpyProcedure.Test_ProcedureWithP1_SysNameIsNull
+AS
+BEGIN
+    EXEC ('CREATE OR ALTER PROCEDURE dbo.TestProcedure @P1 sysname AS BEGIN RETURN; END;');
+
+    EXEC tSQLt.SpyProcedure 'dbo.TestProcedure';
+
+    EXEC dbo.TestProcedure @P1 = NULL;
+
+    IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 IS NULL)
+    BEGIN
+        EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should exists.';
+    END
+END;
+GO
