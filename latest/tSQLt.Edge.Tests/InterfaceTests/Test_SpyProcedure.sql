@@ -85,6 +85,25 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE Test_SpyProcedure.Test_ProcedureWithP1_CommandToExecuteInlineComment
+AS
+BEGIN
+    EXEC ('CREATE OR ALTER PROCEDURE dbo.TestProcedure @P1 int OUTPUT AS BEGIN RETURN; END;');
+
+    EXEC tSQLt.SpyProcedure 'dbo.TestProcedure', 'SET @P1 = 2; --inline comment';
+
+    DECLARE @P1 int = 1;
+    EXEC dbo.TestProcedure @P1 = @P1 OUTPUT;
+
+    IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = 1)
+    BEGIN
+        EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should exists.';
+    END
+
+    EXEC tSQLt.AssertEquals 2, @P1, '@P1 should equals 2.';
+END;
+GO
+
 CREATE PROCEDURE Test_SpyProcedure.Test_ProcedureWithP1_CallOriginal
 AS
 BEGIN
@@ -121,5 +140,23 @@ BEGIN
     END
 
     EXEC tSQLt.AssertEquals 8, @P1, '@P1 should equals 8.';
+END;
+GO
+
+CREATE PROCEDURE Test_SpyProcedure.Test_SpyProcedureLogExists
+AS
+BEGIN
+    CREATE TABLE dbo.TestProcedure_SpyProcedureLog (Column1 int);
+
+    EXEC ('CREATE OR ALTER PROCEDURE dbo.TestProcedure AS BEGIN RETURN; END;');
+
+    EXEC tSQLt.SpyProcedure 'dbo.TestProcedure';
+
+    EXEC dbo.TestProcedure;
+
+    IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1)
+    BEGIN
+        EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should exists.';
+    END
 END;
 GO
