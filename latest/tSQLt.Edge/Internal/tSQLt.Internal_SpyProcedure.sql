@@ -53,7 +53,8 @@ BEGIN
         'RETURN; END;'
     );
 
-    EXEC tSQLt.Private_RenameObject @ProcedureName, @NewName OUTPUT;
+    EXEC tSQLt.Internal_RemoveObject @LogTableName, @IfExists = 1;
+    EXEC tSQLt.Internal_RemoveObject @ProcedureName, @NewName OUTPUT;
     EXEC (@CreateLogTableCommand);
     EXEC (@CreateProcedureCommand);
 END;
