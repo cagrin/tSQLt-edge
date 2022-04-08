@@ -1,9 +1,9 @@
 CREATE PROCEDURE tSQLt.Private_Run
-    @TestName NVARCHAR(MAX) = NULL
+    @TestName NVARCHAR(MAX),
+    @ErrorMessage NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
     DECLARE @TranCounter INT;
-    DECLARE @ErrorMessage NVARCHAR(4000);
     DECLARE @ErrorSeverity INT;
     DECLARE @ErrorState INT;
     DECLARE @ErrorNumber INT;
@@ -44,8 +44,5 @@ BEGIN
     ELSE
         IF XACT_STATE() <> -1
             ROLLBACK TRANSACTION TestName;
-
-    IF @ErrorMessage IS NOT NULL
-        RAISERROR(N'%s', 16, 10, @ErrorMessage);
 END;
 GO

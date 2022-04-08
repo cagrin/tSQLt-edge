@@ -44,7 +44,9 @@ BEGIN
 	AND
 	(
 		@TestName IS NULL
+		OR @TestName = SCHEMA_NAME(r.schema_id)
 		OR @TestName = QUOTENAME(SCHEMA_NAME(r.schema_id))
+		OR @Testname = CONCAT(SCHEMA_NAME(r.schema_id), '.', r.name)
 		OR @Testname = CONCAT(QUOTENAME(SCHEMA_NAME(r.schema_id)), '.', QUOTENAME(r.name))
 	)
 
