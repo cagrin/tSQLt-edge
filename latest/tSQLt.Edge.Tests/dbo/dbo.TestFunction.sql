@@ -31,9 +31,6 @@ GO
 CREATE TABLE dbo.FakeDataSource (Column1 int);
 GO
 
-CREATE TYPE dbo.TestType AS TABLE (Column1 int);
-GO
-
 CREATE FUNCTION dbo.TestFunctionIF_P1_TT(@P1 int, @P2 dbo.TestType READONLY) RETURNS TABLE AS RETURN SELECT (SELECT 13+SUM(Column1)+@P1 FROM @P2) Column1;
 GO
 CREATE FUNCTION dbo.FakeFunctionIF_P1_TT(@P1 int, @P2 dbo.TestType READONLY) RETURNS TABLE AS RETURN SELECT (SELECT 42+SUM(Column1)+@P1 FROM @P2) Column1;

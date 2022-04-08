@@ -131,7 +131,8 @@ BEGIN
     EXEC tSQLt.SpyProcedure 'dbo.TestProcedure', 'SET @P1 = 3;', @CallOriginal = 1;
 
     DECLARE @P1 int = 1;
-    DECLARE @P2 dbo.TestType; INSERT INTO @P2 (Column1) VALUES (2);
+    DECLARE @P2 dbo.TestType;
+    INSERT INTO @P2 (Column1) VALUES (2);
     EXEC dbo.TestProcedure @P1 OUTPUT, @P2;
 
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = 1 AND CONVERT(NVARCHAR(MAX), P2) = '<P2><row><Column1>2</Column1></row></P2>')
@@ -171,6 +172,24 @@ BEGIN
     EXEC dbo.TestProcedure @P1 = NULL;
 
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 IS NULL)
+    BEGIN
+        EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should exists.';
+    END
+END;
+GO
+
+CREATE PROCEDURE Test_SpyProcedure.Test_ProcedureWithP1_TableTypeNotNull
+AS
+BEGIN
+    EXEC ('CREATE OR ALTER PROCEDURE dbo.TestProcedure @P1 dbo.TestTypeNotNull READONLY AS BEGIN RETURN; END;');
+
+    EXEC tSQLt.SpyProcedure 'dbo.TestProcedure';
+
+    DECLARE @P1 dbo.TestTypeNotNull;
+    INSERT INTO @P1 (Column1) VALUES (NULL);
+    EXEC dbo.TestProcedure @P1;
+
+    IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND CONVERT(NVARCHAR(MAX), P1) = '<P1><row/></P1>')
     BEGIN
         EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should exists.';
     END
