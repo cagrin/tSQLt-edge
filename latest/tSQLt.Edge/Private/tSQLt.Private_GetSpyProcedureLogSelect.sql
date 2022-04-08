@@ -10,7 +10,7 @@ BEGIN
                 (
                     ' ',
                     CASE
-                        WHEN is_table_type = 1 THEN '(SELECT * FROM ' + name + ' FOR XML PATH(''row''),TYPE,ROOT('''+ REPLACE(name, '@', '')+'''))'
+                        WHEN is_table_type = 1 THEN CONCAT('(SELECT * FROM ', name, ' FOR XML PATH(''row''),TYPE,ROOT(''', REPLACE(name, '@', ''), '''))')
                         ELSE name
                     END,
                     CASE WHEN is_output = 1 THEN 'OUTPUT' ELSE NULL END
