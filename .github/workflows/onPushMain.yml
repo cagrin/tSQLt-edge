@@ -28,9 +28,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Setup sqltest tool
-        run: dotnet tool install -g dotnet-sqltest
+        shell: pwsh
+        run: |
+          dotnet tool install -g dotnet-sqltest
+          docker pull mcr.microsoft.com/azure-sql-edge
       - name: Unit tests
         shell: pwsh
         run: |
           sqltest runall --image mcr.microsoft.com/azure-sql-edge --project ./latest/tSQLt.Edge.Tests
-          sqltest runall --image mcr.microsoft.com/azure-sql-edge --project ./current/tSQLt.Original.Tests
+          sqltest runall --image mcr.microsoft.com/azure-sql-edge --project ./latest/tSQLt.Original.Tests
+          sqltest runall --image mcr.microsoft.com/azure-sql-edge --project ./current/Example.Tests
