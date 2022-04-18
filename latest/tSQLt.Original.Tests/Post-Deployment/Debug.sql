@@ -136,3 +136,7 @@ END;
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure works with CLR procedures]');
 END;
 GO
+
+PRINT 'tSQLt.Debug'
+EXEC tSQLt.Debug
+GO

@@ -6,5 +6,6 @@
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="../tSQLt.Edge/tSQLt.Edge.csproj" />
+        <PostDeploy Include="Post-Deployment\Debug.sql" />
     </ItemGroup>
 </Project>
