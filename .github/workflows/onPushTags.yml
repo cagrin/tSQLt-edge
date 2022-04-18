@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v3
       - name: Setup dotnet
         uses: actions/setup-dotnet@master
         with:
