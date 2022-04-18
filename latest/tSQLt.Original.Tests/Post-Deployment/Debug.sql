@@ -1,3 +1,5 @@
+PRINT 'Creating SqlProcedure [tSQLt].[Debug]...'
+GO
 CREATE PROCEDURE tSQLt.Debug
 AS
 BEGIN
@@ -137,6 +139,7 @@ END;
 END;
 GO
 
-PRINT 'tSQLt.Debug'
+PRINT 'Running SqlProcedure [tSQLt].[Debug]...'
+GO
 EXEC tSQLt.Debug
 GO
