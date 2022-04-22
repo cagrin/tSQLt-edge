@@ -39,8 +39,7 @@ RETURNS @ComputedColumns TABLE
 	[is_hidden] [bit] NOT NULL,
 	[is_masked] [bit] NOT NULL,
 	[graph_type] [int] NULL,
-	[graph_type_desc] [nvarchar](60) NULL,
-	[is_data_deletion_filter_column] [bit] NULL
+	[graph_type_desc] [nvarchar](60) NULL
 ) AS
 BEGIN
     INSERT INTO @ComputedColumns
@@ -83,8 +82,7 @@ BEGIN
 		[is_hidden],
 		[is_masked],
 		[graph_type],
-		[graph_type_desc],
-		[is_data_deletion_filter_column]
+		[graph_type_desc]
 	FROM sys.computed_columns
     WHERE object_id = OBJECT_ID(@ObjectName) AND column_id = @ColumnId
     UNION ALL
@@ -127,8 +125,7 @@ BEGIN
 		[is_hidden],
 		[is_masked],
 		[graph_type],
-		[graph_type_desc],
-		[is_data_deletion_filter_column]
+		[graph_type_desc]
 	FROM tempdb.sys.computed_columns
     WHERE object_id = OBJECT_ID(CONCAT('tempdb..', @ObjectName)) AND column_id = @ColumnId
 

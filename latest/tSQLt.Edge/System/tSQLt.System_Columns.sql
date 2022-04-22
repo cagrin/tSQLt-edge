@@ -36,8 +36,7 @@ RETURNS @Columns TABLE
 	[is_hidden] [bit] NULL,
 	[is_masked] [bit] NOT NULL,
 	[graph_type] [int] NULL,
-	[graph_type_desc] [nvarchar](60) NULL,
-	[is_data_deletion_filter_column] [bit] NULL
+	[graph_type_desc] [nvarchar](60) NULL
 ) AS
 BEGIN
     INSERT INTO @Columns
@@ -77,8 +76,7 @@ BEGIN
 		[is_hidden],
 		[is_masked],
 		[graph_type],
-		[graph_type_desc],
-		[is_data_deletion_filter_column]
+		[graph_type_desc]
 	FROM sys.columns
     WHERE object_id = OBJECT_ID(@ObjectName)
     UNION ALL
@@ -118,8 +116,7 @@ BEGIN
 		[is_hidden],
 		[is_masked],
 		[graph_type],
-		[graph_type_desc],
-		[is_data_deletion_filter_column]
+		[graph_type_desc]
 	FROM tempdb.sys.columns
     WHERE object_id = OBJECT_ID(CONCAT('tempdb..', @ObjectName))
 
