@@ -6,35 +6,37 @@ on:
     - main
 
 jobs:
-  build:
+  build-on-azure-sql-edge:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup pwsh SqlServer module
-        shell: pwsh
-        run: |
-          Set-PSRepository PSGallery -InstallationPolicy Trusted
-          Install-Module -Name SqlServer
-      - name: Unit tests
-        shell: pwsh
-        run: |
-          cd latest
-          ./test.ps1
-          cd..
-          cd current
-          ./test.ps1
-  build-on-edge:
-    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: mcr.microsoft.com/azure-sql-edge
     steps:
       - uses: actions/checkout@v3
       - name: Setup sqltest tool
         shell: pwsh
         run: |
           dotnet tool install -g dotnet-sqltest
-          docker pull mcr.microsoft.com/azure-sql-edge
+          docker pull ${{env.IMAGE_NAME}}
       - name: Unit tests
         shell: pwsh
         run: |
-          sqltest runall --image mcr.microsoft.com/azure-sql-edge --project ./latest/tSQLt.Edge.Tests
-          sqltest runall --image mcr.microsoft.com/azure-sql-edge --project ./latest/tSQLt.Original.Tests
-          sqltest runall --image mcr.microsoft.com/azure-sql-edge --project ./current/Example.Tests
+          sqltest runall --image ${{env.IMAGE_NAME}} --project ./latest/tSQLt.Edge.Tests
+          sqltest runall --image ${{env.IMAGE_NAME}} --project ./latest/tSQLt.Original.Tests
+          sqltest runall --image ${{env.IMAGE_NAME}} --project ./current/Example.Tests
+  build-on-mssql-server:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: mcr.microsoft.com/mssql/server
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup sqltest tool
+        shell: pwsh
+        run: |
+          dotnet tool install -g dotnet-sqltest
+          docker pull ${{env.IMAGE_NAME}}
+      - name: Unit tests
+        shell: pwsh
+        run: |
+          sqltest runall --image ${{env.IMAGE_NAME}} --project ./latest/tSQLt.Edge.Tests
+          sqltest runall --image ${{env.IMAGE_NAME}} --project ./latest/tSQLt.Original.Tests
+          sqltest runall --image ${{env.IMAGE_NAME}} --project ./current/Example.Tests
