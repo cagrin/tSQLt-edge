@@ -20,3 +20,9 @@ Install-Module -Name SqlServer
 pwsh
 Invoke-Sqlcmd -Query "EXEC tSQLt.RunAll" -ServerInstance localhost,51433 -Database tSQLt.Edge.Tests -Username sa -Password A.794613 -Verbose
 ```
+
+## Run unit tests on Apple Silicon using dotnet-sqltest
+```
+pwsh
+sqltest runall --image cagrin/azure-sql-edge-arm64 --project ./latest/tSQLt.Edge.Tests
+```
