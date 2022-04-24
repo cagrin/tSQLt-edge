@@ -25,4 +25,6 @@ Invoke-Sqlcmd -Query "EXEC tSQLt.RunAll" -ServerInstance localhost,51433 -Databa
 ```
 pwsh
 sqltest runall --image cagrin/azure-sql-edge-arm64 --project ./latest/tSQLt.Edge.Tests
+sqltest runall --image cagrin/azure-sql-edge-arm64 --project ./latest/tSQLt.Original.Tests
+sqltest runall --image cagrin/azure-sql-edge-arm64 --project ./current/Example.Tests
 ```
