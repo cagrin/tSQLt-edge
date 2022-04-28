@@ -25,13 +25,15 @@ BEGIN
         SET @Idx = @Idx + 1;
     END
 
-    SET @ErrorMessage = (SELECT TOP 1 Msg FROM tSQLt.TestResult WHERE Result <> 'Success' ORDER BY [Name])
-    IF @ErrorMessage IS NOT NULL
-        RAISERROR(N'%s', 16, 10, @ErrorMessage);
-
     IF @@TRANCOUNT = 0
-        SELECT
-            Passed = (SELECT COUNT(1) FROM tSQLt.TestResult WHERE Result = 'Success'),
-            Failed = (SELECT COUNT(1) FROM tSQLt.TestResult WHERE Result = 'Failure');
+    BEGIN
+        DECLARE @Failed INT = (SELECT ISNULL(COUNT(1), 0) FROM tSQLt.TestResult WHERE Result = 'Failure');
+        DECLARE @Passed INT = (SELECT ISNULL(COUNT(1), 0) FROM tSQLt.TestResult WHERE Result = 'Success');
+
+        SELECT Failed = @Failed, Passed = @Passed
+
+        IF @Failed > 0
+            SELECT Name, Msg FROM tSQLt.TestResult WHERE Result = 'Failure'
+    END
 END;
 GO
