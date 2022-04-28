@@ -27,7 +27,6 @@ BEGIN
         SAVE TRANSACTION TestName;
 
     BEGIN TRY
-        PRINT @TestName;
         EXEC @TestName;
     END TRY
     BEGIN CATCH
