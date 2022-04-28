@@ -4,6 +4,7 @@ CREATE PROCEDURE tSQLt.SpyProcedure
     @CallOriginal BIT = 0
 AS
 BEGIN
+    SET NOCOUNT ON;
     DECLARE @Command NVARCHAR(MAX) = 'tSQLt.Internal_SpyProcedure';
     EXEC @Command
     @ProcedureName = @ProcedureName,

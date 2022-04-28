@@ -4,6 +4,7 @@ CREATE PROCEDURE tSQLt.AssertLike
     @Message NVARCHAR(MAX) = ''
 AS
 BEGIN
+    SET NOCOUNT ON;
     DECLARE @Command NVARCHAR(MAX) = 'tSQLt.Internal_AssertLike';
     EXEC @Command
     @ExpectedPattern = @ExpectedPattern,

@@ -4,6 +4,7 @@ CREATE PROCEDURE tSQLt.RemoveObject
     @IfExists INT = 0
 AS
 BEGIN
+    SET NOCOUNT ON;
     DECLARE @Command NVARCHAR(MAX) = 'tSQLt.Internal_RemoveObject';
     EXEC @Command
     @ObjectName = @ObjectName,

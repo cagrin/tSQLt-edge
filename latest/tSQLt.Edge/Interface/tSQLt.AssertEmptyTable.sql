@@ -3,6 +3,7 @@ CREATE PROCEDURE tSQLt.AssertEmptyTable
     @Message NVARCHAR(MAX) = ''
 AS
 BEGIN
+    SET NOCOUNT ON;
     DECLARE @Command NVARCHAR(MAX) = 'tSQLt.Internal_AssertEmptyTable';
     EXEC @Command
     @TableName = @TableName,

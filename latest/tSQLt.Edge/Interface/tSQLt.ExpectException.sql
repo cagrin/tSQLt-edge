@@ -7,6 +7,7 @@ CREATE PROCEDURE tSQLt.ExpectException
     @ExpectedErrorNumber INT = NULL
 AS
 BEGIN
+    SET NOCOUNT ON;
     DECLARE @Command NVARCHAR(MAX) = 'tSQLt.Internal_ExpectException';
     EXEC @Command
     @ExpectedMessage = @ExpectedMessage,

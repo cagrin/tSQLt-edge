@@ -11,6 +11,7 @@ CREATE PROCEDURE tSQLt.Fail
     @Message9 NVARCHAR(MAX) = ''
 AS
 BEGIN
+    SET NOCOUNT ON;
     DECLARE @Command NVARCHAR(MAX) = 'tSQLt.Internal_Fail';
     EXEC @Command
     @Message0 = @Message0,

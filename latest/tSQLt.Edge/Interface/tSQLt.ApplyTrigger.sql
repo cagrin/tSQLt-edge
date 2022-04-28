@@ -3,6 +3,7 @@ CREATE PROCEDURE tSQLt.ApplyTrigger
     @TriggerName NVARCHAR(MAX)
 AS
 BEGIN
+    SET NOCOUNT ON;
     DECLARE @Command NVARCHAR(MAX) = 'tSQLt.Internal_ApplyTrigger';
     EXEC @Command
     @TableName = @TableName,

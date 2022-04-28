@@ -4,6 +4,7 @@ CREATE PROCEDURE tSQLt.AssertNotEquals
     @Message NVARCHAR(MAX) = ''
 AS
 BEGIN
+    SET NOCOUNT ON;
     DECLARE @Command NVARCHAR(MAX) = 'tSQLt.Internal_AssertNotEquals';
     EXEC @Command
     @Expected = @Expected,

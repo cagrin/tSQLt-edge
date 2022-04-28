@@ -4,6 +4,7 @@ CREATE PROCEDURE tSQLt.FakeFunction
     @FakeDataSource NVARCHAR(MAX) = NULL
 AS
 BEGIN
+    SET NOCOUNT ON;
     DECLARE @Command NVARCHAR(MAX) = 'tSQLt.Internal_FakeFunction';
     EXEC @Command
     @FunctionName = @FunctionName,

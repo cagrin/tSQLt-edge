@@ -3,6 +3,7 @@ CREATE PROCEDURE tSQLt.AssertObjectDoesNotExist
     @Message NVARCHAR(MAX) = ''
 AS
 BEGIN
+    SET NOCOUNT ON;
     DECLARE @Command NVARCHAR(MAX) = 'tSQLt.Internal_AssertObjectDoesNotExist';
     EXEC @Command
     @ObjectName = @ObjectName,
