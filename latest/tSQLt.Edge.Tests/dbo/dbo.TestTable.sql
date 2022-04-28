@@ -33,3 +33,7 @@ CREATE TABLE dbo.TestTable
     [col30] uniqueidentifier,
     [col31] xml
 );
+GO
+
+CREATE TABLE dbo.FakeDataSource (Column1 int);
+GO
