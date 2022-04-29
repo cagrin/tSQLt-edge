@@ -28,6 +28,7 @@ BEGIN
 
     BEGIN TRY
         EXEC @TestName;
+        SET @ErrorMessage = NULL;
     END TRY
     BEGIN CATCH
         SELECT @ErrorMessage = ERROR_MESSAGE();

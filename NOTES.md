@@ -5,7 +5,7 @@ docker run -e 'ACCEPT_EULA=1' -e 'MSSQL_SA_PASSWORD=A.794613' -e 'MSSQL_COLLATIO
 
 ## Build and publish project Tests to localhost
 ```
-dotnet publish ./tSQLt.Edge.Tests /p:TargetServerName=localhost /p:TargetDatabaseName=tSQLt.Edge.Tests /p:TargetUser=sa /p:TargetPassword=A.794613
+dotnet publish ./latest/tSQLt.Edge.Tests /p:TargetServerName=localhost /p:TargetPort=51433 /p:TargetDatabaseName=tSQLt.Edge.Tests /p:TargetUser=sa /p:TargetPassword=A.794613
 ```
 
 ## Prepare Powershell (optional)
