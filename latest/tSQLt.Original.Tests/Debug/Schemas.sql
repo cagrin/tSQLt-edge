@@ -30,5 +30,7 @@ CREATE SCHEMA RemoveObjectTests;
 GO
 CREATE SCHEMA RemoveObjectIfExistsTests;
 GO
+CREATE SCHEMA Run_Methods_Tests;
+GO
 CREATE SCHEMA SpyProcedureTests;
 GO
