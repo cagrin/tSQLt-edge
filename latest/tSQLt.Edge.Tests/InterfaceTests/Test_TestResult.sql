@@ -103,3 +103,31 @@ BEGIN
     EXEC Test_TestResult.Private_FilteringRun @TestCase = '[TestSchema].TestCase';
 END;
 GO
+
+CREATE PROCEDURE Test_TestResult.Test_StartTimeAndEndTimeAreNotNull
+AS
+BEGIN
+    EXEC('CREATE SCHEMA TestSchema;');
+    EXEC('CREATE PROCEDURE TestSchema.TestCase AS EXEC tSQLt.AssertEquals 1, 1;');
+
+    BEGIN TRY
+        EXEC tSQLt.Run 'TestSchema';
+    END TRY
+    BEGIN CATCH
+        EXEC tSQLt.Fail 'EXEC tSQLt.Run ''TestSchema'' should not failed.';
+    END CATCH
+
+    SELECT
+        TestStartTimeIsNotNull = 1,
+        TestEndTimeIsNotNull   = 0
+    INTO #Expected
+
+    SELECT
+        TestStartTimeIsNotNull = CASE WHEN TestStartTime IS NOT NULL THEN 1 ELSE 0 END,
+        TestEndTimeIsNotNull   = CASE WHEN TestEndTime   IS NOT NULL THEN 1 ELSE 0 END
+    INTO #Actual
+    FROM tSQLt.TestResult;
+
+    EXEC tSQLt.AssertEqualsTable '#Expected', '#Actual';
+END;
+GO
