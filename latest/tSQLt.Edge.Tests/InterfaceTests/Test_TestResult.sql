@@ -119,7 +119,7 @@ BEGIN
 
     SELECT
         TestStartTimeIsNotNull = 1,
-        TestEndTimeIsNotNull   = 0
+        TestEndTimeIsNotNull   = 1
     INTO #Expected
 
     SELECT

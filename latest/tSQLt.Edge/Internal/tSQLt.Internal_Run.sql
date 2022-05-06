@@ -11,16 +11,20 @@ BEGIN
     WHILE @Idx <= @Max
     BEGIN
         SET @TestCase = (SELECT TestName FROM @TestNames WHERE Id = @Idx)
+
+        INSERT INTO tSQLt.TestResult (Class, TestCase)
+        SELECT
+            Class = OBJECT_SCHEMA_NAME(OBJECT_ID(@TestCase)),
+            TestCase = OBJECT_NAME(OBJECT_ID(@TestCase));
+        DECLARE @Id INT = SCOPE_IDENTITY();
+
         EXEC tSQLt.Private_Run @TestCase, @ErrorMessage OUTPUT;
 
-        INSERT INTO tSQLt.TestResult (Class, TestCase, Result, Msg)
-        VALUES
-        (
-            OBJECT_SCHEMA_NAME(OBJECT_ID(@TestCase)),
-            OBJECT_NAME(OBJECT_ID(@TestCase)),
-            CASE WHEN @ErrorMessage IS NOT NULL THEN 'Failure' ELSE 'Success' END,
-            @ErrorMessage
-        );
+        UPDATE tSQLt.TestResult SET
+            Result = CASE WHEN @ErrorMessage IS NOT NULL THEN 'Failure' ELSE 'Success' END,
+            Msg = @ErrorMessage,
+            TestEndTime = SYSDATETIME()
+        WHERE Id = @Id;
 
         SET @Idx = @Idx + 1;
     END
