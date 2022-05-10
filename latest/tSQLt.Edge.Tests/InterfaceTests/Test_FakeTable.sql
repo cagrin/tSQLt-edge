@@ -179,6 +179,23 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE Test_FakeTable.Test_CannotFakeSynonymForProcedure
+AS
+BEGIN
+    CREATE TABLE dbo.TestTable1 (Column1 int IDENTITY(1,2) NOT NULL, Column2 AS 2*Column1, Column3 VARCHAR(100) COLLATE Polish_100_CI_AS DEFAULT '-');
+    CREATE TABLE dbo.TestTable2 (Column1 int,                        Column2 int         , Column3 VARCHAR(100) COLLATE Polish_100_CI_AS);
+
+    EXEC ('CREATE PROCEDURE dbo.TestProcedure1 AS BEGIN SELECT * FROM dbo.TestTable1; END;')
+    EXEC ('CREATE SYNONYM dbo.TestSynonym1 FOR dbo.TestProcedure1;')
+
+    EXEC tSQLt.ExpectException 'Cannot process synonym dbo.TestSynonym1 as it is pointing to [dbo].[TestProcedure1] which is not a table or view.';
+
+    EXEC tSQLt.FakeTable 'dbo.TestSynonym1';
+
+    EXEC tSQLt.AssertEqualsTableSchema 'dbo.TestTable2', 'dbo.TestSynonym1';
+END;
+GO
+
 CREATE PROCEDURE Test_FakeFunction.Test_SchemaName
 AS
 BEGIN
