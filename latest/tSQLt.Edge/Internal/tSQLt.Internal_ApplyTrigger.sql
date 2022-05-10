@@ -3,6 +3,6 @@ CREATE PROCEDURE tSQLt.Internal_ApplyTrigger
     @TriggerName NVARCHAR(MAX)
 AS
 BEGIN
-    PRINT CONCAT_WS(' ', '- tSQLt.ApplyTrigger', @TableName, @TriggerName);
+    EXEC tSQLt.Fail 'tSQLt.ApplyTrigger is not yet supported.';
 END;
 GO

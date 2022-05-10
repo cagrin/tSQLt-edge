@@ -24,7 +24,7 @@ Invoke-Sqlcmd -Query "EXEC tSQLt.RunAll" -ServerInstance localhost,51433 -Databa
 ## Run unit tests on Apple Silicon using dotnet-sqltest
 ```
 pwsh
-sqltest runall --image cagrin/azure-sql-edge-arm64 --project ./latest/tSQLt.Edge.Tests
+sqltest runall --image cagrin/azure-sql-edge-arm64 --project ./latest/tSQLt.Edge.Tests --cc-include-tsqlt
 sqltest runall --image cagrin/azure-sql-edge-arm64 --project ./latest/tSQLt.Original.Tests
 sqltest runall --image cagrin/azure-sql-edge-arm64 --project ./current/Example.Tests
 ```
