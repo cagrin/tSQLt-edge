@@ -241,3 +241,12 @@ BEGIN
     EXEC tSQLt.FakeFunction 'dbo.TestFunctionScalar_P1_TT', 'dbo.FakeFunctionScalar';
 END;
 GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_Failed_When_Procedure
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'Both parameters must contain the name of either scalar or table valued functions';
+
+    EXEC tSQLt.FakeFunction 'dbo.TestProcedure', 'dbo.FakeFunctionIF';
+END;
+GO
