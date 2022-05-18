@@ -8,7 +8,9 @@ AS
 BEGIN
      DECLARE @ErrorMessage NVARCHAR(MAX);
 
-     EXEC tSQLt.Private_Run @TestName, @ErrorMessage OUTPUT;
+     DECLARE @TranName CHAR(32); EXEC tSQLt.Private_GetNewTranName @TranName OUTPUT;
+
+     EXEC tSQLt.Private_Run @TestName, @TranName, @ErrorMessage OUTPUT;
 
      EXEC tSQLt.AssertEqualsString @ExpectedMessage, @ErrorMessage;
 END;

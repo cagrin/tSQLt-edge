@@ -1,5 +1,6 @@
 CREATE PROCEDURE tSQLt.Private_Run
     @TestName NVARCHAR(MAX),
+    @TranName CHAR(32),
     @ErrorMessage NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
@@ -24,7 +25,7 @@ BEGIN
     IF @TranCounter = 0
         BEGIN TRANSACTION;
     ELSE
-        SAVE TRANSACTION TestName;
+        SAVE TRANSACTION @TestName;
 
     BEGIN TRY
         EXEC @TestName;
@@ -43,6 +44,6 @@ BEGIN
         ROLLBACK TRANSACTION;
     ELSE
         IF XACT_STATE() <> -1
-            ROLLBACK TRANSACTION TestName;
+            ROLLBACK TRANSACTION @TestName;
 END;
 GO

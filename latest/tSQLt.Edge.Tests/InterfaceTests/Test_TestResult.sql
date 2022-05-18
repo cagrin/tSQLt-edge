@@ -104,7 +104,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE Test_TestResult.Test_StartTimeAndEndTimeAreNotNull
+CREATE PROCEDURE Test_TestResult.Test_DetailsAreNotNull
 AS
 BEGIN
     EXEC('CREATE SCHEMA TestSchema;');
@@ -118,11 +118,13 @@ BEGIN
     END CATCH
 
     SELECT
+        TranName = 1,
         TestStartTimeIsNotNull = 1,
         TestEndTimeIsNotNull   = 1
     INTO #Expected
 
     SELECT
+        TranName               = CASE WHEN LEN(TranName) = 32        THEN 1 ELSE 0 END,
         TestStartTimeIsNotNull = CASE WHEN TestStartTime IS NOT NULL THEN 1 ELSE 0 END,
         TestEndTimeIsNotNull   = CASE WHEN TestEndTime   IS NOT NULL THEN 1 ELSE 0 END
     INTO #Actual
