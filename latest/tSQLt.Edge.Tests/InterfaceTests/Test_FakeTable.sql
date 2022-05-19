@@ -224,3 +224,16 @@ BEGIN
     EXEC tSQLt.FakeTable 'dbo.TestTable1';
 END;
 GO
+
+CREATE PROCEDURE Test_FakeTable.Test_CannotFakeTableAndViewWithSchemabinding
+AS
+BEGIN
+    CREATE TABLE dbo.TestTable1 (Column1 int NOT NULL);
+
+    EXEC ('CREATE VIEW dbo.TestView1 WITH SCHEMABINDING AS SELECT Column1 FROM dbo.TestTable1;');
+
+    EXEC tSQLt.ExpectException 'Object ''[dbo].[TestTable1]'' cannot be renamed because the object participates in enforced dependencies.';
+
+    EXEC tSQLt.FakeTable 'dbo.TestTable1';
+END;
+GO
