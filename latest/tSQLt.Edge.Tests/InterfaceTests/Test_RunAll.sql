@@ -49,7 +49,8 @@ EXEC [tSQLt].[RemoveObject] @ObjectName, @NewName OUTPUT, @IfExists;
 EXEC [tSQLt].[RemoveObjectIfExists] @ObjectName, @NewName OUTPUT;
 EXEC [tSQLt].[RenameClass] @SchemaName, @NewSchemaName;
 EXEC [tSQLt].[Run] @TestName;
-EXEC [tSQLt].[SpyProcedure] @ProcedureName, @CommandToExecute, @CallOriginal;';
+EXEC [tSQLt].[SpyProcedure] @ProcedureName, @CommandToExecute, @CallOriginal;
+EXEC [tSQLt].[XmlResultFormatter] ;';
 
     EXEC tSQLt.AssertEqualsString @Expected, @Actual;
 END;
@@ -102,7 +103,8 @@ BEGIN
 [tSQLt].[RemoveObjectIfExists] @ObjectName nvarchar(max), @NewName nvarchar(max) OUTPUT;
 [tSQLt].[RenameClass] @SchemaName nvarchar(max), @NewSchemaName nvarchar(max);
 [tSQLt].[Run] @TestName nvarchar(max);
-[tSQLt].[SpyProcedure] @ProcedureName nvarchar(max), @CommandToExecute nvarchar(max), @CallOriginal bit;';
+[tSQLt].[SpyProcedure] @ProcedureName nvarchar(max), @CommandToExecute nvarchar(max), @CallOriginal bit;
+[tSQLt].[XmlResultFormatter] ;';
 
     EXEC tSQLt.AssertEqualsString @Expected, @Actual;
 END;
