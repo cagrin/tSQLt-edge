@@ -1,0 +1,3 @@
+[submodule "submodules/tSQLt"]
+	path = submodules/tSQLt
+	url = https://github.com/tSQLt-org/tSQLt

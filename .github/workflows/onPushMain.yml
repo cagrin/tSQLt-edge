@@ -12,6 +12,8 @@ jobs:
       IMAGE_NAME: mcr.microsoft.com/azure-sql-edge
     steps:
       - uses: actions/checkout@v3
+      - name: Checkout submodules
+        run: git submodule update --init
       - name: Setup sqltest tool
         shell: pwsh
         run: |
@@ -29,6 +31,8 @@ jobs:
       IMAGE_NAME: mcr.microsoft.com/mssql/server
     steps:
       - uses: actions/checkout@v3
+      - name: Checkout submodules
+        run: git submodule update --init
       - name: Setup sqltest tool
         shell: pwsh
         run: |
