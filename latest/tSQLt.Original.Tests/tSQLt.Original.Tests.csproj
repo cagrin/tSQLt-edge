@@ -7,5 +7,22 @@
     <ItemGroup>
         <ProjectReference Include="../tSQLt.Edge/tSQLt.Edge.csproj" />
         <PostDeploy Include="Post-Deployment\Debug.sql" />
+        <Content Include="../../submodules/tSQLt/Tests/AssertEmptyTableTests.class.sql "/>
+        <Content Include="../../submodules/tSQLt/Tests/AssertEqualsStringTests.class.sql "/>
+        <Content Include="../../submodules/tSQLt/Tests/AssertEqualsTableSchemaTests.class.sql "/>
+        <Content Include="../../submodules/tSQLt/Tests/AssertEqualsTableTests.class.sql "/>
+        <Content Include="../../submodules/tSQLt/Tests/AssertEqualsTests.class.sql "/>
+        <Content Include="../../submodules/tSQLt/Tests/AssertLikeTests.class.sql "/>
+        <Content Include="../../submodules/tSQLt/Tests/AssertNotEqualsTests.class.sql "/>
+        <Content Include="../../submodules/tSQLt/Tests/AssertObjectDoesNotExistTests.class.sql "/>
+        <Content Include="../../submodules/tSQLt/Tests/AssertObjectExistsTests.class.sql "/>
+        <Content Include="../../submodules/tSQLt/Tests/AssertResultSetsHaveSameMetaDataTests.class.sql "/>
+        <Content Include="../../submodules/tSQLt/Tests/FailTests.class.sql "/>
+        <Content Include="../../submodules/tSQLt/Tests/FakeFunctionTests.class.sql "/>
+        <Content Include="../../submodules/tSQLt/Tests/FakeTableTests.class.sql "/>
+        <Content Include="../../submodules/tSQLt/Tests/RemoveObjectIfExistsTests.class.sql "/>
+        <Content Include="../../submodules/tSQLt/Tests/RemoveObjectTests.class.sql "/>
+        <Content Include="../../submodules/tSQLt/Tests/Run_Methods_Tests.class.sql "/>
+        <Content Include="../../submodules/tSQLt/Tests/SpyProcedureTests.class.sql "/>
     </ItemGroup>
 </Project>
