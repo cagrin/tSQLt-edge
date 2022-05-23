@@ -77,7 +77,11 @@ END;
 
     -- ExpectExceptionTests.class.sql --todo
 
-    -- ExpectNoExceptionTests.class.sql --todo
+    EXEC ('DROP PROCEDURE [ExpectNoExceptionTests].[test a ExpectNoException cannot follow an ExpectException]'); --todo
+    EXEC ('DROP PROCEDURE [ExpectNoExceptionTests].[test fails if called more then once]'); --todo
+    EXEC ('DROP PROCEDURE [ExpectNoExceptionTests].[test tSQLt.ExpectNoException causes test with exception to fail ]'); --todo
+    EXEC ('DROP PROCEDURE [ExpectNoExceptionTests].[test tSQLt.ExpectNoException includes additional message in fail message ]'); --todo
+    EXEC ('DROP PROCEDURE [ExpectNoExceptionTests].[test tSQLt.ExpectNoException includes error information in fail message ]');
 
     EXEC ('DROP PROCEDURE [FailTests].[test Fail does not change open tansaction count in case of XACT_STATE = -1]'); --todo
     EXEC ('DROP PROCEDURE [FailTests].[test Fail gives info about cleanup work if transaction state is invalidated]'); --todo
