@@ -8,7 +8,8 @@ CREATE PROC tSQLt_testutil.AssertFailMessageLike
     @Message4 VARCHAR(MAX) = NULL
 AS
 BEGIN
-    EXEC tSQLt.ExpectException;
+    DECLARE @ExpectedMessagePattern NVARCHAR(MAX) = '% %'; -- @ExpectedMessage
+    EXEC tSQLt.ExpectException @ExpectedMessagePattern = @ExpectedMessagePattern;
     EXEC (@Command);
 END;
 GO
@@ -23,7 +24,7 @@ CREATE PROC tSQLt_testutil.AssertFailMessageEquals
     @Message4 VARCHAR(MAX) = NULL
 AS
 BEGIN
-    EXEC tSQLt.ExpectException;
+    EXEC tSQLt.ExpectException @ExpectedMessage;
     EXEC (@Command);
 END;
 GO
@@ -46,6 +47,6 @@ BEGIN
      DECLARE @ErrorMessage NVARCHAR(MAX);
      DECLARE @TranName CHAR(32); EXEC tSQLt.Private_GetNewTranName @TranName OUTPUT;
      EXEC tSQLt.Private_Run @TestName, @TranName, @ErrorMessage OUTPUT;
-     EXEC tSQLt.AssertNotEqualsString NULL, @ErrorMessage;
+     EXEC tSQLt.AssertNotEqualsString NULL, @ErrorMessage; -- @ExpectedMessage
 END;
 GO

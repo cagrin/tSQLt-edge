@@ -26,6 +26,10 @@ BEGIN
         NULLIF(@Message9, '')
     );
 
+    -- [AssertEqualsTableTests].[test ***
+    IF  @ErrorMessage = 'tSQLt.AssertEqualsTable failed. Expected:<AssertEqualsTableTests.LeftTable> has different rowset than Actual:<AssertEqualsTableTests.RightTable>.'
+    SET @ErrorMessage = 'Unexpected/missing resultset rows!' + CHAR(13) + CHAR(10);
+
     -- [FakeFunctionTests].[test errors when function is ***
     IF @ErrorMessage LIKE 'tSQLt.AssertObjectExists failed. Object:<tSQLt_testutil.AClr%'
     SET @ErrorMessage = 'Both parameters must contain the name of either scalar or table valued functions!';
