@@ -39,43 +39,37 @@ END;
 ';
     EXEC (@AlterExpectException);
 
-    DECLARE @AlterFakeTable NVARCHAR(MAX) =
+    DECLARE @AlterFail NVARCHAR(MAX) =
 '
-ALTER PROCEDURE tSQLt.FakeTable
-    @TableName NVARCHAR(MAX),
-    @SchemaName NVARCHAR(MAX) = NULL, --parameter preserved for backward compatibility. Do not use. Will be removed soon.
-    @Identity BIT = NULL,
-    @ComputedColumns BIT = NULL,
-    @Defaults BIT = NULL
+ALTER PROCEDURE tSQLt.Fail
+    @Message0 NVARCHAR(MAX) = '''',
+    @Message1 NVARCHAR(MAX) = '''',
+    @Message2 NVARCHAR(MAX) = '''',
+    @Message3 NVARCHAR(MAX) = '''',
+    @Message4 NVARCHAR(MAX) = '''',
+    @Message5 NVARCHAR(MAX) = '''',
+    @Message6 NVARCHAR(MAX) = '''',
+    @Message7 NVARCHAR(MAX) = '''',
+    @Message8 NVARCHAR(MAX) = '''',
+    @Message9 NVARCHAR(MAX) = ''''
 AS
 BEGIN
-    DECLARE @Command NVARCHAR(MAX) = ''tSQLt.Internal_FakeTableDebug'';
+    SET NOCOUNT ON;
+    DECLARE @Command NVARCHAR(MAX) = ''tSQLt.Internal_FailDebug'';
     EXEC @Command
-    @TableName = @TableName,
-    @SchemaName = @SchemaName,
-    @Identity = @Identity,
-    @ComputedColumns = @ComputedColumns,
-    @Defaults = @Defaults;
+    @Message0 = @Message0,
+    @Message1 = @Message1,
+    @Message2 = @Message2,
+    @Message3 = @Message3,
+    @Message4 = @Message4,
+    @Message5 = @Message5,
+    @Message6 = @Message6,
+    @Message7 = @Message7,
+    @Message8 = @Message8,
+    @Message9 = @Message9;
 END;
 ';
-    EXEC (@AlterFakeTable);
-
-    DECLARE @AlterRemoveObject NVARCHAR(MAX) =
-'
-ALTER PROCEDURE tSQLt.RemoveObject
-    @ObjectName NVARCHAR(MAX),
-    @NewName NVARCHAR(MAX) = NULL OUTPUT,
-    @IfExists INT = 0
-AS
-BEGIN
-    DECLARE @Command NVARCHAR(MAX) = ''tSQLt.Internal_RemoveObjectDebug'';
-    EXEC @Command
-    @ObjectName = @ObjectName,
-    @NewName = @NewName OUTPUT,
-    @IfExists = @IfExists;
-END;
-';
-    EXEC (@AlterRemoveObject);
+    EXEC (@AlterFail);
 
     --EXEC ('DROP PROCEDURE [AssertEmptyTableTests].[test uses tSQLt.TableToText]');
 
