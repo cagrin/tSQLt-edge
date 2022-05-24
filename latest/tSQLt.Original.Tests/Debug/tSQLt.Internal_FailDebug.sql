@@ -26,21 +26,37 @@ BEGIN
         NULLIF(@Message9, '')
     );
 
+    -- [FakeFunctionTests].[test errors when function is ***
+    IF @ErrorMessage LIKE 'tSQLt.AssertObjectExists failed. Object:<tSQLt_testutil.AClr%'
+    SET @ErrorMessage = 'Both parameters must contain the name of either scalar or table valued functions!';
+
+    -- [FakeFunctionTests].[test errors when function doesn't exist]
+    IF  @ErrorMessage = 'tSQLt.AssertObjectExists failed. Object:<FakeFunctionTests.ANotExistingFunction> does not exist.'
+    SET @ErrorMessage = 'FakeFunctionTests.ANotExistingFunction does not exist!';
+
+    -- [FakeFunctionTests].[test errors when fake function doesn't exist]
+    IF  @ErrorMessage = 'tSQLt.AssertObjectExists failed. Object:<FakeFunctionTests.ANotExistingFakeFunction> does not exist.'
+    SET @ErrorMessage = 'FakeFunctionTests.ANotExistingFakeFunction does not exist!';
+
     -- [FakeTableTests].[test FakeTable raises appropriate error if table does not exist]
-    IF @ErrorMessage LIKE 'tSQLt.AssertObjectExists failed. Object:<schemaA.tableXYZ> does not exist.'
-      SET @ErrorMessage = 'FakeTable could not resolve the object name, ''schemaA.tableXYZ''. (When calling tSQLt.FakeTable, avoid the use of the @SchemaName parameter, as it is deprecated.)'
+    IF  @ErrorMessage = 'tSQLt.AssertObjectExists failed. Object:<schemaA.tableXYZ> does not exist.'
+    SET @ErrorMessage = 'FakeTable could not resolve the object name, ''schemaA.tableXYZ''. (When calling tSQLt.FakeTable, avoid the use of the @SchemaName parameter, as it is deprecated.)'
 
     -- [FakeTableTests].[test FakeTable raises appropriate error if it was called with a single parameter]
-    IF @ErrorMessage LIKE 'tSQLt.AssertObjectExists failed. Object:<schemaB.tableXYZ> does not exist.'
-      SET @ErrorMessage = 'FakeTable could not resolve the object name, ''schemaB.tableXYZ''. (When calling tSQLt.FakeTable, avoid the use of the @SchemaName parameter, as it is deprecated.)'
+    IF  @ErrorMessage = 'tSQLt.AssertObjectExists failed. Object:<schemaB.tableXYZ> does not exist.'
+    SET @ErrorMessage = 'FakeTable could not resolve the object name, ''schemaB.tableXYZ''. (When calling tSQLt.FakeTable, avoid the use of the @SchemaName parameter, as it is deprecated.)'
 
     -- [FakeTableTests].[test FakeTable raises appropriate error if called with NULL parameters]
-    IF @ErrorMessage LIKE 'tSQLt.AssertObjectExists failed. Object:<(null)> does not exist.'
-      SET @ErrorMessage = 'FakeTable could not resolve the object name, ''(null)''.'
+    IF  @ErrorMessage = 'tSQLt.AssertObjectExists failed. Object:<(null)> does not exist.'
+    SET @ErrorMessage = 'FakeTable could not resolve the object name, ''(null)''.'
+
+    -- [FakeTableTests].[test raises appropriate error if synonym is not of a table]
+    IF  @ErrorMessage = 'Cannot process synonym FakeTableTests.TempSynonym1 as it is pointing to [FakeTableTests].[NotATable] which is not a table or view.'
+    SET @ErrorMessage = 'Cannot fake synonym [FakeTableTests].[TempSynonym1] as it is pointing to [FakeTableTests].[NotATable], which is not a table or view!'
 
     -- [RemoveObjectTests].[test RemoveObject raises approporate error if object doesn't exists']
-    IF @ErrorMessage LIKE 'tSQLt.RemoveObject failed. ObjectName:<RemoveObjectTests.aNonExistentTestObject> does not exist.'
-      SET @ErrorMessage = 'tSQLt.RemoveObject failed. ObjectName: RemoveObjectTests.aNonExistentTestObject does not exist!';
+    IF  @ErrorMessage = 'tSQLt.RemoveObject failed. ObjectName:<RemoveObjectTests.aNonExistentTestObject> does not exist.'
+    SET @ErrorMessage = 'tSQLt.RemoveObject failed. ObjectName: RemoveObjectTests.aNonExistentTestObject does not exist!';
 
     RAISERROR(N'%s', 16, 10, @ErrorMessage);
 END;

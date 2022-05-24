@@ -15,30 +15,6 @@ END;
 ';
     EXEC (@AlterNewTestClass);
 
-    DECLARE @AlterExpectException NVARCHAR(MAX) =
-'
-ALTER PROCEDURE tSQLt.ExpectException
-    @ExpectedMessage NVARCHAR(MAX) = NULL,
-    @ExpectedSeverity INT = NULL,
-    @ExpectedState INT = NULL,
-    @Message NVARCHAR(MAX) = NULL,
-    @ExpectedMessagePattern NVARCHAR(MAX) = NULL,
-    @ExpectedErrorNumber INT = NULL
-AS
-BEGIN
-    DECLARE @Command NVARCHAR(MAX) = ''tSQLt.Internal_ExpectException'';
-    SET @ExpectedMessagePattern = ''% %'';
-    EXEC @Command
-        @ExpectedMessage = NULL,
-        @ExpectedSeverity = @ExpectedSeverity,
-        @ExpectedState = @ExpectedState,
-        @Message = @Message,
-        @ExpectedMessagePattern = @ExpectedMessagePattern,
-        @ExpectedErrorNumber = @ExpectedErrorNumber;
-END;
-';
-    EXEC (@AlterExpectException);
-
     DECLARE @AlterFail NVARCHAR(MAX) =
 '
 ALTER PROCEDURE tSQLt.Fail
@@ -71,8 +47,6 @@ END;
 ';
     EXEC (@AlterFail);
 
-    --EXEC ('DROP PROCEDURE [AssertEmptyTableTests].[test uses tSQLt.TableToText]');
-
     EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test all unsupported 2008 data types]');
     EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test all unsupported data types]');
     EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test can handle byte ordered comparable CLR data type]');
@@ -81,12 +55,8 @@ END;
     EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test RC table is created in the tSQLt schema]');
     EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test RC table is marked as tSQLt.IsTempObject]');
 
-    --EXEC ('DROP PROCEDURE [AssertNotEqualsTests].[test AssertNotEquals should give meaningfull failmessage]');
-
     EXEC ('DROP PROCEDURE [tSQLt_test_AssertResultSetsHaveSameMetaData].[test AssertResultSetsHaveSameMetaData does not compare hidden columns]'); --todo
     EXEC ('DROP PROCEDURE [tSQLt_test_AssertResultSetsHaveSameMetaData].[test AssertResultSetsHaveSameMetaData fails when one result set has no rows for versions before SQL Server 2012]');
-
-    -- AssertStringInTests.class.sql
 
     EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test a single ExpectNoException can be followed by a single ExpectException]'); --todo
     EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test expecting error number passes when expected error number is used]'); --todo
@@ -123,13 +93,20 @@ END;
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test Private_PrepareFakeFunctionOutputTable returns table with VALUES]');
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test tSQLt.Private_GetFullTypeName is used for return type]');
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test tSQLt.Private_GetFullTypeName is used to build parameter list]');
+    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors if function is a SVF and @FakeDataSource is used]'); --todo
+    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when fakee is not a function]'); --todo
+    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when function is ITVF and fake is not a function]'); --todo
+    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when function is ITVF and fake is SVF]'); --todo
+    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when function is MSTVF and fake is not a function]'); --todo
+    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when function is MSTVF and fake is SVF]'); --todo
+    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when function is SVF and fake is ITVF]'); --todo
+    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when function is SVF and fake is MSTVF]'); --todo
+    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when function is SVF and fake is not a function]'); --todo
+    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when neither @FakeFunctionName nor @FakeDataSource are passed]'); --todo
 
     EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable calls tSQLt.Private_MarktSQLtTempObject on new object]');
     EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable doesn''t produce output]');
-    --EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable raises appropriate error if called with NULL parameters]'); --todo
-    --EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable raises appropriate error if it was called with a single parameter]'); --todo
     EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable raises appropriate error if schema does not exist]');
-    --EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable raises appropriate error if table does not exist]'); --todo
     EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable takes 2 nameless parameters containing schema and table name]');
     EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable works if new name of original table requires quoting]'); --todo
     EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable works with two parameters, if they are quoted]'); --todo
@@ -141,8 +118,8 @@ END;
     EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility returns NULLs when table name has special char]');
     EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility returns quoted schema when schema and table provided]');
     EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility returns quoted table when schema and table provided]');
-
-    --EXEC ('DROP PROCEDURE [RemoveObjectTests].[test RemoveObject raises approporate error if object doesn''t exists'']'); --todo
+    EXEC ('DROP PROCEDURE [FakeTableTests].[test raises error if @TableName is multi-part and @SchemaName is not NULL]'); --todo
+    EXEC ('DROP PROCEDURE [FakeTableTests].[test raises error if @TableName is quoted multi-part and @SchemaName is not NULL]'); --todo
 
     EXEC ('DROP PROCEDURE [Run_Methods_Tests].[test all tSQLt.Run methods call the run method handler]'); --tSQLt.RemoveObject failed. ObjectName:<tSQLt.Private_RunMethodHandler> does not exist.
     EXEC ('DROP PROCEDURE [Run_Methods_Tests].[test DefaultResultFormatter is using PrepareTestResultForOutput]'); --tSQLt.AssertObjectExists failed. Object:<tSQLt.Private_PrepareTestResultForOutput> does not exist.
