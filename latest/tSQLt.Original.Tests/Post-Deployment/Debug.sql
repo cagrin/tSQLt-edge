@@ -95,8 +95,6 @@ END;
     -- AssertStringInTests.class.sql
 
     EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test a single ExpectNoException can be followed by a single ExpectException]'); --todo
-    EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test ExpectException reports TestEndTime when failing]'); --todo
-    EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test ExpectException reports TestEndTime when passing]'); --todo
     EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test expecting error number passes when expected error number is used]'); --todo
     EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test expecting exception passes when error is raised]'); --todo
     EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test expecting message can contain wildcards]'); --todo

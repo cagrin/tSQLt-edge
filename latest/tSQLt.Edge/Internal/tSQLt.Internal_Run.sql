@@ -1,5 +1,6 @@
 CREATE PROCEDURE tSQLt.Internal_Run
-    @TestName NVARCHAR(MAX) = NULL
+    @TestName NVARCHAR(MAX) = NULL,
+    @TestResultFormatter NVARCHAR(MAX) = NULL
 AS
 BEGIN
     DELETE FROM tSQLt.TestResult;
