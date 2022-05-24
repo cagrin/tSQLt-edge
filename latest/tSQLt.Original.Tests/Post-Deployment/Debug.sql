@@ -3,6 +3,18 @@ GO
 CREATE PROCEDURE tSQLt.Debug
 AS
 BEGIN
+    DECLARE @AlterNewTestClass NVARCHAR(MAX) =
+'
+ALTER PROCEDURE tSQLt.NewTestClass
+    @ClassName NVARCHAR(MAX)
+AS
+BEGIN
+    DECLARE @Command NVARCHAR(MAX) = ''CREATE SCHEMA '' + @ClassName;
+    EXEC sp_executesql @Command;
+END;
+';
+    EXEC (@AlterNewTestClass);
+
     DECLARE @AlterExpectException NVARCHAR(MAX) =
 '
 ALTER PROCEDURE tSQLt.ExpectException
@@ -77,10 +89,8 @@ END;
 
     -- ExpectExceptionTests.class.sql --todo
 
-    EXEC ('DROP PROCEDURE [ExpectNoExceptionTests].[test a ExpectNoException cannot follow an ExpectException]'); --todo
-    EXEC ('DROP PROCEDURE [ExpectNoExceptionTests].[test fails if called more then once]'); --todo
-    EXEC ('DROP PROCEDURE [ExpectNoExceptionTests].[test tSQLt.ExpectNoException causes test with exception to fail ]'); --todo
-    EXEC ('DROP PROCEDURE [ExpectNoExceptionTests].[test tSQLt.ExpectNoException includes additional message in fail message ]'); --todo
+    EXEC ('DROP PROCEDURE [ExpectNoExceptionTests].[test a ExpectNoException cannot follow an ExpectException]');
+    EXEC ('DROP PROCEDURE [ExpectNoExceptionTests].[test fails if called more then once]');
     EXEC ('DROP PROCEDURE [ExpectNoExceptionTests].[test tSQLt.ExpectNoException includes error information in fail message ]');
 
     EXEC ('DROP PROCEDURE [FailTests].[test Fail does not change open tansaction count in case of XACT_STATE = -1]'); --todo

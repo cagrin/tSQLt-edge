@@ -37,3 +37,15 @@ BEGIN
     EXEC (@Command);
 END;
 GO
+
+CREATE PROC tSQLt_testutil.AssertTestFails
+    @TestName NVARCHAR(MAX),
+    @ExpectedMessage NVARCHAR(MAX) = NULL
+AS
+BEGIN
+     DECLARE @ErrorMessage NVARCHAR(MAX);
+     DECLARE @TranName CHAR(32); EXEC tSQLt.Private_GetNewTranName @TranName OUTPUT;
+     EXEC tSQLt.Private_Run @TestName, @TranName, @ErrorMessage OUTPUT;
+     EXEC tSQLt.AssertNotEqualsString NULL, @ErrorMessage;
+END;
+GO
