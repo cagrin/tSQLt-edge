@@ -27,7 +27,14 @@ ALTER PROCEDURE tSQLt.ExpectException
 AS
 BEGIN
     DECLARE @Command NVARCHAR(MAX) = ''tSQLt.Internal_ExpectException'';
-    EXEC @Command;
+    SET @ExpectedMessagePattern = ''% %'';
+    EXEC @Command
+        @ExpectedMessage = NULL,
+        @ExpectedSeverity = @ExpectedSeverity,
+        @ExpectedState = @ExpectedState,
+        @Message = @Message,
+        @ExpectedMessagePattern = @ExpectedMessagePattern,
+        @ExpectedErrorNumber = @ExpectedErrorNumber;
 END;
 ';
     EXEC (@AlterExpectException);
@@ -87,7 +94,19 @@ END;
 
     -- AssertStringInTests.class.sql
 
-    -- ExpectExceptionTests.class.sql --todo
+    EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test a single ExpectNoException can be followed by a single ExpectException]'); --todo
+    EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test ExpectException reports TestEndTime when failing]'); --todo
+    EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test ExpectException reports TestEndTime when passing]'); --todo
+    EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test expecting error number passes when expected error number is used]'); --todo
+    EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test expecting exception passes when error is raised]'); --todo
+    EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test expecting message can contain wildcards]'); --todo
+    EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test expecting message fails when different message is raised]'); --todo
+    EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test expecting message passes when correct message is raised]'); --todo
+    EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test expecting MessagePattern handles wildcards]'); --todo
+    EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test expecting severity succeeds when expected severity is used]'); --todo
+    EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test expecting state passes when expected state is used]'); --todo
+    EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test fails if called more then once]'); --todo
+    EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test raising wrong message produces meaningful output]'); --todo
 
     EXEC ('DROP PROCEDURE [ExpectNoExceptionTests].[test a ExpectNoException cannot follow an ExpectException]');
     EXEC ('DROP PROCEDURE [ExpectNoExceptionTests].[test fails if called more then once]');

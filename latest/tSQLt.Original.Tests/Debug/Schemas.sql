@@ -20,6 +20,8 @@ CREATE SCHEMA AssertObjectExistsTests;
 GO
 CREATE SCHEMA tSQLt_test_AssertResultSetsHaveSameMetaData;
 GO
+CREATE SCHEMA ExpectExceptionTests;
+GO
 CREATE SCHEMA ExpectNoExceptionTests;
 GO
 CREATE SCHEMA FailTests;

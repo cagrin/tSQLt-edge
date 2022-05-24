@@ -17,6 +17,7 @@
         <Content Include="../../submodules/tSQLt/Tests/AssertObjectDoesNotExistTests.class.sql" />
         <Content Include="../../submodules/tSQLt/Tests/AssertObjectExistsTests.class.sql" />
         <Content Include="../../submodules/tSQLt/Tests/AssertResultSetsHaveSameMetaDataTests.class.sql" />
+        <Content Include="../../submodules/tSQLt/Tests/ExpectExceptionTests.class.sql" />
         <Content Include="../../submodules/tSQLt/Tests/ExpectNoExceptionTests.class.sql" />
         <Content Include="../../submodules/tSQLt/Tests/FailTests.class.sql" />
         <Content Include="../../submodules/tSQLt/Tests/FakeFunctionTests.class.sql" />
