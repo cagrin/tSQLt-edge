@@ -24,7 +24,6 @@
         <Content Include="../../submodules/tSQLt/Tests/FakeTableTests.class.sql" />
         <Content Include="../../submodules/tSQLt/Tests/RemoveObjectIfExistsTests.class.sql" />
         <Content Include="../../submodules/tSQLt/Tests/RemoveObjectTests.class.sql" />
-        <Content Include="../../submodules/tSQLt/Tests/Run_Methods_Tests.class.sql" />
         <Content Include="../../submodules/tSQLt/Tests/SpyProcedureTests.class.sql" />
     </ItemGroup>
 </Project>
