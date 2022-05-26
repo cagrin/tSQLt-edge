@@ -214,19 +214,6 @@ END;
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure raises appropriate error if the procedure name given references another type of object]'); --todo
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure works if spyee has 100 parameters with 8000 bytes each]'); --todo
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test SpyProcedure works with CLR procedures]');
-
-    -- TODO: tSQLt_testutil.AssertFailMessageEquals
-    EXEC ('DROP PROCEDURE [AsertEqualsStringTests].[test AssertEqualsString should produce formatted fail message]');
-    EXEC ('DROP PROCEDURE [AsertEqualsStringTests].[test fail message shows NULL for actual value]');
-    EXEC ('DROP PROCEDURE [AsertEqualsStringTests].[test fail message shows NULL for expected value]');
-    EXEC ('DROP PROCEDURE [AssertEmptyTableTests].[test fails if #table does not exist]');
-    EXEC ('DROP PROCEDURE [AssertEmptyTableTests].[test fails if table does not exist]');
-    EXEC ('DROP PROCEDURE [AssertEmptyTableTests].[test uses tSQLt.TableToText]');
-    EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test left table doesn''t exist results in failure]');
-    EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test right table doesn''t exist results in failure]');
-    EXEC ('DROP PROCEDURE [AssertLikeTests].[test AssertLike allows custom failure message]');
-    EXEC ('DROP PROCEDURE [AssertLikeTests].[test AssertLike returns helpful message on failure]');
-    EXEC ('DROP PROCEDURE [AssertObjectDoesNotExistTests].[test uses appropriate fail message]');
 END;
 GO
 
