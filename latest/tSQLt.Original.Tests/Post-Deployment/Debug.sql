@@ -93,7 +93,6 @@ END;
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when function is SVF and fake is ITVF]'); --todo
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when function is SVF and fake is MSTVF]'); --todo
     EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when function is SVF and fake is not a function]'); --todo
-    EXEC ('DROP PROCEDURE [FakeFunctionTests].[test errors when neither @FakeFunctionName nor @FakeDataSource are passed]'); --todo
 
     EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable calls tSQLt.Private_MarktSQLtTempObject on new object]');
     EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable doesn''t produce output]');

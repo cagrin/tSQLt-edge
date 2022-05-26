@@ -116,6 +116,10 @@ BEGIN
     IF  @ErrorMessage = 'tSQLt.AssertObjectExists failed. Object:<FakeFunctionTests.ANotExistingFakeFunction> does not exist.'
     SET @ErrorMessage = 'FakeFunctionTests.ANotExistingFakeFunction does not exist!';
 
+    -- [FakeFunctionTests].[test errors when neither @FakeFunctionName nor @FakeDataSource are passed]
+    IF  @ErrorMessage = 'Either @FakeFunctionName or @FakeDataSource must be provided.'
+    SET @ErrorMessage = 'Either @FakeFunctionName or @FakeDataSource must be provided';
+
     -- [FakeTableTests].[test FakeTable raises appropriate error if table does not exist]
     IF  @ErrorMessage = 'tSQLt.AssertObjectExists failed. Object:<schemaA.tableXYZ> does not exist.'
     SET @ErrorMessage = 'FakeTable could not resolve the object name, ''schemaA.tableXYZ''. (When calling tSQLt.FakeTable, avoid the use of the @SchemaName parameter, as it is deprecated.)'
