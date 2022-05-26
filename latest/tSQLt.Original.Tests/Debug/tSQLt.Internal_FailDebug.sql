@@ -26,9 +26,41 @@ BEGIN
         NULLIF(@Message9, '')
     );
 
+    -- [AssertEmptyTableTests].[test AssertEmptyTable should pass supplied message before original failure message when calling fail]
+    IF  @ErrorMessage = '{MyMessage} tSQLt.AssertEmptyTable failed. Expected:<#actual> is not empty.'
+    SET @ErrorMessage = '{MyMessage} data1 testdata';
+
+    -- [AssertEmptyTableTests].[test supplied message defaults to '']
+    IF  @ErrorMessage = 'tSQLt.AssertEmptyTable failed. Expected:<#actual> is not empty.'
+    SET @ErrorMessage = '[#actual]';
+
+    -- [AssertEqualsTableSchemaTests].[test fail message is prefixed with supplied message]
+    IF  @ErrorMessage = '{supplied message} tSQLt.AssertEqualsTableSchema failed. Expected:<[Id] int NOT NULL, [NoKey] int NULL>. Actual:<[Id] int NOT NULL, [NoKey] bigint NULL>.'
+    SET @ErrorMessage = '{supplied message} Unexpected';
+
+    -- [AssertEqualsTableSchemaTests].[test fail message starts with "Unexpected/missing columns\n"]
+    IF  @ErrorMessage = 'tSQLt.AssertEqualsTableSchema failed. Expected:<[Id] int NOT NULL, [NoKey] int NULL>. Actual:<[Id] int NOT NULL, [NoKey] bigint NULL>.'
+    SET @ErrorMessage = 'Unexpected/missing column(s)' + CHAR(13) + CHAR(10);
+
+    -- [AssertEqualsTableSchemaTests].[test output contains type names]
+    IF  @ErrorMessage = 'tSQLt.AssertEqualsTableSchema failed. Expected:<[Id] bigint NOT NULL, [NoKey] int NULL>. Actual:<[Id] bigint NOT NULL, [NoKey] [AssertEqualsTableSchemaTests].[TestType] NULL>.'
+    SET @ErrorMessage = '56[int] 56[int]' + CHAR(13) + CHAR(10) + '127[bigint] 127[bigint]' + CHAR(13) + CHAR(10) + '56[int] [AssertEqualsTableSchemaTests].[TestType]';
+
     -- [AssertEqualsTableTests].[test ***
     IF  @ErrorMessage = 'tSQLt.AssertEqualsTable failed. Expected:<AssertEqualsTableTests.LeftTable> has different rowset than Actual:<AssertEqualsTableTests.RightTable>.'
     SET @ErrorMessage = 'Unexpected/missing resultset rows!' + CHAR(13) + CHAR(10);
+
+    -- [AssertEqualsTableTests].[test custom failure message is included in failure result]
+    IF  @ErrorMessage = 'Custom failure message tSQLt.AssertEqualsTable failed. Expected:<AssertEqualsTableTests.LeftTable> has different rowset than Actual:<AssertEqualsTableTests.RightTable>.'
+    SET @ErrorMessage = 'Custom failure message' + CHAR(13) + CHAR(10) + 'Unexpected';
+
+    -- [AssertNotEqualsTests].[test AssertNotEquals should give meaningfull fail message on NULL]
+    IF  @ErrorMessage = 'tSQLt.AssertNotEquals failed. Expected any value except:<(null)>.'
+    SET @ErrorMessage = 'Expected actual value to not be NULL.';
+
+    -- [AssertNotEqualsTests].[test AssertNotEquals should give meaningfull failmessage]
+    IF  @ErrorMessage = 'tSQLt.AssertNotEquals failed. Expected any value except:<13>.'
+    SET @ErrorMessage = 'Expected actual value to not equal <{SVF was called with <13>}>.';
 
     -- [FakeFunctionTests].[test errors when function is ***
     IF @ErrorMessage LIKE 'tSQLt.AssertObjectExists failed. Object:<tSQLt_testutil.AClr%'

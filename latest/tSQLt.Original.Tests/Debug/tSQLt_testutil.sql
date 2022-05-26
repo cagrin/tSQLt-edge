@@ -8,8 +8,7 @@ CREATE PROC tSQLt_testutil.AssertFailMessageLike
     @Message4 VARCHAR(MAX) = NULL
 AS
 BEGIN
-    DECLARE @ExpectedMessagePattern NVARCHAR(MAX) = '% %'; -- @ExpectedMessage
-    EXEC tSQLt.ExpectException @ExpectedMessagePattern = @ExpectedMessagePattern;
+    EXEC tSQLt.ExpectException @ExpectedMessagePattern = @ExpectedMessage
     EXEC (@Command);
 END;
 GO
