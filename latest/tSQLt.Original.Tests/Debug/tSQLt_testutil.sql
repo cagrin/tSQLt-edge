@@ -40,6 +40,18 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE tSQLt_testutil.AssertTestSucceeds
+    @TestName NVARCHAR(MAX)
+AS
+BEGIN
+    DECLARE @ErrorMessage NVARCHAR(MAX);
+    DECLARE @TranName CHAR(32); EXEC tSQLt.Private_GetNewTranName @TranName OUTPUT;
+    EXEC tSQLt.Private_Run @TestName, @TranName, @ErrorMessage OUTPUT;
+
+    EXEC tSQLt.AssertEqualsString NULL, @ErrorMessage;
+END;
+GO
+
 CREATE PROC tSQLt_testutil.AssertTestFails
     @TestName NVARCHAR(MAX),
     @ExpectedMessage NVARCHAR(MAX) = NULL
@@ -113,6 +125,12 @@ BEGIN
         SET @ErrorMessage =
         '%Expected State: 13'+@NL+
         'Actual State  : 10';
+
+        -- [ExpectExceptionTests].[test raising wrong message produces meaningful output]
+        IF  @ErrorMessage = 'Expected an exception to be raised. ExpectedMessage:<Correct Message>. ActualMessage:<Wrong Message>.'
+        SET @ErrorMessage =
+        '%Expected Message: <Correct Message>'+@NL+
+        'Actual Message  : <Wrong Message>';
 
         -- [ExpectNoExceptionTests].[test tSQLt.ExpectNoException includes additional message in fail message ]
         IF  @ErrorMessage = 'Additional Fail Message. Expected no exception to be raised. ErrorMessage:<test error message>. ErrorSeverity:<16>. ErrorState:<10>. ErrorNumber:<50000>.'
