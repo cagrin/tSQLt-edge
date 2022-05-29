@@ -38,6 +38,7 @@ EXEC [tSQLt].[AssertNotEqualsString] @Expected, @Actual, @Message;
 EXEC [tSQLt].[AssertObjectDoesNotExist] @ObjectName, @Message;
 EXEC [tSQLt].[AssertObjectExists] @ObjectName, @Message;
 EXEC [tSQLt].[AssertResultSetsHaveSameMetaData] @expectedCommand, @actualCommand;
+EXEC [tSQLt].[AssertStringIn] @Expected, @Actual, @Message;
 EXEC [tSQLt].[DropClass] @ClassName;
 EXEC [tSQLt].[ExpectException] @ExpectedMessage, @ExpectedSeverity, @ExpectedState, @Message, @ExpectedMessagePattern, @ExpectedErrorNumber;
 EXEC [tSQLt].[ExpectNoException] @Message;
@@ -92,6 +93,7 @@ BEGIN
 [tSQLt].[AssertObjectDoesNotExist] @ObjectName nvarchar(max), @Message nvarchar(max);
 [tSQLt].[AssertObjectExists] @ObjectName nvarchar(max), @Message nvarchar(max);
 [tSQLt].[AssertResultSetsHaveSameMetaData] @expectedCommand nvarchar(max), @actualCommand nvarchar(max);
+[tSQLt].[AssertStringIn] @Expected [tSQLt].[AssertStringTable], @Actual nvarchar(max), @Message nvarchar(max);
 [tSQLt].[DropClass] @ClassName nvarchar(max);
 [tSQLt].[ExpectException] @ExpectedMessage nvarchar(max), @ExpectedSeverity int, @ExpectedState int, @Message nvarchar(max), @ExpectedMessagePattern nvarchar(max), @ExpectedErrorNumber int;
 [tSQLt].[ExpectNoException] @Message nvarchar(max);
