@@ -64,3 +64,35 @@ BEGIN
     EXEC tSQLt.AssertResultSetsHaveSameMetaData 'SELECT * FROM #TestTable1', 'SELECT * FROM #TestTable2';
 END;
 GO
+
+CREATE PROCEDURE Test_AssertResultSetsHaveSameMetaData.Test_SelectFromTempRightEmpty
+AS
+BEGIN
+    CREATE TABLE #TestTable1 (Column1 INT, Column2 CHAR(3));
+    CREATE TABLE #TestTable2 (Column1 INT, Column2 CHAR(3));
+    INSERT INTO #TestTable1 VALUES (1, 'ABC');
+
+    EXEC tSQLt.AssertResultSetsHaveSameMetaData 'SELECT * FROM #TestTable1', 'SELECT * FROM #TestTable2';
+END;
+GO
+
+CREATE PROCEDURE Test_AssertResultSetsHaveSameMetaData.Test_SelectFromTempLeftEmpty
+AS
+BEGIN
+    CREATE TABLE #TestTable1 (Column1 INT, Column2 CHAR(3));
+    CREATE TABLE #TestTable2 (Column1 INT, Column2 CHAR(3));
+    INSERT INTO #TestTable1 VALUES (2, 'XYZ');
+
+    EXEC tSQLt.AssertResultSetsHaveSameMetaData 'SELECT * FROM #TestTable1', 'SELECT * FROM #TestTable2';
+END;
+GO
+
+CREATE PROCEDURE Test_AssertResultSetsHaveSameMetaData.Test_SelectFromTempBothEmpty
+AS
+BEGIN
+    CREATE TABLE #TestTable1 (Column1 INT, Column2 CHAR(3));
+    CREATE TABLE #TestTable2 (Column1 INT, Column2 CHAR(3));
+
+    EXEC tSQLt.AssertResultSetsHaveSameMetaData 'SELECT * FROM #TestTable1', 'SELECT * FROM #TestTable2';
+END;
+GO
