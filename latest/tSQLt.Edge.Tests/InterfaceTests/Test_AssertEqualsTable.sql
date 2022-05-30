@@ -215,3 +215,29 @@ BEGIN
     EXEC tSQLt.AssertEqualsTable 'dbo.TestSynonym1', 'dbo.TestSynonym2';
 END;
 GO
+
+CREATE PROCEDURE Test_AssertEqualsTable.Test_LowDate
+AS
+BEGIN
+    CREATE TABLE #TestTable1 (DateColumn DATE);
+    CREATE TABLE #TestTable2 (DateColumn DATE);
+    INSERT INTO #TestTable1 (DateColumn) VALUES ('1752-12-31');
+    INSERT INTO #TestTable2 (DateColumn) VALUES ('2000-01-01');
+
+    EXEC tSQLt.ExpectException 'tSQLt.AssertEqualsTable failed. Expected:<#TestTable1> has different rowset than Actual:<#TestTable2>.';
+
+    EXEC tSQLt.AssertEqualsTable '#TestTable1', '#TestTable2';
+END;
+GO
+
+CREATE PROCEDURE Test_AssertEqualsTable.Test_MinDate
+AS
+BEGIN
+    CREATE TABLE #TestTable1 (DateColumn DATE);
+    CREATE TABLE #TestTable2 (DateColumn DATE);
+    INSERT INTO #TestTable1 (DateColumn) VALUES ('0001-01-01');
+    INSERT INTO #TestTable2 (DateColumn) VALUES ('0001-01-01');
+
+    EXEC tSQLt.AssertEqualsTable '#TestTable1', '#TestTable2';
+END;
+GO
