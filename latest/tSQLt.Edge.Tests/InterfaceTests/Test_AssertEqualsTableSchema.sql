@@ -69,6 +69,18 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE Test_AssertEqualsTableSchema.Test_TempTablesFail
+AS
+BEGIN
+    CREATE TABLE #TestTable1 (Id BIT PRIMARY KEY, NoKey NVARCHAR(MAX) NULL);
+    CREATE TABLE #TestTable2 (Id INT PRIMARY KEY, NoKey INT NULL);
+
+    EXEC tSQLt.ExpectException 'tSQLt.AssertEqualsTableSchema failed. Expected:<[Id] bit NOT NULL, [NoKey] nvarchar(max) NULL>. Actual:<[Id] int NOT NULL, [NoKey] int NULL>.';
+
+    EXEC tSQLt.AssertEqualsTableSchema '#TestTable1', '#TestTable2';
+END;
+GO
+
 CREATE PROCEDURE Test_AssertEqualsTableSchema.Test_TempTables_ExpectedNotExists
 AS
 BEGIN
