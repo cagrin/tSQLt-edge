@@ -16,7 +16,7 @@ Detailed principles:
 - Use tSQLt assertions in internal tests
 
 ## Compatibility
-[tSQLt-edge 0.7.0](https://www.nuget.org/packages/tSQLt.Edge/0.7.0) is mostly fully compatible with tSQLt unit testing framework. See [full user guide](https://tsqlt.org/full-user-guide/) for more details about tSQLt.
+[tSQLt-edge](https://www.nuget.org/packages/tSQLt.Edge) is mostly fully compatible with tSQLt unit testing framework. See [full user guide](https://tsqlt.org/full-user-guide/) for more details about tSQLt.
 
 > The default method of calling tSQLt.NewTestClass to create a tSQLt test class (the schema to organize your unit tests) does not work either in Visual Studio database projects nor MSBuild.SDK.SqlProj projects. That is why tSQLt-edge entirely drop support for NewTestClass, DropClass and RenameClass.
 
@@ -28,11 +28,12 @@ Detailed principles:
 
 #### Test creation and execution:
 
-- ![](https://img.shields.io/badge/NewTestClass--red)
 - ![](https://img.shields.io/badge/DropClass--red)
-- ![](https://img.shields.io/badge/RunAll--yellow)
-- ![](https://img.shields.io/badge/Run--yellow)
+- ![](https://img.shields.io/badge/NewTestClass--red)
 - ![](https://img.shields.io/badge/RenameClass--red)
+- ![](https://img.shields.io/badge/Run--yellow)
+- ![](https://img.shields.io/badge/RunAll--yellow)
+- ![](https://img.shields.io/badge/XmlResultFormatter--red)
 
 #### Assertions:
 
@@ -41,12 +42,13 @@ Detailed principles:
 - ![](https://img.shields.io/badge/AssertEqualsString--green)
 - ![](https://img.shields.io/badge/AssertEqualsTable--yellow)
 - ![](https://img.shields.io/badge/AssertEqualsTableSchema--green)
+- ![](https://img.shields.io/badge/AssertLike--green)
 - ![](https://img.shields.io/badge/AssertNotEquals--green)
 - ![](https://img.shields.io/badge/AssertObjectDoesNotExist--green)
 - ![](https://img.shields.io/badge/AssertObjectExists--green)
 - ![](https://img.shields.io/badge/AssertResultSetsHaveSameMetaData--yellow)
+- ![](https://img.shields.io/badge/AssertStringIn--green)
 - ![](https://img.shields.io/badge/Fail--green)
-- ![](https://img.shields.io/badge/AssertLike--green)
 
 #### Expectations:
 
@@ -56,12 +58,12 @@ Detailed principles:
 #### Isolating dependencies:
 
 - ![](https://img.shields.io/badge/ApplyConstraint--red)
+- ![](https://img.shields.io/badge/ApplyTrigger--red)
 - ![](https://img.shields.io/badge/FakeFunction--yellow)
 - ![](https://img.shields.io/badge/FakeTable--yellow)
+- ![](https://img.shields.io/badge/RemoveObject--green)
 - ![](https://img.shields.io/badge/RemoveObjectIfExists--green)
 - ![](https://img.shields.io/badge/SpyProcedure--yellow)
-- ![](https://img.shields.io/badge/ApplyTrigger--red)
-- ![](https://img.shields.io/badge/RemoveObject--green)
 
 ## Extentions
 

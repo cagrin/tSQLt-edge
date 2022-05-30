@@ -104,6 +104,10 @@ BEGIN
     IF  @ErrorMessage = 'tSQLt.AssertObjectDoesNotExist failed. Object:<#aTempObject> does exist.'
     SET @ErrorMessage = '''#aTempObject'' does exist!';
 
+    -- [AssertStringInTests].[test AssertStringIn passes supplied message before original failure message when calling fail]
+    IF  @ErrorMessage = '{MyMessage} tSQLt.AssertStringIn failed. String:<(null)> is not in <(null)>.'
+    SET @ErrorMessage = '{MyMessage} NULL value';
+
     -- [FakeFunctionTests].[test errors when function is ***
     IF @ErrorMessage LIKE 'tSQLt.AssertObjectExists failed. Object:<tSQLt_testutil.AClr%'
     SET @ErrorMessage = 'Both parameters must contain the name of either scalar or table valued functions!';

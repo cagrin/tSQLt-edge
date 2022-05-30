@@ -40,6 +40,16 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE tSQLt_testutil.CaptureFailMessage
+  @Command NVARCHAR(MAX),
+  @FailMessage NVARCHAR(MAX) OUTPUT
+AS
+BEGIN
+    EXEC tSQLt.ExpectException @Message = @FailMessage;
+    EXEC (@Command);
+END;
+GO
+
 CREATE PROCEDURE tSQLt_testutil.AssertTestSucceeds
     @TestName NVARCHAR(MAX)
 AS
