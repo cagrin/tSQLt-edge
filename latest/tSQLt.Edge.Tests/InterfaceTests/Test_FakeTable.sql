@@ -196,17 +196,6 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE Test_FakeFunction.Test_SchemaName
-AS
-BEGIN
-    CREATE TABLE dbo.TestTable1 (Column1 int NOT NULL);
-
-    EXEC tSQLt.ExpectException '@SchemaName parameter preserved for backward compatibility. Do not use. Will be removed soon.';
-
-    EXEC tSQLt.FakeTable @TableName = 'TestTable1', @SchemaName = 'dbo';
-END;
-GO
-
 CREATE PROCEDURE Test_FakeFunction.Test_TableNameIsNull
 AS
 BEGIN
