@@ -33,6 +33,10 @@ Detailed principles:
 - ![](https://img.shields.io/badge/RenameClass--red)
 - ![](https://img.shields.io/badge/Run--yellow)
 - ![](https://img.shields.io/badge/RunAll--yellow)
+- ![](https://img.shields.io/badge/TestCaseSummary--green)
+- ![](https://img.shields.io/badge/TestClasses--green)
+- ![](https://img.shields.io/badge/TestResult--green)
+- ![](https://img.shields.io/badge/Tests--green)
 - ![](https://img.shields.io/badge/XmlResultFormatter--red)
 
 #### Assertions:
