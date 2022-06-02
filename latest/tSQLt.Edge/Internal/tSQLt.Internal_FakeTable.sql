@@ -2,12 +2,13 @@ CREATE PROCEDURE tSQLt.Internal_FakeTable
     @TableName NVARCHAR(MAX),
     @Identity BIT = NULL,
     @ComputedColumns BIT = NULL,
-    @Defaults BIT = NULL
+    @Defaults BIT = NULL,
+    @NotNulls BIT = NULL
 AS
 BEGIN
     EXEC tSQLt.Private_ProcessTableName @TableName OUTPUT;
 
-    DECLARE @FakeColumns NVARCHAR(MAX) = tSQLt.Private_GetFakeColumns (@TableName, @Identity, @ComputedColumns, @Defaults);
+    DECLARE @FakeColumns NVARCHAR(MAX) = tSQLt.Private_GetFakeColumns (@TableName, @Identity, @ComputedColumns, @Defaults, @NotNulls);
 
     DECLARE @CreateFakeTableCommand NVARCHAR(MAX) = CONCAT_WS
     (

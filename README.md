@@ -71,8 +71,9 @@ Detailed principles:
 
 ## Extentions
 
-tSQLt-edge has some additional stored procedures:
+tSQLt-edge has some additional features:
 
-|Name|Description|
+|Stored procedure|Description|
 |--- |---|
 |AssertNotEqualsString|Same as AssertNotEquals, but for NVARCHAR(MAX)|
+|FakeTable|Add @NotNulls optional parameter to preserve NOT NULLs|

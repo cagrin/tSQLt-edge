@@ -2,7 +2,8 @@ CREATE PROCEDURE tSQLt.FakeTable
     @TableName NVARCHAR(MAX),
     @Identity BIT = NULL,
     @ComputedColumns BIT = NULL,
-    @Defaults BIT = NULL
+    @Defaults BIT = NULL,
+    @NotNulls BIT = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -11,6 +12,7 @@ BEGIN
     @TableName = @TableName,
     @Identity = @Identity,
     @ComputedColumns = @ComputedColumns,
-    @Defaults = @Defaults;
+    @Defaults = @Defaults,
+    @NotNulls = @NotNulls;
 END;
 GO
