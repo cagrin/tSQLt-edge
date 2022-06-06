@@ -106,7 +106,5 @@ BEGIN
             );
         END
     END
-
-    DELETE FROM #ExpectException;
 END;
 GO
