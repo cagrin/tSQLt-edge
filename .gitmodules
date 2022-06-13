@@ -1,3 +1,6 @@
 [submodule "submodules/tSQLt"]
 	path = submodules/tSQLt
 	url = https://github.com/tSQLt-org/tSQLt
+[submodule "submodules/JUnit-Schema"]
+	path = submodules/JUnit-Schema
+	url = https://github.com/windyroad/JUnit-Schema
