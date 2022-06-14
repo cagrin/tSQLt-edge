@@ -10,7 +10,7 @@ namespace ValidationTests
 #if DEBUG
         "cagrin/azure-sql-edge-arm64";
 #else
-        "mcr.microsoft.com/mssql/server:2019-latest";
+        "mcr.microsoft.com/azure-sql-edge";
 #endif
 
         private const string Password = "A.794613";

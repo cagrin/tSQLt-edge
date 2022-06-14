@@ -3,11 +3,14 @@
         <TargetFramework>net6.0</TargetFramework>
         <IsPackable>false</IsPackable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>Preview</LangVersion>
     </PropertyGroup>
     <ItemGroup>
         <EmbeddedResource Include="../tSQLt.Edge/Interface/tSQLt.sql" />
         <EmbeddedResource Include="../tSQLt.Edge/Interface/tSQLt.TestResult.sql" />
+        <EmbeddedResource Include="../tSQLt.Edge/Interface/tSQLt.XmlResultFormatter.sql" />
         <EmbeddedResource Include="../tSQLt.Edge/Internal/tSQLt.Internal_XmlResultFormatter.sql" />
+        <EmbeddedResource Include="../../submodules/JUnit-Schema/JUnit.xsd" />
     </ItemGroup>
     <ItemGroup>
         <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting"/>

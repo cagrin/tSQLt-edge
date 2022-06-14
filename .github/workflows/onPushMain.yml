@@ -25,6 +25,7 @@ jobs:
           sqltest runall --image ${{env.IMAGE_NAME}} --project ./latest/tSQLt.Edge.Tests
           sqltest runall --image ${{env.IMAGE_NAME}} --project ./latest/tSQLt.Original.Tests
           sqltest runall --image ${{env.IMAGE_NAME}} --project ./current/Example.Tests
+          dotnet test -c Release ./latest/tSQLt.XmlResult.Tests
   build-on-mssql-server:
     runs-on: ubuntu-latest
     env:

@@ -292,7 +292,7 @@
         <Rule Id="CA5368" Action="Warning" />          <!-- Set ViewStateUserKey For Classes Derived From Page -->
         <Rule Id="CA5369" Action="Warning" />          <!-- Use XmlReader For Deserialize -->
         <Rule Id="CA5370" Action="Warning" />          <!-- Use XmlReader For Validating Reader -->
-        <Rule Id="CA5371" Action="Warning" />          <!-- Use XmlReader For Schema Read -->
+        <Rule Id="CA5371" Action="None" />          <!-- Use XmlReader For Schema Read -->
         <Rule Id="CA5372" Action="Warning" />          <!-- Use XmlReader For XPathDocument -->
         <Rule Id="CA5373" Action="Warning" />          <!-- Do not use obsolete key derivation function -->
         <Rule Id="CA5374" Action="Warning" />          <!-- Do Not Use XslTransform -->
