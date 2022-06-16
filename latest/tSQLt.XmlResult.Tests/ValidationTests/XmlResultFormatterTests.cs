@@ -35,11 +35,11 @@ namespace ValidationTests
             if (schema != null)
             {
                 doc.Schemas.Add(schema);
-                doc.Validate((o, e) => throw new AmbiguousMatchException(e.Message));
+                doc.Validate((o, e) => throw new XmlSchemaValidationException(e.Message));
             }
         }
 
-        private static string GetSql(string fileName)
+        private static string GetResource(string fileName, Func<string?, string?> lineAction)
         {
             var sql = new StringBuilder();
 
@@ -51,7 +51,8 @@ namespace ValidationTests
                 while (res.Peek() >= 0)
                 {
                     var line = res.ReadLine();
-                    if (line != "GO")
+                    line = lineAction(line);
+                    if (line != null)
                     {
                         sql.AppendLine(line);
                     }
@@ -61,26 +62,14 @@ namespace ValidationTests
             return sql.ToString();
         }
 
+        private static string GetSql(string fileName)
+        {
+            return GetResource(fileName, (line) => line != "GO" ? line : null);
+        }
+
         private static string GetSchema(string fileName)
         {
-            var sql = new StringBuilder();
-
-            var asm = Assembly.GetExecutingAssembly();
-            using var str = asm.GetManifestResourceStream($"tSQLt.XmlResult.Tests.{fileName}");
-            if (str != null)
-            {
-                using var res = new StreamReader(str);
-                while (res.Peek() >= 0)
-                {
-                    var line = res.ReadLine()?
-                                  .Replace("'", "''", StringComparison.InvariantCulture)
-                                  .Replace("©", "�", StringComparison.InvariantCulture);
-
-                    sql.AppendLine(line);
-                }
-            }
-
-            return sql.ToString();
+            return GetResource(fileName, (line) => line?.Replace("'", "''", StringComparison.InvariantCulture).Replace("©", "�", StringComparison.InvariantCulture));
         }
     }
 }
