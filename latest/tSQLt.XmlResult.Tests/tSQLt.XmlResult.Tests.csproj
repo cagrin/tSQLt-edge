@@ -13,6 +13,7 @@
         <EmbeddedResource Include="../../submodules/JUnit-Schema/JUnit.xsd" />
     </ItemGroup>
     <ItemGroup>
+        <Using Include="LikeComparison.TransactSql"/>
         <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting"/>
     </ItemGroup>
     <ItemGroup>

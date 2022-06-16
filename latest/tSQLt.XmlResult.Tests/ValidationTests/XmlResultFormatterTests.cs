@@ -31,12 +31,15 @@ namespace ValidationTests
             var doc = new XmlDocument();
             doc.LoadXml(xml);
 
-            var schema = XmlSchema.Read(new StringReader(GetSchema("JUnit.xsd")), (o, e) => throw new AmbiguousMatchException(e.Message));
+            var schema = XmlSchema.Read(new StringReader(GetSchema("JUnit.xsd")), (o, e) => throw new XmlException(e.Message));
             if (schema != null)
             {
                 doc.Schemas.Add(schema);
                 doc.Validate((o, e) => throw new XmlSchemaValidationException(e.Message));
             }
+
+            Assert.IsNotNull(schema);
+            Assert.That.IsLike(xml, "<testsuites%testsuite%properties%testcase%system-out%system-err%testsuite%testsuites>");
         }
 
         private static string GetResource(string fileName, Func<string?, string?> lineAction)
