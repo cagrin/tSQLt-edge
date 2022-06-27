@@ -75,5 +75,6 @@ tSQLt-edge has some additional features:
 
 |Stored procedure|Description|
 |--- |---|
+|AssertEqualsTable|Add XML column comparison using convertion to NVARCHAR(MAX)|
 |AssertNotEqualsString|Same as AssertNotEquals, but for NVARCHAR(MAX)|
 |FakeTable|Add @NotNulls optional parameter to preserve NOT NULLs|

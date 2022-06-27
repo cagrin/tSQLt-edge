@@ -6,11 +6,14 @@ AS
 BEGIN
     DECLARE @ColumnsNames NVARCHAR(MAX) = tSQLt.Private_GetColumnsNames(@Expected);
 
+    EXEC tSQLt.Private_ProcessUncomparableColumns @Expected OUTPUT;
+    EXEC tSQLt.Private_ProcessUncomparableColumns @Actual OUTPUT;
+
     DECLARE @DiffsCommand NVARCHAR(MAX) = CONCAT_WS
     (
         ' ',
-        'SELECT _row_ = ROW_NUMBER() OVER(ORDER BY', @ColumnsNames, '), * INTO #Expecte_d FROM', tSQLt.Private_GetQuotedObjectName(@Expected),
-        'SELECT _row_ = ROW_NUMBER() OVER(ORDER BY', @ColumnsNames, '), * INTO #Actua___l FROM', tSQLt.Private_GetQuotedObjectName(@Actual),
+        'SELECT _row_ = ROW_NUMBER() OVER(ORDER BY', @ColumnsNames, '), * INTO #Expecte_d FROM', @Expected,
+        'SELECT _row_ = ROW_NUMBER() OVER(ORDER BY', @ColumnsNames, '), * INTO #Actua___l FROM', @Actual,
         'SELECT @Diffs = COUNT(1) FROM',
         '(',
             '(',
