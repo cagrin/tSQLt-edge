@@ -73,3 +73,14 @@ BEGIN
     EXEC tSQLt.AssertEquals 3.14, 3.141;
 END;
 GO
+
+CREATE PROCEDURE Test_AssertEquals.Test_FloatLossOfPrecision
+AS
+BEGIN
+    DECLARE @PointThree FLOAT = 0.1 + 0.2;
+
+    EXEC tSQLt.ExpectException 'tSQLt.AssertEquals failed. Expected:<0.3>. Actual:<0.3>.';
+
+    EXEC tSQLt.AssertEquals 0.3, @PointThree;
+END;
+GO
