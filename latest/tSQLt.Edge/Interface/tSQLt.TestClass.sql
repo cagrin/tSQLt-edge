@@ -1,0 +1,1 @@
+CREATE USER [tSQLt.TestClass] WITHOUT LOGIN;
