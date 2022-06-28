@@ -250,3 +250,32 @@ BEGIN
     EXEC tSQLt.FakeFunction 'dbo.TestProcedure', 'dbo.FakeFunctionIF';
 END;
 GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_Failed_When_UnsuportedFunctionType
+AS
+BEGIN
+    EXEC Test_Extensions.FakeObjectType 'dbo.TestFunctionScalar', 'AF';
+
+    EXEC tSQLt.ExpectException 'Both parameters must contain the name of either scalar or table valued functions';
+
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionScalar', 'dbo.FakeFunctionScalar';
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_Can_Fake_Assembly_CLR_ScalarFunction
+AS
+BEGIN
+    EXEC Test_Extensions.FakeObjectType 'dbo.TestFunctionScalar', 'FS';
+
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionScalar', 'dbo.FakeFunctionScalar';
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_Can_Fake_Assembly_CLR_TableValuedFunction
+AS
+BEGIN
+    EXEC Test_Extensions.FakeObjectType 'dbo.TestFunctionIF', 'FT';
+
+    EXEC tSQLt.FakeFunction 'dbo.TestFunctionIF', 'dbo.FakeFunctionIF';
+END;
+GO

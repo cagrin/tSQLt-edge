@@ -29,7 +29,7 @@ BEGIN
     DECLARE @FunctionType CHAR(2) = tSQLt.Private_GetObjectType(@ObjectId);
     DECLARE @FakeFunctionType CHAR(2) = tSQLt.Private_GetObjectType(@FakeObjectId);
 
-    IF @FunctionType IN ('IF', 'TF') AND (@FakeFunctionType IN ('IF', 'TF') OR @FakeDataSource IS NOT NULL)
+    IF @FunctionType IN ('IF', 'TF', 'FT') AND (@FakeFunctionType IN ('IF', 'TF') OR @FakeDataSource IS NOT NULL)
     BEGIN
         IF @FakeDataSource IS NULL
         BEGIN
@@ -45,7 +45,7 @@ BEGIN
             SET @FakeDataSource = CONCAT('(SELECT * FROM ', @FakeDataSource, ');');
         END
     END
-    ELSE IF @FunctionType IN ('FN') AND @FakeFunctionType IN ('FN') AND @FakeDataSource IS NULL
+    ELSE IF @FunctionType IN ('FN', 'FS') AND @FakeFunctionType IN ('FN') AND @FakeDataSource IS NULL
     BEGIN
         SET @FakeDataSource = NULL
     END
