@@ -44,7 +44,7 @@ EXEC [tSQLt].[ExpectException] @ExpectedMessage, @ExpectedSeverity, @ExpectedSta
 EXEC [tSQLt].[ExpectNoException] @Message;
 EXEC [tSQLt].[Fail] @Message0, @Message1, @Message2, @Message3, @Message4, @Message5, @Message6, @Message7, @Message8, @Message9;
 EXEC [tSQLt].[FakeFunction] @FunctionName, @FakeFunctionName, @FakeDataSource;
-EXEC [tSQLt].[FakeTable] @TableName, @Identity, @ComputedColumns, @Defaults, @NotNulls;
+EXEC [tSQLt].[FakeTable] @TableName, @SchemaName, @Identity, @ComputedColumns, @Defaults, @NotNulls;
 EXEC [tSQLt].[NewTestClass] @ClassName;
 EXEC [tSQLt].[RemoveObject] @ObjectName, @NewName OUTPUT, @IfExists;
 EXEC [tSQLt].[RemoveObjectIfExists] @ObjectName, @NewName OUTPUT;
@@ -99,7 +99,7 @@ BEGIN
 [tSQLt].[ExpectNoException] @Message nvarchar(max);
 [tSQLt].[Fail] @Message0 nvarchar(max), @Message1 nvarchar(max), @Message2 nvarchar(max), @Message3 nvarchar(max), @Message4 nvarchar(max), @Message5 nvarchar(max), @Message6 nvarchar(max), @Message7 nvarchar(max), @Message8 nvarchar(max), @Message9 nvarchar(max);
 [tSQLt].[FakeFunction] @FunctionName nvarchar(max), @FakeFunctionName nvarchar(max), @FakeDataSource nvarchar(max);
-[tSQLt].[FakeTable] @TableName nvarchar(max), @Identity bit, @ComputedColumns bit, @Defaults bit, @NotNulls bit;
+[tSQLt].[FakeTable] @TableName nvarchar(max), @SchemaName nvarchar(max), @Identity bit, @ComputedColumns bit, @Defaults bit, @NotNulls bit;
 [tSQLt].[NewTestClass] @ClassName nvarchar(max);
 [tSQLt].[RemoveObject] @ObjectName nvarchar(max), @NewName nvarchar(max) OUTPUT, @IfExists int;
 [tSQLt].[RemoveObjectIfExists] @ObjectName nvarchar(max), @NewName nvarchar(max) OUTPUT;

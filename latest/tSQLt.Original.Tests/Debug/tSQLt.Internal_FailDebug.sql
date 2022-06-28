@@ -140,6 +140,14 @@ BEGIN
     IF  @ErrorMessage = 'Cannot process synonym FakeTableTests.TempSynonym1 as it is pointing to [FakeTableTests].[NotATable] which is not a table or view.'
     SET @ErrorMessage = 'Cannot fake synonym [FakeTableTests].[TempSynonym1] as it is pointing to [FakeTableTests].[NotATable], which is not a table or view!'
 
+    -- [FakeTableTests].[test raises error if @TableName is multi-part and @SchemaName is not NULL]
+    IF  @ErrorMessage = 'tSQLt.AssertObjectExists failed. Object:<aschema.aschema.anobject> does not exist.'
+    SET @ErrorMessage = 'When @TableName is a multi-part identifier, @SchemaName must be NULL!'
+
+    -- [FakeTableTests].[test raises error if @TableName is quoted multi-part and @SchemaName is not NULL]
+    IF  @ErrorMessage = 'tSQLt.AssertObjectExists failed. Object:<aschema.[aschema].[anobject]> does not exist.'
+    SET @ErrorMessage = 'When @TableName is a multi-part identifier, @SchemaName must be NULL!'
+
     -- [RemoveObjectTests].[test RemoveObject raises approporate error if object doesn't exists']
     IF  @ErrorMessage = 'tSQLt.RemoveObject failed. ObjectName:<RemoveObjectTests.aNonExistentTestObject> does not exist.'
     SET @ErrorMessage = 'tSQLt.RemoveObject failed. ObjectName: RemoveObjectTests.aNonExistentTestObject does not exist!';

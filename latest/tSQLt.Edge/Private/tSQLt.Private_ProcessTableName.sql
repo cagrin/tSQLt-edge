@@ -1,7 +1,16 @@
 CREATE PROCEDURE tSQLt.Private_ProcessTableName
-    @TableName NVARCHAR(MAX) OUTPUT
+    @TableName NVARCHAR(MAX) OUTPUT,
+    @SchemaName NVARCHAR(MAX) = NULL
 AS
 BEGIN
+    IF @SchemaName IS NOT NULL
+    BEGIN
+        IF OBJECT_ID(CONCAT(@TableName, '.', @SchemaName)) IS NOT NULL
+            SET @TableName = CONCAT(@TableName, '.', @SchemaName)
+        ELSE
+            SET @TableName = CONCAT(@SchemaName, '.', @TableName)
+    END
+
     EXEC tSQLt.AssertObjectExists @TableName;
 
     DECLARE @BaseObjectName NVARCHAR(MAX) =

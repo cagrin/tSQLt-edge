@@ -214,6 +214,42 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE Test_FakeFunction.Test_SchemaAndTableName
+AS
+BEGIN
+    CREATE TABLE dbo.TestTable1 (Column1 int NOT NULL);
+
+    EXEC tSQLt.FakeTable 'TestTable1', 'dbo';
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_SchemaAndTableNameNotExists
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'tSQLt.AssertObjectExists failed. Object:<dbo.TestTable1> does not exist.';
+
+    EXEC tSQLt.FakeTable 'TestTable1', 'dbo';
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_SchemaAndTableReversedName
+AS
+BEGIN
+    CREATE TABLE dbo.TestTable1 (Column1 int NOT NULL);
+
+    EXEC tSQLt.FakeTable 'dbo', 'TestTable1';
+END;
+GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_SchemaAndTableReversedNameNotExists
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'tSQLt.AssertObjectExists failed. Object:<TestTable1.dbo> does not exist.';
+
+    EXEC tSQLt.FakeTable 'dbo', 'TestTable1';
+END;
+GO
+
 CREATE PROCEDURE Test_FakeTable.Test_CannotFakeTableAndViewWithSchemabinding
 AS
 BEGIN
