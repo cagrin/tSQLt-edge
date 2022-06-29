@@ -62,7 +62,7 @@ Detailed principles:
 #### Isolating dependencies:
 
 - ![](https://img.shields.io/badge/ApplyConstraint--red)
-- ![](https://img.shields.io/badge/ApplyTrigger--red)
+- ![](https://img.shields.io/badge/ApplyTrigger--yellow)
 - ![](https://img.shields.io/badge/FakeFunction--yellow)
 - ![](https://img.shields.io/badge/FakeTable--yellow)
 - ![](https://img.shields.io/badge/RemoveObject--green)

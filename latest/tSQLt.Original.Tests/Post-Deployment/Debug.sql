@@ -47,6 +47,10 @@ END;
 ';
     EXEC (@AlterFail);
 
+    EXEC ('DROP PROCEDURE [ApplyTriggerTests].[test ApplyTrigger calls tSQLt.Private_MarktSQLtTempObject on new check constraints]');
+    EXEC ('DROP PROCEDURE [ApplyTriggerTests].[test cannot apply trigger if table is not a faked table]'); --todo
+    EXEC ('DROP PROCEDURE [ApplyTriggerTests].[test cannot apply trigger if trigger exist on wrong table]'); --todo
+
     EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test all unsupported 2008 data types]');
     EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test all unsupported data types]');
     EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test can handle byte ordered comparable CLR data type]');
