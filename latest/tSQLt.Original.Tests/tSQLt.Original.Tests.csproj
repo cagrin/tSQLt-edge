@@ -7,6 +7,7 @@
     <ItemGroup>
         <ProjectReference Include="../tSQLt.Edge/tSQLt.Edge.csproj" />
         <PostDeploy Include="Post-Deployment\Debug.sql" />
+        <Content Include="../../submodules/tSQLt/Tests/ApplyConstraintTests.class.sql" />
         <Content Include="../../submodules/tSQLt/Tests/ApplyTriggerTests.class.sql" />
         <Content Include="../../submodules/tSQLt/Tests/AssertEmptyTableTests.class.sql" />
         <Content Include="../../submodules/tSQLt/Tests/AssertEqualsStringTests.class.sql" />
