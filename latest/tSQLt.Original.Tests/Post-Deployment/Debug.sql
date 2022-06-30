@@ -74,7 +74,6 @@ END;
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a check constraint even if same table/constraint names exist on another schema]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a check constraint even if same table/constraint names exist on multiple other schemata]'); --Invalid object name 'tSQLt.F_Num'.
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a check constraint to a fake table with schema]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a check constraint to a fake table]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a foreign key to a fake table with referenced table not faked]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a foreign key to a fake table with schema]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a primary key and multiple unique constraints]');
