@@ -47,3 +47,18 @@ BEGIN
     INSERT INTO Schema1.Table1 (Column1) VALUES (1)
 END;
 GO
+
+CREATE PROCEDURE Test_ApplyConstraint.Test_MultiColumnCheckConstraintApplied
+AS
+BEGIN
+    EXEC('CREATE SCHEMA Schema1;');
+    CREATE TABLE Schema1.Table1 (Column1 INT, Column2 INT, CONSTRAINT Constraint1 CHECK (Column1 = 0 AND Column2 = 0));
+
+    EXEC tSQLt.FakeTable 'Schema1.Table1';
+    EXEC tSQLt.ApplyConstraint 'Schema1.Table1', 'Constraint1';
+
+    EXEC tSQLt.ExpectException @ExpectedMessagePattern = 'The INSERT statement conflicted with the CHECK constraint "Constraint1"%, table "Schema1.Table1".';
+
+    INSERT INTO Schema1.Table1 (Column1, Column2) VALUES (0, 1)
+END;
+GO
