@@ -26,6 +26,7 @@ BEGIN
 
     DECLARE @Expected NVARCHAR(MAX) =
 'EXEC [tSQLt].[ApplyConstraint] @TableName, @ConstraintName, @SchemaName, @NoCascade;
+EXEC [tSQLt].[ApplyIndex] @TableName, @IndexName;
 EXEC [tSQLt].[ApplyTrigger] @TableName, @TriggerName;
 EXEC [tSQLt].[AssertEmptyTable] @TableName, @Message;
 EXEC [tSQLt].[AssertEquals] @Expected, @Actual, @Message;
@@ -81,6 +82,7 @@ BEGIN
 
     DECLARE @Expected NVARCHAR(MAX) =
 '[tSQLt].[ApplyConstraint] @TableName nvarchar(max), @ConstraintName nvarchar(max), @SchemaName nvarchar(max), @NoCascade bit;
+[tSQLt].[ApplyIndex] @TableName nvarchar(max), @IndexName nvarchar(max);
 [tSQLt].[ApplyTrigger] @TableName nvarchar(max), @TriggerName nvarchar(max);
 [tSQLt].[AssertEmptyTable] @TableName nvarchar(max), @Message nvarchar(max);
 [tSQLt].[AssertEquals] @Expected sql_variant, @Actual sql_variant, @Message nvarchar(max);

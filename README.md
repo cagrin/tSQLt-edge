@@ -61,7 +61,7 @@ Detailed principles:
 
 #### Isolating dependencies:
 
-- ![](https://img.shields.io/badge/ApplyConstraint--red)
+- ![](https://img.shields.io/badge/ApplyConstraint--yellow)
 - ![](https://img.shields.io/badge/ApplyTrigger--yellow)
 - ![](https://img.shields.io/badge/FakeFunction--yellow)
 - ![](https://img.shields.io/badge/FakeTable--yellow)
@@ -75,6 +75,7 @@ tSQLt-edge has some additional features:
 
 |Stored procedure|Description|
 |--- |---|
+|ApplyIndex|Same as ApplyConstraint, but for INDEXES|
 |AssertEqualsTable|Add XML column comparison using convertion to NVARCHAR(MAX)|
 |AssertNotEqualsString|Same as AssertNotEquals, but for NVARCHAR(MAX)|
 |FakeTable|Add @NotNulls optional parameter to preserve NOT NULLs|
