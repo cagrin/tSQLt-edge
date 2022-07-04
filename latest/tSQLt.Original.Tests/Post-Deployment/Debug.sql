@@ -67,13 +67,11 @@ END;
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new primary key]'); --tSQLt.RemoveObject failed. ObjectName:<tSQLt.Private_MarktSQLtTempObject> does not exist.
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new unique key]'); --tSQLt.RemoveObject failed. ObjectName:<tSQLt.Private_MarktSQLtTempObject> does not exist.
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint can apply two foreign keys]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint can be called with 2 parameters]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint can be called with 3 parameters]');
+    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint can be called with 3 parameters]'); --tSQLt.AssertObjectExists failed. Object:<testConstraint.schemaA> does not exist.
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint can handle data types with length when changing NULLability]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint can handle data types with precision and scale when changing NULLability]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a check constraint even if same table/constraint names exist on another schema]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a check constraint even if same table/constraint names exist on multiple other schemata]'); --Invalid object name 'tSQLt.F_Num'.
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a check constraint to a fake table with schema]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a foreign key to a fake table with referenced table not faked]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a foreign key to a fake table with schema]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a primary key and multiple unique constraints]');
@@ -83,7 +81,6 @@ END;
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint does apply existing ON UPDATE/DELETE CASCADE if @NoCascade = NULL]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint doesn''t apply existing ON DELETE CASCADE if @NoCascade = 1]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint doesn''t apply existing ON UPDATE CASCADE if @NoCascade = 1]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint for a check constraint can be called with quoted names]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint for a foreign key can be called with quoted names]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint for a primary key can be called with quoted names]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint for a unique constrain can be called with quoted names]');

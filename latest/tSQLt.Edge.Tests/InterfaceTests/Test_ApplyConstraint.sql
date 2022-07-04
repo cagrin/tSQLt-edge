@@ -62,3 +62,18 @@ BEGIN
     INSERT INTO Schema1.Table1 (Column1, Column2) VALUES (0, 1)
 END;
 GO
+
+CREATE PROCEDURE Test_ApplyConstraint.Test_PrimaryKeyApplied
+AS
+BEGIN
+    EXEC('CREATE SCHEMA Schema1;');
+    CREATE TABLE Schema1.Table1 (Column1 INT NOT NULL, CONSTRAINT PrimaryKey1 PRIMARY KEY(Column1));
+
+    EXEC tSQLt.FakeTable 'Schema1.Table1', @NotNulls = 1;
+    EXEC tSQLt.ApplyConstraint 'Schema1.Table1', 'PrimaryKey1';
+
+    EXEC tSQLt.ExpectException 'Violation of PRIMARY KEY constraint ''PrimaryKey1''. Cannot insert duplicate key in object ''Schema1.Table1''. The duplicate key value is (1).';
+
+    INSERT INTO Schema1.Table1 (Column1) VALUES (1), (1)
+END;
+GO

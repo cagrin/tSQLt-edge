@@ -5,7 +5,6 @@ CREATE PROCEDURE tSQLt.Internal_ApplyConstraint
     @NoCascade BIT = 0
 AS
 BEGIN
-
     DECLARE @ObjectName NVARCHAR(MAX) = @TableName;
 
     IF @SchemaName IS NOT NULL
@@ -13,19 +12,21 @@ BEGIN
 
     EXEC tSQLt.AssertObjectExists @ObjectName;
 
-    DECLARE @SchemaId INT = SCHEMA_ID(OBJECT_SCHEMA_NAME(OBJECT_ID(@ObjectName)))
-
-    DECLARE @ConstraintType CHAR(2) =
-    (
-        SELECT [type]
-        FROM tSQLt.System_objects()
-        WHERE [schema_id] = @SchemaId
-        AND [name] = @ConstraintName
-    )
+    DECLARE @ConstraintId INT, @ConstraintType CHAR(2);
+    SELECT
+        @ConstraintId = [object_id],
+        @ConstraintType = [type]
+    FROM tSQLt.System_objects()
+    WHERE [schema_id] = SCHEMA_ID(OBJECT_SCHEMA_NAME(OBJECT_ID(@ObjectName)))
+    AND ([name] = @ConstraintName OR QUOTENAME([name]) = @ConstraintName)
 
     IF @ConstraintType = 'C'
     BEGIN
-        EXEC tSQLt.Internal_ApplyCheckConstraint @Objectname, @ConstraintName, @SchemaId
+        EXEC tSQLt.Internal_ApplyCheckConstraint @Objectname, @ConstraintId;
+    END
+    ELSE IF @ConstraintType = 'PK'
+    BEGIN
+        EXEC tSQLt.Internal_ApplyPrimaryKey @Objectname, @ConstraintId;
     END
     ELSE
     BEGIN
@@ -42,18 +43,16 @@ GO
 
 CREATE PROCEDURE tSQLt.Internal_ApplyCheckConstraint
     @ObjectName NVARCHAR(MAX),
-    @ConstraintName NVARCHAR(MAX),
-    @SchemaId INT
+    @ConstraintId INT
 AS
 BEGIN
-    DECLARE @ConstraintId INT, @ConstraintDefinition NVARCHAR(MAX), @ParentName NVARCHAR(MAX)
+    DECLARE @ParentName NVARCHAR(MAX), @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX);
     SELECT
-        @ConstraintId = [object_id],
-        @ConstraintDefinition = [definition],
-        @ParentName = CONCAT(QUOTENAME(SCHEMA_NAME(@SchemaId)), '.', QUOTENAME(OBJECT_NAME([parent_object_id])))
+        @ParentName = CONCAT(QUOTENAME(SCHEMA_NAME([schema_id])), '.', QUOTENAME(OBJECT_NAME([parent_object_id]))),
+        @ConstraintName = QUOTENAME(OBJECT_NAME([object_id])),
+        @ConstraintDefinition = [definition]
     FROM tSQLt.System_CheckConstraints()
-    WHERE [schema_id] = @SchemaId
-    AND [name] = @ConstraintName
+    WHERE [object_id] = @ConstraintId
 
     DECLARE @CreateConstraint NVARCHAR(MAX) = CONCAT_WS
     (
@@ -63,5 +62,46 @@ BEGIN
     )
 
     EXEC (@CreateConstraint);
+END;
+GO
+
+CREATE PROCEDURE tSQLt.Internal_ApplyPrimaryKey
+    @ObjectName NVARCHAR(MAX),
+    @ConstraintId INT
+AS
+BEGIN
+    DECLARE @ParentName NVARCHAR(MAX), @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX);
+    SELECT
+        @ParentName = CONCAT(QUOTENAME(SCHEMA_NAME([schema_id])), '.', QUOTENAME([table_name])),
+        @ConstraintName = QUOTENAME([index_name]),
+        @ConstraintDefinition = CONCAT
+        (
+            [type_desc],
+            ' (',
+            STRING_AGG
+            (
+                CONCAT_WS
+                (
+                    ' ',
+                    [column_name],
+                    CASE WHEN [is_descending_key] = 1 THEN 'DESC' ELSE 'ASC' END
+                ),
+                ', '
+            ),
+            ')'
+        )
+    FROM tSQLt.System_PrimaryKeyColumns()
+    WHERE [schema_id] = SCHEMA_ID(OBJECT_SCHEMA_NAME(OBJECT_ID(@ObjectName)))
+    AND [index_name] = OBJECT_NAME(@ConstraintId)
+    GROUP BY [schema_id], [table_name], [index_name], [type_desc]
+
+    DECLARE @CreatePrimaryKey NVARCHAR(MAX) = CONCAT_WS
+    (
+        ' ',
+        'ALTER TABLE', @ParentName, 'DROP CONSTRAINT', @ConstraintName,
+        'ALTER TABLE', @ObjectName, 'ADD CONSTRAINT',  @ConstraintName, 'PRIMARY KEY', @ConstraintDefinition
+    )
+
+    EXEC (@CreatePrimaryKey);
 END;
 GO
