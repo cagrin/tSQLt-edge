@@ -69,11 +69,60 @@ BEGIN
     EXEC('CREATE SCHEMA Schema1;');
     CREATE TABLE Schema1.Table1 (Column1 INT NOT NULL, CONSTRAINT PrimaryKey1 PRIMARY KEY(Column1));
 
-    EXEC tSQLt.FakeTable 'Schema1.Table1', @NotNulls = 1;
+    EXEC tSQLt.FakeTable 'Schema1.Table1';
     EXEC tSQLt.ApplyConstraint 'Schema1.Table1', 'PrimaryKey1';
 
     EXEC tSQLt.ExpectException 'Violation of PRIMARY KEY constraint ''PrimaryKey1''. Cannot insert duplicate key in object ''Schema1.Table1''. The duplicate key value is (1).';
 
+    INSERT INTO Schema1.Table1 (Column1) VALUES (1), (1)
+END;
+GO
+
+CREATE PROCEDURE Test_ApplyConstraint.Test_PrimaryKeyApplied_WithDescendingKey
+AS
+BEGIN
+    EXEC('CREATE SCHEMA Schema1;');
+    CREATE TABLE Schema1.Table1 (Column1 INT NOT NULL, CONSTRAINT PrimaryKey1 PRIMARY KEY(Column1 DESC));
+
+    EXEC tSQLt.FakeTable 'Schema1.Table1';
+    EXEC tSQLt.ApplyConstraint 'Schema1.Table1', 'PrimaryKey1';
+
+    INSERT INTO Schema1.Table1 (Column1) VALUES (1), (2)
+
+    DECLARE @Actual INT = (SELECT TOP 1 Column1 FROM Schema1.Table1)
+    DECLARE @Expected INT = 2
+
+    EXEC tSQLt.AssertEquals @Expected, @Actual;
+END;
+GO
+
+CREATE PROCEDURE Test_ApplyConstraint.Test_PrimaryKeyApplied_WithDefault
+AS
+BEGIN
+    EXEC('CREATE SCHEMA Schema1;');
+    CREATE TABLE Schema1.Table1 (Column1 INT DEFAULT 1 NOT NULL, CONSTRAINT PrimaryKey1 PRIMARY KEY(Column1));
+
+    EXEC tSQLt.FakeTable 'Schema1.Table1', @Defaults = 1;
+    EXEC tSQLt.ApplyConstraint 'Schema1.Table1', 'PrimaryKey1';
+
+    EXEC tSQLt.ExpectException 'Violation of PRIMARY KEY constraint ''PrimaryKey1''. Cannot insert duplicate key in object ''Schema1.Table1''. The duplicate key value is (1).';
+
+    INSERT INTO Schema1.Table1 VALUES (DEFAULT), (DEFAULT)
+END;
+GO
+
+CREATE PROCEDURE Test_ApplyConstraint.Test_PrimaryKeyApplied_WithIdentity
+AS
+BEGIN
+    EXEC('CREATE SCHEMA Schema1;');
+    CREATE TABLE Schema1.Table1 (Column1 INT IDENTITY(1,1) NOT NULL, CONSTRAINT PrimaryKey1 PRIMARY KEY(Column1));
+
+    EXEC tSQLt.FakeTable 'Schema1.Table1', @Identity = 1;
+    EXEC tSQLt.ApplyConstraint 'Schema1.Table1', 'PrimaryKey1';
+
+    EXEC tSQLt.ExpectException 'Violation of PRIMARY KEY constraint ''PrimaryKey1''. Cannot insert duplicate key in object ''Schema1.Table1''. The duplicate key value is (1).';
+
+    SET IDENTITY_INSERT Schema1.Table1 ON
     INSERT INTO Schema1.Table1 (Column1) VALUES (1), (1)
 END;
 GO

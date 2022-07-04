@@ -70,7 +70,7 @@ CREATE PROCEDURE tSQLt.Internal_ApplyPrimaryKey
     @ConstraintId INT
 AS
 BEGIN
-    DECLARE @ParentName NVARCHAR(MAX), @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX);
+    DECLARE @ParentName NVARCHAR(MAX), @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX), @AlterPrimaryColumns NVARCHAR(MAX);
     SELECT
         @ParentName = CONCAT(QUOTENAME(SCHEMA_NAME([schema_id])), '.', QUOTENAME([table_name])),
         @ConstraintName = QUOTENAME([index_name]),
@@ -89,6 +89,23 @@ BEGIN
                 ', '
             ),
             ')'
+        ),
+        @AlterPrimaryColumns = STRING_AGG
+        (
+            CONCAT_WS
+            (
+                ' ',
+                'ALTER TABLE', @ObjectName, 'ALTER COLUMN', QUOTENAME(column_name),
+                CASE
+                    WHEN is_computed = 1 THEN tSQLt.Private_GetComputedColumn(@ObjectName, column_id)
+                    ELSE CONCAT_WS
+                    (
+                        ' ', tSQLt.Private_GetType(user_type_id, max_length, precision, scale, collation_name),
+                        'NOT NULL'
+                    )
+                END
+            ),
+            ' '
         )
     FROM tSQLt.System_PrimaryKeyColumns()
     WHERE [schema_id] = SCHEMA_ID(OBJECT_SCHEMA_NAME(OBJECT_ID(@ObjectName)))
@@ -102,6 +119,7 @@ BEGIN
         'ALTER TABLE', @ObjectName, 'ADD CONSTRAINT',  @ConstraintName, 'PRIMARY KEY', @ConstraintDefinition
     )
 
+    EXEC (@AlterPrimaryColumns);
     EXEC (@CreatePrimaryKey);
 END;
 GO
