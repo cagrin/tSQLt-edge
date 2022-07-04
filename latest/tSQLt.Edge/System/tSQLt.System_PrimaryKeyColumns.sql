@@ -1,5 +1,5 @@
-CREATE FUNCTION tSQLt.System_PrimaryKeyColumns ()
-RETURNS @PrimaryKeyColumns TABLE
+CREATE FUNCTION tSQLt.System_IndexColumns ()
+RETURNS @IndexColumns TABLE
 (
 	[object_id] [int] NOT NULL,
 	[schema_id] [int] NOT NULL,
@@ -9,6 +9,9 @@ RETURNS @PrimaryKeyColumns TABLE
 	[key_ordinal] [tinyint] NOT NULL,
 	[is_descending_key] [bit] NULL,
 	[type_desc] [nvarchar](60) NULL,
+	[is_primary_key] [bit] NULL,
+	[is_unique] [bit] NULL,
+	[is_unique_constraint] [bit] NULL,
 	[column_id] [int] NOT NULL,
 	[is_computed] [bit] NOT NULL,
 	[is_nullable] [bit] NULL,
@@ -19,7 +22,7 @@ RETURNS @PrimaryKeyColumns TABLE
 	[collation_name] [sysname] NULL
 ) AS
 BEGIN
-    INSERT INTO @PrimaryKeyColumns
+    INSERT INTO @IndexColumns
 	SELECT
 		t.[object_id],
 		t.[schema_id],
@@ -29,6 +32,9 @@ BEGIN
 		ic.[key_ordinal],
 		ic.[is_descending_key],
 		i.[type_desc],
+        i.[is_primary_key],
+        i.[is_unique],
+        i.[is_unique_constraint],
         c.[column_id],
         c.[is_computed],
         c.[is_nullable],
@@ -41,7 +47,6 @@ BEGIN
 	INNER JOIN sys.indexes i ON i.[object_id] = t.[object_id]
 	INNER JOIN sys.index_columns ic ON ic.[object_id] = t.[object_id] AND ic.[index_id] = i.[index_id]
 	INNER JOIN sys.columns c ON c.[object_id] = t.[object_id] AND c.[column_id] = ic.[column_id]
-	WHERE i.[is_primary_key] = 1
 
     RETURN;
 END;
