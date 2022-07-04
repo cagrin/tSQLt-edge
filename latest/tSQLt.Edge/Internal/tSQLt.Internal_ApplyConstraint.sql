@@ -83,7 +83,7 @@ BEGIN
                 CONCAT_WS
                 (
                     ' ',
-                    [column_name],
+                    QUOTENAME([column_name]),
                     CASE WHEN [is_descending_key] = 1 THEN 'DESC' ELSE 'ASC' END
                 ),
                 ', '
@@ -95,15 +95,9 @@ BEGIN
             CONCAT_WS
             (
                 ' ',
-                'ALTER TABLE', @ObjectName, 'ALTER COLUMN', QUOTENAME(column_name),
-                CASE
-                    WHEN is_computed = 1 THEN tSQLt.Private_GetComputedColumn(@ObjectName, column_id)
-                    ELSE CONCAT_WS
-                    (
-                        ' ', tSQLt.Private_GetType(user_type_id, max_length, precision, scale, collation_name),
-                        'NOT NULL'
-                    )
-                END
+                'ALTER TABLE', @ObjectName, 'ALTER COLUMN', QUOTENAME([column_name]),
+                tSQLt.Private_GetType([user_type_id], [max_length], [precision], [scale], [collation_name]),
+                'NOT NULL'
             ),
             ' '
         )

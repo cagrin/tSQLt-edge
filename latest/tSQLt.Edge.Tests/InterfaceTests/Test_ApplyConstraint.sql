@@ -126,3 +126,17 @@ BEGIN
     INSERT INTO Schema1.Table1 (Column1) VALUES (1), (1)
 END;
 GO
+
+CREATE PROCEDURE Test_ApplyConstraint.Test_PrimaryKeyFailed_WithComputedColumn
+AS
+BEGIN
+    EXEC('CREATE SCHEMA Schema1;');
+    CREATE TABLE Schema1.Table1 (Column1 INT NOT NULL, Column2 AS 2*Column1 PERSISTED, CONSTRAINT PrimaryKey1 PRIMARY KEY(Column2));
+
+    EXEC tSQLt.FakeTable 'Schema1.Table1', @ComputedColumns = 1;
+
+    EXEC tSQLt.ExpectException 'Cannot alter column ''Column2'' because it is ''COMPUTED''.'
+
+    EXEC tSQLt.ApplyConstraint 'Schema1.Table1', 'PrimaryKey1';
+END;
+GO

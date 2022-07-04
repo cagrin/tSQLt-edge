@@ -58,9 +58,7 @@ END;
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint Applies existing ON UPDATE CASCADE]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint Applies existing ON UPDATE SET DEFAULT]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint Applies existing ON UPDATE SET NULL]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint applies multi-column primary key]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint applies multi-column unique constraint]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint applies primary key constraint to correct column]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint applies unique constraint to correct column]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new check constraints]'); --tSQLt.RemoveObject failed. ObjectName:<tSQLt.Private_MarktSQLtTempObject> does not exist.
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new foreign key]'); --tSQLt.RemoveObject failed. ObjectName:<tSQLt.Private_MarktSQLtTempObject> does not exist.
@@ -68,21 +66,17 @@ END;
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new unique key]'); --tSQLt.RemoveObject failed. ObjectName:<tSQLt.Private_MarktSQLtTempObject> does not exist.
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint can apply two foreign keys]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint can be called with 3 parameters]'); --tSQLt.AssertObjectExists failed. Object:<testConstraint.schemaA> does not exist.
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint can handle data types with length when changing NULLability]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint can handle data types with precision and scale when changing NULLability]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a check constraint even if same table/constraint names exist on another schema]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a check constraint even if same table/constraint names exist on multiple other schemata]'); --Invalid object name 'tSQLt.F_Num'.
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a foreign key to a fake table with referenced table not faked]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a foreign key to a fake table with schema]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a primary key and multiple unique constraints]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a primary key constraint to a fake table]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a unique constraint to a fake table]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint does apply existing ON UPDATE/DELETE CASCADE if @NoCascade = 0]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint does apply existing ON UPDATE/DELETE CASCADE if @NoCascade = NULL]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint doesn''t apply existing ON DELETE CASCADE if @NoCascade = 1]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint doesn''t apply existing ON UPDATE CASCADE if @NoCascade = 1]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint for a foreign key can be called with quoted names]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint for a primary key can be called with quoted names]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint for a unique constrain can be called with quoted names]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint of a foreign key does not create additional unique index on unfaked table]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint throws error if called with constraint existsing on different table]');
