@@ -96,6 +96,22 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE Test_ApplyConstraint.Test_PrimaryKeyApplied_WithClusteredIndex
+AS
+BEGIN
+    EXEC('CREATE SCHEMA Schema1;');
+    CREATE TABLE Schema1.Table1 (Column1 INT NOT NULL, Column2 INT NOT NULL, CONSTRAINT PrimaryKey1 PRIMARY KEY NONCLUSTERED (Column1));
+
+    EXEC tSQLt.FakeTable 'Schema1.Table1';
+    CREATE CLUSTERED INDEX Index1 ON Schema1.Table1 (Column2);
+    EXEC tSQLt.ApplyConstraint 'Schema1.Table1', 'PrimaryKey1';
+
+    EXEC tSQLt.ExpectException 'Violation of PRIMARY KEY constraint ''PrimaryKey1''. Cannot insert duplicate key in object ''Schema1.Table1''. The duplicate key value is (1).';
+
+    INSERT INTO Schema1.Table1 (Column1, Column2) VALUES (1, 2), (1, 2)
+END;
+GO
+
 CREATE PROCEDURE Test_ApplyConstraint.Test_PrimaryKeyApplied_WithDefault
 AS
 BEGIN
