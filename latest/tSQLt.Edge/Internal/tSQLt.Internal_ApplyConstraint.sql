@@ -24,6 +24,10 @@ BEGIN
     BEGIN
         EXEC tSQLt.Internal_ApplyCheckConstraint @Objectname, @ConstraintId;
     END
+    ELSE IF @ConstraintType = 'F'
+    BEGIN
+        EXEC tSQLt.Internal_ApplyForeignKey @Objectname, @ConstraintId;
+    END
     ELSE IF @ConstraintType = 'PK'
     BEGIN
         EXEC tSQLt.Internal_ApplyPrimaryKey @Objectname, @ConstraintId;
@@ -153,6 +157,55 @@ BEGIN
         ' ',
         'ALTER TABLE', @ParentName, 'DROP CONSTRAINT', @ConstraintName,
         'ALTER TABLE', @ObjectName, 'ADD CONSTRAINT',  @ConstraintName, 'UNIQUE', @ConstraintDefinition
+    )
+
+    EXEC (@CreateUniqueConstraint);
+END;
+GO
+
+CREATE PROCEDURE tSQLt.Internal_ApplyForeignKey
+    @ObjectName NVARCHAR(MAX),
+    @ConstraintId INT
+AS
+BEGIN
+    DECLARE @ParentName NVARCHAR(MAX), @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX);
+    SELECT
+        @ParentName = CONCAT(QUOTENAME(SCHEMA_NAME(fk.[schema_id])), '.', QUOTENAME(OBJECT_NAME(fk.[parent_object_id]))),
+        @ConstraintName = QUOTENAME(fk.[name]),
+        @ConstraintDefinition = CONCAT
+        (
+            '(',
+            (
+                SELECT STRING_AGG(QUOTENAME(pci.name), ', ')
+                FROM sys.foreign_key_columns c
+                INNER JOIN sys.columns pci
+                ON pci.object_id = c.parent_object_id
+                AND pci.column_id = c.parent_column_id
+                WHERE fk.object_id = c.constraint_object_id
+            ),
+            ') REFERENCES ',
+            QUOTENAME(SCHEMA_NAME(t.schema_id)), '.', QUOTENAME(t.name),
+            ' (',
+            (
+                SELECT STRING_AGG(QUOTENAME(rci.name), ', ')
+                FROM sys.foreign_key_columns c
+                INNER JOIN sys.columns rci
+                ON rci.object_id = c.referenced_object_id
+                AND rci.column_id = c.referenced_column_id
+                WHERE fk.object_id = c.constraint_object_id
+            ),
+            ')'
+        )
+    FROM sys.foreign_keys fk
+    INNER JOIN sys.tables t ON fk.referenced_object_id = t.object_id
+    WHERE fk.[schema_id] = SCHEMA_ID(OBJECT_SCHEMA_NAME(OBJECT_ID(@ObjectName)))
+    AND fk.[name] = OBJECT_NAME(@ConstraintId)
+
+    DECLARE @CreateUniqueConstraint NVARCHAR(MAX) = CONCAT_WS
+    (
+        ' ',
+        'ALTER TABLE', @ParentName, 'DROP CONSTRAINT', @ConstraintName,
+        'ALTER TABLE', @ObjectName, 'ADD CONSTRAINT',  @ConstraintName, 'FOREIGN KEY', @ConstraintDefinition
     )
 
     EXEC (@CreateUniqueConstraint);

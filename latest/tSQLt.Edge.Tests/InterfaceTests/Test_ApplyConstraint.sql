@@ -186,3 +186,21 @@ BEGIN
     INSERT INTO Schema1.Table1 (Column1, Column2) VALUES (0, 1), (0, 1)
 END;
 GO
+
+CREATE PROCEDURE Test_ApplyConstraint.Test_ForeignKeyApplied
+AS
+BEGIN
+    EXEC('CREATE SCHEMA Schema1;');
+    CREATE TABLE Schema1.Table1 (Column1 INT NOT NULL, CONSTRAINT PrimaryKey1 PRIMARY KEY (Column1));
+    CREATE TABLE Schema1.Table2 (Column1 INT NOT NULL, Column2 INT NOT NULL, CONSTRAINT PrimaryKey2 PRIMARY KEY (Column1, Column2));
+
+    ALTER TABLE Schema1.Table2 ADD CONSTRAINT ForeignKey1 FOREIGN KEY (Column1) REFERENCES Schema1.Table1 (Column1)
+
+    EXEC tSQLt.FakeTable 'Schema1.Table2';
+    EXEC tSQLt.ApplyConstraint 'Schema1.Table2', 'ForeignKey1';
+
+    EXEC tSQLt.ExpectException @ExpectedMessagePattern = 'The INSERT statement conflicted with the FOREIGN KEY constraint "ForeignKey1"%, table "Schema1.Table1", column ''Column1''.';
+
+    INSERT INTO Schema1.Table2 (Column1, Column2) VALUES (1, 1)
+END;
+GO
