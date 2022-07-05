@@ -59,8 +59,6 @@ END;
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new primary key]'); --tSQLt.RemoveObject failed. ObjectName:<tSQLt.Private_MarktSQLtTempObject> does not exist.
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new unique key]'); --tSQLt.RemoveObject failed. ObjectName:<tSQLt.Private_MarktSQLtTempObject> does not exist.
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint can be called with 3 parameters]'); --tSQLt.AssertObjectExists failed. Object:<testConstraint.schemaA> does not exist.
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a check constraint even if same table/constraint names exist on another schema]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint copies a check constraint even if same table/constraint names exist on multiple other schemata]'); --Invalid object name 'tSQLt.F_Num'.
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint does apply existing ON UPDATE/DELETE CASCADE if @NoCascade = 0]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint does apply existing ON UPDATE/DELETE CASCADE if @NoCascade = NULL]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint doesn''t apply existing ON DELETE CASCADE if @NoCascade = 1]');
