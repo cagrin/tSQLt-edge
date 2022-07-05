@@ -22,19 +22,19 @@ BEGIN
 
     IF @ConstraintType = 'C'
     BEGIN
-        EXEC tSQLt.Internal_ApplyCheckConstraint @Objectname, @ConstraintId;
+        EXEC tSQLt.Private_ApplyCheckConstraint @Objectname, @ConstraintId;
     END
     ELSE IF @ConstraintType = 'F'
     BEGIN
-        EXEC tSQLt.Internal_ApplyForeignKey @Objectname, @ConstraintId;
+        EXEC tSQLt.Private_ApplyForeignKey @Objectname, @ConstraintId, @NoCascade;
     END
     ELSE IF @ConstraintType = 'PK'
     BEGIN
-        EXEC tSQLt.Internal_ApplyPrimaryKey @Objectname, @ConstraintId;
+        EXEC tSQLt.Private_ApplyPrimaryKey @Objectname, @ConstraintId;
     END
     ELSE IF @ConstraintType = 'UQ'
     BEGIN
-        EXEC tSQLt.Internal_ApplyUniqueConstraint @Objectname, @ConstraintId;
+        EXEC tSQLt.Private_ApplyUniqueConstraint @Objectname, @ConstraintId;
     END
     ELSE
     BEGIN
@@ -46,185 +46,5 @@ BEGIN
         );
         EXEC tSQLt.Fail @Failed;
     END
-END;
-GO
-
-CREATE PROCEDURE tSQLt.Internal_ApplyCheckConstraint
-    @ObjectName NVARCHAR(MAX),
-    @ConstraintId INT
-AS
-BEGIN
-    DECLARE @ParentName NVARCHAR(MAX), @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX);
-    SELECT
-        @ParentName = CONCAT(QUOTENAME(SCHEMA_NAME([schema_id])), '.', QUOTENAME(OBJECT_NAME([parent_object_id]))),
-        @ConstraintName = QUOTENAME(OBJECT_NAME([object_id])),
-        @ConstraintDefinition = [definition]
-    FROM tSQLt.System_CheckConstraints()
-    WHERE [object_id] = @ConstraintId
-
-    DECLARE @CreateConstraint NVARCHAR(MAX) = CONCAT_WS
-    (
-        ' ',
-        'ALTER TABLE', @ParentName, 'DROP CONSTRAINT', @ConstraintName,
-        'ALTER TABLE', @ObjectName, 'ADD CONSTRAINT',  @ConstraintName, 'CHECK', @ConstraintDefinition
-    )
-
-    EXEC (@CreateConstraint);
-END;
-GO
-
-CREATE PROCEDURE tSQLt.Internal_ApplyPrimaryKey
-    @ObjectName NVARCHAR(MAX),
-    @ConstraintId INT
-AS
-BEGIN
-    DECLARE @ParentName NVARCHAR(MAX), @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX), @AlterPrimaryColumns NVARCHAR(MAX);
-    SELECT
-        @ParentName = CONCAT(QUOTENAME(SCHEMA_NAME([schema_id])), '.', QUOTENAME([table_name])),
-        @ConstraintName = QUOTENAME([index_name]),
-        @ConstraintDefinition = CONCAT
-        (
-            [type_desc],
-            ' (',
-            STRING_AGG
-            (
-                CONCAT_WS
-                (
-                    ' ',
-                    QUOTENAME([column_name]),
-                    CASE WHEN [is_descending_key] = 1 THEN 'DESC' ELSE 'ASC' END
-                ),
-                ', '
-            ),
-            ')'
-        ),
-        @AlterPrimaryColumns = STRING_AGG
-        (
-            CONCAT_WS
-            (
-                ' ',
-                'ALTER TABLE', @ObjectName, 'ALTER COLUMN', QUOTENAME([column_name]),
-                tSQLt.Private_GetType([user_type_id], [max_length], [precision], [scale], [collation_name]),
-                'NOT NULL'
-            ),
-            ' '
-        )
-    FROM tSQLt.System_IndexColumns()
-    WHERE [schema_id] = SCHEMA_ID(OBJECT_SCHEMA_NAME(OBJECT_ID(@ObjectName)))
-    AND [index_name] = OBJECT_NAME(@ConstraintId)
-    AND [is_primary_key] = 1
-    GROUP BY [schema_id], [table_name], [index_name], [type_desc]
-
-    DECLARE @CreatePrimaryKey NVARCHAR(MAX) = CONCAT_WS
-    (
-        ' ',
-        'ALTER TABLE', @ParentName, 'DROP CONSTRAINT', @ConstraintName,
-        'ALTER TABLE', @ObjectName, 'ADD CONSTRAINT',  @ConstraintName, 'PRIMARY KEY', @ConstraintDefinition
-    )
-
-    EXEC (@AlterPrimaryColumns);
-    EXEC (@CreatePrimaryKey);
-END;
-GO
-
-CREATE PROCEDURE tSQLt.Internal_ApplyUniqueConstraint
-    @ObjectName NVARCHAR(MAX),
-    @ConstraintId INT
-AS
-BEGIN
-    DECLARE @ParentName NVARCHAR(MAX), @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX);
-    SELECT
-        @ParentName = CONCAT(QUOTENAME(SCHEMA_NAME([schema_id])), '.', QUOTENAME([table_name])),
-        @ConstraintName = QUOTENAME([index_name]),
-        @ConstraintDefinition = CONCAT
-        (
-            '(',
-            STRING_AGG
-            (
-                QUOTENAME([column_name]),
-                ', '
-            ),
-            ')'
-        )
-    FROM tSQLt.System_IndexColumns()
-    WHERE [schema_id] = SCHEMA_ID(OBJECT_SCHEMA_NAME(OBJECT_ID(@ObjectName)))
-    AND [index_name] = OBJECT_NAME(@ConstraintId)
-    AND [is_unique_constraint] = 1
-    GROUP BY [schema_id], [table_name], [index_name], [type_desc]
-
-    DECLARE @CreateUniqueConstraint NVARCHAR(MAX) = CONCAT_WS
-    (
-        ' ',
-        'ALTER TABLE', @ParentName, 'DROP CONSTRAINT', @ConstraintName,
-        'ALTER TABLE', @ObjectName, 'ADD CONSTRAINT',  @ConstraintName, 'UNIQUE', @ConstraintDefinition
-    )
-
-    EXEC (@CreateUniqueConstraint);
-END;
-GO
-
-CREATE PROCEDURE tSQLt.Internal_ApplyForeignKey
-    @ObjectName NVARCHAR(MAX),
-    @ConstraintId INT
-AS
-BEGIN
-    DECLARE @ParentName NVARCHAR(MAX), @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX), @UniqueIndex NVARCHAR(MAX);
-    SELECT
-        @ParentName = CONCAT(QUOTENAME(SCHEMA_NAME(fk.[schema_id])), '.', QUOTENAME(OBJECT_NAME(fk.[parent_object_id]))),
-        @ConstraintName = QUOTENAME(fk.[name]),
-        @ConstraintDefinition = CONCAT
-        (
-            '(',
-            (
-                SELECT STRING_AGG(QUOTENAME(pci.name), ', ')
-                FROM sys.foreign_key_columns c
-                INNER JOIN sys.columns pci
-                ON pci.object_id = c.parent_object_id
-                AND pci.column_id = c.parent_column_id
-                WHERE fk.object_id = c.constraint_object_id
-            ),
-            ') REFERENCES ',
-            QUOTENAME(SCHEMA_NAME(t.schema_id)), '.', QUOTENAME(ISNULL(OBJECT_NAME(ftl.fake_object_id), t.name)),
-            ' (',
-            (
-                SELECT STRING_AGG(QUOTENAME(rci.name), ', ')
-                FROM sys.foreign_key_columns c
-                INNER JOIN sys.columns rci
-                ON rci.object_id = c.referenced_object_id
-                AND rci.column_id = c.referenced_column_id
-                WHERE fk.object_id = c.constraint_object_id
-            ),
-            ')'
-        ),
-        @UniqueIndex = CASE WHEN ftl.fake_object_id IS NOT NULL THEN CONCAT
-        (
-            'CREATE UNIQUE INDEX ', QUOTENAME(CAST(NEWID() AS NVARCHAR(MAX))),
-            ' ON ', QUOTENAME(SCHEMA_NAME(t.schema_id)), '.', QUOTENAME(ISNULL(OBJECT_NAME(ftl.fake_object_id), t.name)),
-            ' (',
-            (
-                SELECT STRING_AGG(QUOTENAME(rci.name), ', ')
-                FROM sys.foreign_key_columns c
-                INNER JOIN sys.columns rci
-                ON rci.object_id = c.referenced_object_id
-                AND rci.column_id = c.referenced_column_id
-                WHERE fk.object_id = c.constraint_object_id
-            ),
-            ')'
-        ) END
-    FROM sys.foreign_keys fk
-    INNER JOIN sys.tables t ON fk.referenced_object_id = t.object_id
-    LEFT JOIN tSQLt.Private_FakeTableLog ftl ON t.object_id = ftl.[object_id]
-    WHERE fk.[schema_id] = SCHEMA_ID(OBJECT_SCHEMA_NAME(OBJECT_ID(@ObjectName)))
-    AND fk.[name] = OBJECT_NAME(@ConstraintId)
-
-    DECLARE @CreateUniqueConstraint NVARCHAR(MAX) = CONCAT_WS
-    (
-        ' ',
-        'ALTER TABLE', @ParentName, 'DROP CONSTRAINT', @ConstraintName,
-        'ALTER TABLE', @ObjectName, 'ADD CONSTRAINT',  @ConstraintName, 'FOREIGN KEY', @ConstraintDefinition
-    )
-
-    EXEC (@UniqueIndex);
-    EXEC (@CreateUniqueConstraint);
 END;
 GO
