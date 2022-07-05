@@ -47,8 +47,6 @@ END;
 ';
     EXEC (@AlterFail);
 
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint applies a foreign key between two faked tables and insert works]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint applies a multi-column foreign key between two faked tables and insert works]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint Applies existing ON DELETE CASCADE]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint Applies existing ON DELETE SET DEFAULT]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint Applies existing ON DELETE SET NULL]');
@@ -67,7 +65,6 @@ END;
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint does apply existing ON UPDATE/DELETE CASCADE if @NoCascade = NULL]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint doesn''t apply existing ON DELETE CASCADE if @NoCascade = 1]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint doesn''t apply existing ON UPDATE CASCADE if @NoCascade = 1]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint of a foreign key does not create additional unique index on unfaked table]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint throws error if called with constraint existsing on different table]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint throws error if called with invalid constraint]');
 

@@ -222,3 +222,21 @@ BEGIN
     INSERT INTO Schema1.Table2 (Table1Column1, Table1Column2, Column3) VALUES (1, 1, 1)
 END;
 GO
+
+CREATE PROCEDURE Test_ApplyConstraint.Test_ForeignKeyApplied_WithReferencedFakeTable
+AS
+BEGIN
+    EXEC('CREATE SCHEMA Schema1;');
+    CREATE TABLE Schema1.Table1 (Column1 INT NOT NULL, CONSTRAINT PrimaryKey1 PRIMARY KEY (Column1));
+    CREATE TABLE Schema1.Table2 (Table1Column1 INT NOT NULL, Column2 INT NOT NULL, CONSTRAINT PrimaryKey2 PRIMARY KEY (Table1Column1, Column2));
+
+    ALTER TABLE Schema1.Table2 ADD CONSTRAINT ForeignKey1 FOREIGN KEY (Table1Column1) REFERENCES Schema1.Table1 (Column1)
+
+    EXEC tSQLt.FakeTable 'Schema1.Table1';
+    EXEC tSQLt.FakeTable 'Schema1.Table2';
+    EXEC tSQLt.ApplyConstraint 'Schema1.Table2', 'ForeignKey1';
+
+    INSERT INTO Schema1.Table1 (Column1) VALUES (1)
+    INSERT INTO Schema1.Table2 (Table1Column1, Column2) VALUES (1, 1)
+END;
+GO

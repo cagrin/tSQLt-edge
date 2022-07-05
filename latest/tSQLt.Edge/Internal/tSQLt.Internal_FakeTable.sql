@@ -17,7 +17,11 @@ BEGIN
         'CREATE TABLE', @TableName, CONCAT('(', @FakeColumns, ');')
     );
 
+    DECLARE @ObjectId INT = OBJECT_ID(@TableName);
     EXEC tSQLt.Private_RenameObject @TableName;
     EXEC (@CreateFakeTableCommand);
+
+    INSERT INTO tSQLt.Private_FakeTableLog ([object_id], [fake_object_id])
+    VALUES (@ObjectId, OBJECT_ID(@TableName));
 END;
 GO
