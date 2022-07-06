@@ -47,22 +47,11 @@ END;
 ';
     EXEC (@AlterFail);
 
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint Applies existing ON DELETE CASCADE]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint Applies existing ON DELETE SET DEFAULT]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint Applies existing ON DELETE SET NULL]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint Applies existing ON UPDATE and ON DELETE together]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint Applies existing ON UPDATE CASCADE]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint Applies existing ON UPDATE SET DEFAULT]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint Applies existing ON UPDATE SET NULL]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new check constraints]'); --tSQLt.RemoveObject failed. ObjectName:<tSQLt.Private_MarktSQLtTempObject> does not exist.
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new foreign key]'); --tSQLt.RemoveObject failed. ObjectName:<tSQLt.Private_MarktSQLtTempObject> does not exist.
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new primary key]'); --tSQLt.RemoveObject failed. ObjectName:<tSQLt.Private_MarktSQLtTempObject> does not exist.
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new unique key]'); --tSQLt.RemoveObject failed. ObjectName:<tSQLt.Private_MarktSQLtTempObject> does not exist.
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint can be called with 3 parameters]'); --tSQLt.AssertObjectExists failed. Object:<testConstraint.schemaA> does not exist.
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint does apply existing ON UPDATE/DELETE CASCADE if @NoCascade = 0]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint does apply existing ON UPDATE/DELETE CASCADE if @NoCascade = NULL]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint doesn''t apply existing ON DELETE CASCADE if @NoCascade = 1]');
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint doesn''t apply existing ON UPDATE CASCADE if @NoCascade = 1]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint throws error if called with constraint existsing on different table]');
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint throws error if called with invalid constraint]');
 

@@ -30,7 +30,14 @@ BEGIN
                 AND rci.column_id = c.referenced_column_id
                 WHERE fk.object_id = c.constraint_object_id
             ),
-            ')'
+            ')',
+            CASE WHEN @NoCascade = 1 THEN ''
+            ELSE CONCAT
+            (
+                ' ON UPDATE ', REPLACE(fk.update_referential_action_desc, '_', ' '),
+                ' ON DELETE ', REPLACE(fk.delete_referential_action_desc, '_', ' ')
+            )
+            END
         ),
         @CreateUniqueIndex = CASE WHEN ftl.fake_object_id IS NOT NULL THEN CONCAT
         (
