@@ -6,31 +6,13 @@ AS
 BEGIN
     DECLARE @ParentName NVARCHAR(MAX), @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX), @CreateUniqueIndex NVARCHAR(MAX);
     SELECT
-        @ParentName = CONCAT(QUOTENAME(SCHEMA_NAME(fk.[schema_id])), '.', QUOTENAME(OBJECT_NAME(fk.[parent_object_id]))),
-        @ConstraintName = QUOTENAME(fk.[name]),
+        @ParentName = CONCAT(QUOTENAME(SCHEMA_NAME(fk.schema_id)), '.', QUOTENAME(OBJECT_NAME(fk.parent_object_id))),
+        @ConstraintName = QUOTENAME(fk.name),
         @ConstraintDefinition = CONCAT
         (
-            '(',
-            (
-                SELECT STRING_AGG(QUOTENAME(pci.name), ', ')
-                FROM sys.foreign_key_columns c
-                INNER JOIN sys.columns pci
-                ON pci.object_id = c.parent_object_id
-                AND pci.column_id = c.parent_column_id
-                WHERE fk.object_id = c.constraint_object_id
-            ),
-            ') REFERENCES ',
-            QUOTENAME(SCHEMA_NAME(t.schema_id)), '.', QUOTENAME(ISNULL(OBJECT_NAME(ftl.fake_object_id), t.name)),
-            ' (',
-            (
-                SELECT STRING_AGG(QUOTENAME(rci.name), ', ')
-                FROM sys.foreign_key_columns c
-                INNER JOIN sys.columns rci
-                ON rci.object_id = c.referenced_object_id
-                AND rci.column_id = c.referenced_column_id
-                WHERE fk.object_id = c.constraint_object_id
-            ),
-            ')',
+            '(', fk.foreign_key_columns, ')',
+            ' REFERENCES ', QUOTENAME(SCHEMA_NAME(fk.referenced_schema_id)), '.', QUOTENAME(ISNULL(OBJECT_NAME(ftl.fake_object_id), fk.referenced_name)),
+            ' (', fk.referenced_columns, ')',
             CASE WHEN @NoCascade = 1 THEN ''
             ELSE CONCAT
             (
@@ -42,23 +24,13 @@ BEGIN
         @CreateUniqueIndex = CASE WHEN ftl.fake_object_id IS NOT NULL THEN CONCAT
         (
             'CREATE UNIQUE INDEX ', QUOTENAME(CAST(NEWID() AS NVARCHAR(MAX))),
-            ' ON ', QUOTENAME(SCHEMA_NAME(t.schema_id)), '.', QUOTENAME(ISNULL(OBJECT_NAME(ftl.fake_object_id), t.name)),
-            ' (',
-            (
-                SELECT STRING_AGG(QUOTENAME(rci.name), ', ')
-                FROM sys.foreign_key_columns c
-                INNER JOIN sys.columns rci
-                ON rci.object_id = c.referenced_object_id
-                AND rci.column_id = c.referenced_column_id
-                WHERE fk.object_id = c.constraint_object_id
-            ),
-            ')'
+            ' ON ', QUOTENAME(SCHEMA_NAME(fk.referenced_schema_id)), '.', QUOTENAME(ISNULL(OBJECT_NAME(ftl.fake_object_id), fk.referenced_name)),
+            ' (', fk.referenced_columns, ')'
         ) END
-    FROM sys.foreign_keys fk
-    INNER JOIN sys.tables t ON fk.referenced_object_id = t.object_id
-    LEFT JOIN tSQLt.Private_FakeTableLog ftl ON t.object_id = ftl.[object_id]
-    WHERE fk.[schema_id] = SCHEMA_ID(OBJECT_SCHEMA_NAME(OBJECT_ID(@ObjectName)))
-    AND fk.[name] = OBJECT_NAME(@ConstraintId)
+    FROM tSQLt.System_ForeignKeys() fk
+    LEFT JOIN tSQLt.Private_FakeTableLog ftl ON fk.referenced_object_id = ftl.object_id
+    WHERE fk.schema_id = SCHEMA_ID(OBJECT_SCHEMA_NAME(OBJECT_ID(@ObjectName)))
+    AND fk.name = OBJECT_NAME(@ConstraintId)
 
     DECLARE @CreateForeignKey NVARCHAR(MAX) = CONCAT_WS
     (
