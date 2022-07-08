@@ -9,17 +9,6 @@ BEGIN
     DECLARE @ErrorState INT;
     DECLARE @ErrorNumber INT;
 
-    CREATE TABLE #ExpectException
-    (
-        ExpectException BIT NOT NULL,
-        ExpectedMessage NVARCHAR(MAX),
-        ExpectedSeverity INT,
-        ExpectedState INT,
-        Message NVARCHAR(MAX),
-        ExpectedMessagePattern NVARCHAR(MAX),
-        ExpectedErrorNumber INT
-    );
-
     -- https://docs.microsoft.com/en-us/sql/t-sql/language-elements/save-transaction-transact-sql?view=sql-server-ver15
     SET @TranCounter = @@TRANCOUNT;
     IF @TranCounter = 0

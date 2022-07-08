@@ -24,7 +24,7 @@ BEGIN
         @Message          = Message,
         @ExpectedMessagePattern = ExpectedMessagePattern,
         @ExpectedErrorNumber    = ExpectedErrorNumber
-    FROM #ExpectException
+    FROM tSQLt.Private_ExpectException
 
     IF @ExpectException = 0
     BEGIN
