@@ -16,7 +16,7 @@ BEGIN
     DECLARE @BaseObjectName NVARCHAR(MAX) =
     (
         SELECT base_object_name
-        FROM sys.synonyms
+        FROM tSQLt.System_Synonyms()
         WHERE object_id = OBJECT_ID(@TableName)
     )
 
