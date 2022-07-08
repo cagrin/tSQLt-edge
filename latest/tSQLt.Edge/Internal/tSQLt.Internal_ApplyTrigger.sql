@@ -3,10 +3,7 @@ CREATE PROCEDURE tSQLt.Internal_ApplyTrigger
     @TriggerName NVARCHAR(MAX)
 AS
 BEGIN
-    EXEC tSQLt.AssertObjectExists @TableName;
-
-    SET @TriggerName = CONCAT(OBJECT_SCHEMA_NAME(OBJECT_ID(@TableName)), '.', @TriggerName);
-    EXEC tSQLt.AssertObjectExists @TriggerName;
+    EXEC tSQLt.Private_ProcessTriggerName @TableName, @TriggerName OUTPUT;
 
     DECLARE @CreateTrigger NVARCHAR(MAX) =
     (

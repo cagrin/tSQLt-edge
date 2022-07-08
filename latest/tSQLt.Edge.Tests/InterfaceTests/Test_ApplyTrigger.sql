@@ -4,59 +4,61 @@ GO
 CREATE PROCEDURE Test_ApplyTrigger.Test_TableNotExists
 AS
 BEGIN
-    EXEC tSQLt.ExpectException 'tSQLt.AssertObjectExists failed. Object:<TableName1> does not exist.'
+    EXEC tSQLt.ExpectException 'tSQLt.AssertObjectExists failed. Object:<Table1> does not exist.'
 
-    EXEC tSQLt.ApplyTrigger 'TableName1', 'TriggerName1';
+    EXEC tSQLt.ApplyTrigger 'Table1', 'Trigger1';
 END;
 GO
 
 CREATE PROCEDURE Test_ApplyTrigger.Test_TriggerNotExists
 AS
 BEGIN
-    CREATE TABLE TableName1 (Column1 INT);
+    CREATE TABLE Table1 (Column1 INT);
 
-    EXEC tSQLt.ExpectException 'tSQLt.AssertObjectExists failed. Object:<dbo.TriggerName1> does not exist.'
+    EXEC tSQLt.FakeTable 'Table1';
 
-    EXEC tSQLt.ApplyTrigger 'TableName1', 'TriggerName1';
+    EXEC tSQLt.ExpectException 'tSQLt.AssertObjectExists failed. Object:<dbo.Trigger1> does not exist.'
+
+    EXEC tSQLt.ApplyTrigger 'Table1', 'Trigger1';
 END;
 GO
 
 CREATE PROCEDURE Test_ApplyTrigger.Test_IsTriggered
 AS
 BEGIN
-    CREATE TABLE TableName1 (Column1 INT);
-    EXEC('CREATE TRIGGER TriggerName1 ON TableName1 INSTEAD OF INSERT AS BEGIN RAISERROR(N''TriggerName1 triggered!'', 16, 10); END;');
+    CREATE TABLE Table1 (Column1 INT);
+    EXEC('CREATE TRIGGER Trigger1 ON Table1 INSTEAD OF INSERT AS BEGIN RAISERROR(N''Trigger1 triggered!'', 16, 10); END;');
 
-    EXEC tSQLt.ExpectException 'TriggerName1 triggered!';
+    EXEC tSQLt.ExpectException 'Trigger1 triggered!';
 
-    INSERT INTO TableName1 (Column1) VALUES (1);
+    INSERT INTO Table1 (Column1) VALUES (1);
 END;
 GO
 
 CREATE PROCEDURE Test_ApplyTrigger.Test_IsNotTriggeredAfterFakeTable
 AS
 BEGIN
-    CREATE TABLE TableName1 (Column1 INT);
-    EXEC('CREATE TRIGGER TriggerName1 ON TableName1 INSTEAD OF INSERT AS BEGIN RAISERROR(N''TriggerName1 triggered!'', 16, 10); END;');
+    CREATE TABLE Table1 (Column1 INT);
+    EXEC('CREATE TRIGGER Trigger1 ON Table1 INSTEAD OF INSERT AS BEGIN RAISERROR(N''Trigger1 triggered!'', 16, 10); END;');
 
-    EXEC tSQLt.FakeTable 'TableName1';
+    EXEC tSQLt.FakeTable 'Table1';
 
-    INSERT INTO TableName1 (Column1) VALUES (1);
+    INSERT INTO Table1 (Column1) VALUES (1);
 END;
 GO
 
 CREATE PROCEDURE Test_ApplyTrigger.Test_IsTriggeredAfterFakeTableAndApplyTrigger
 AS
 BEGIN
-    CREATE TABLE TableName1 (Column1 INT);
-    EXEC('CREATE TRIGGER TriggerName1 ON TableName1 INSTEAD OF INSERT AS BEGIN RAISERROR(N''TriggerName1 triggered!'', 16, 10); END;');
+    CREATE TABLE Table1 (Column1 INT);
+    EXEC('CREATE TRIGGER Trigger1 ON Table1 INSTEAD OF INSERT AS BEGIN RAISERROR(N''Trigger1 triggered!'', 16, 10); END;');
 
-    EXEC tSQLt.ExpectException 'TriggerName1 triggered!';
+    EXEC tSQLt.FakeTable 'Table1';
+    EXEC tSQLt.ApplyTrigger 'Table1', 'Trigger1';
 
-    EXEC tSQLt.FakeTable 'TableName1';
-    EXEC tSQLt.ApplyTrigger 'TableName1', 'TriggerName1';
+    EXEC tSQLt.ExpectException 'Trigger1 triggered!';
 
-    INSERT INTO TableName1 (Column1) VALUES (1);
+    INSERT INTO Table1 (Column1) VALUES (1);
 END;
 GO
 
@@ -64,14 +66,28 @@ GO
 CREATE PROCEDURE Test_ApplyTrigger.Test_IsTriggeredAfterFakeTableAndApplyTrigger_Schema
 AS
 BEGIN
-    CREATE TABLE Test_ApplyTrigger.TableName2 (Column2 INT);
-    EXEC('CREATE TRIGGER TriggerName2 ON Test_ApplyTrigger.TableName2 INSTEAD OF INSERT AS BEGIN RAISERROR(N''TriggerName2 triggered!'', 16, 10); END;');
+    EXEC('CREATE SCHEMA Schema1;');
+    EXEC('CREATE TABLE Schema1.Table1 (Column1 INT);');
+    EXEC('CREATE TRIGGER Trigger1 ON Schema1.Table1 INSTEAD OF INSERT AS BEGIN RAISERROR(N''Trigger1 triggered!'', 16, 10); END;');
 
-    EXEC tSQLt.ExpectException 'TriggerName2 triggered!';
+    EXEC tSQLt.FakeTable 'Schema1.Table1';
+    EXEC tSQLt.ApplyTrigger 'Schema1.Table1', 'Trigger1';
 
-    EXEC tSQLt.FakeTable 'Test_ApplyTrigger.TableName2';
-    EXEC tSQLt.ApplyTrigger 'Test_ApplyTrigger.TableName2', 'TriggerName2';
+    EXEC tSQLt.ExpectException 'Trigger1 triggered!';
 
-    INSERT INTO Test_ApplyTrigger.TableName2 (Column2) VALUES (2);
+    EXEC('INSERT INTO Schema1.Table1 (Column1) VALUES (2);');
+END;
+GO
+
+CREATE PROCEDURE Test_ApplyTrigger.Test_FailWhenTableWasNotFaked
+AS
+BEGIN
+    EXEC('CREATE SCHEMA Schema1;');
+    EXEC('CREATE TABLE Schema1.Table1 (Column1 INT);');
+    EXEC('CREATE TRIGGER Trigger1 ON Schema1.Table1 INSTEAD OF INSERT AS BEGIN RAISERROR(N''Trigger1 triggered!'', 16, 10); END;');
+
+    EXEC tSQLt.ExpectException 'Table Schema1.Table1 was not faked by tSQLt.FakeTable.';
+
+    EXEC tSQLt.ApplyTrigger 'Schema1.Table1', 'Trigger1';
 END;
 GO
