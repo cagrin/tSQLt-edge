@@ -11,7 +11,7 @@ BEGIN
         @ConstraintDefinition = CONCAT
         (
             '(', fk.foreign_key_columns, ')',
-            ' REFERENCES ', QUOTENAME(SCHEMA_NAME(fk.referenced_schema_id)), '.', QUOTENAME(ISNULL(OBJECT_NAME(ftl.fake_object_id), fk.referenced_name)),
+            ' REFERENCES ', QUOTENAME(SCHEMA_NAME(fk.referenced_schema_id)), '.', QUOTENAME(ISNULL(OBJECT_NAME(ft.FakeObjectId), fk.referenced_name)),
             ' (', fk.referenced_columns, ')',
             CASE WHEN @NoCascade = 1 THEN ''
             ELSE CONCAT
@@ -21,14 +21,14 @@ BEGIN
             )
             END
         ),
-        @CreateUniqueIndex = CASE WHEN ftl.fake_object_id IS NOT NULL THEN CONCAT
+        @CreateUniqueIndex = CASE WHEN ft.FakeObjectId IS NOT NULL THEN CONCAT
         (
             'CREATE UNIQUE INDEX ', QUOTENAME(CAST(NEWID() AS NVARCHAR(MAX))),
-            ' ON ', QUOTENAME(SCHEMA_NAME(fk.referenced_schema_id)), '.', QUOTENAME(ISNULL(OBJECT_NAME(ftl.fake_object_id), fk.referenced_name)),
+            ' ON ', QUOTENAME(SCHEMA_NAME(fk.referenced_schema_id)), '.', QUOTENAME(ISNULL(OBJECT_NAME(ft.FakeObjectId), fk.referenced_name)),
             ' (', fk.referenced_columns, ')'
         ) END
     FROM tSQLt.System_ForeignKeys() fk
-    LEFT JOIN tSQLt.Private_FakeTableLog ftl ON fk.referenced_object_id = ftl.object_id
+    LEFT JOIN tSQLt.Private_FakeTables ft ON fk.referenced_object_id = ft.ObjectId
     WHERE fk.schema_id = SCHEMA_ID(OBJECT_SCHEMA_NAME(OBJECT_ID(@ObjectName)))
     AND fk.name = OBJECT_NAME(@ConstraintId)
 

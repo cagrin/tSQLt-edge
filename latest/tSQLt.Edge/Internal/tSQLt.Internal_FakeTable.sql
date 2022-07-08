@@ -21,7 +21,7 @@ BEGIN
     EXEC tSQLt.Private_RenameObject @TableName;
     EXEC (@CreateFakeTableCommand);
 
-    INSERT INTO tSQLt.Private_FakeTableLog ([object_id], [fake_object_id])
+    INSERT INTO tSQLt.Private_FakeTables (ObjectId, FakeObjectId)
     VALUES (@ObjectId, OBJECT_ID(@TableName));
 END;
 GO
