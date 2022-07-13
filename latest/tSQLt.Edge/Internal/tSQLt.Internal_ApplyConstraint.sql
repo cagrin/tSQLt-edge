@@ -1,24 +1,12 @@
 CREATE PROCEDURE tSQLt.Internal_ApplyConstraint
     @TableName NVARCHAR(MAX),
     @ConstraintName NVARCHAR(MAX),
-    @SchemaName NVARCHAR(MAX) = NULL, --parameter preserved for backward compatibility. Do not use. Will be removed soon.
+    @SchemaName NVARCHAR(MAX) = NULL,
     @NoCascade BIT = 0
 AS
 BEGIN
-    DECLARE @ObjectName NVARCHAR(MAX) = @TableName;
-
-    IF @SchemaName IS NOT NULL
-        SET @ObjectName = CONCAT(@SchemaName, '.', @TableName)
-
-    EXEC tSQLt.AssertObjectExists @ObjectName;
-
-    DECLARE @ConstraintId INT, @ConstraintType CHAR(2);
-    SELECT
-        @ConstraintId = [object_id],
-        @ConstraintType = [type]
-    FROM tSQLt.System_objects()
-    WHERE [schema_id] = SCHEMA_ID(OBJECT_SCHEMA_NAME(OBJECT_ID(@ObjectName)))
-    AND ([name] = @ConstraintName OR QUOTENAME([name]) = @ConstraintName)
+    DECLARE @ObjectName NVARCHAR(MAX), @ConstraintId INT, @ConstraintType CHAR(2);
+    EXEC tSQLt.Private_ProcessConstraintName @ObjectName OUTPUT, @ConstraintId OUTPUT, @ConstraintType OUTPUT, @TableName, @ConstraintName, @SchemaName;
 
     IF @ConstraintType = 'C'
     BEGIN

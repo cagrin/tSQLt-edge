@@ -19,6 +19,18 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE Test_ApplyConstraint.Test_TableWasNotFaked
+AS
+BEGIN
+    EXEC('CREATE SCHEMA Schema1;');
+    CREATE TABLE Schema1.Table1 (Column1 INT);
+
+    EXEC tSQLt.ExpectException 'Table Schema1.Table1 was not faked by tSQLt.FakeTable.';
+
+    EXEC tSQLt.ApplyConstraint 'Schema1.Table1', 'Constraint1';
+END;
+GO
+
 CREATE PROCEDURE Test_ApplyConstraint.Test_ConstraintNotExists
 AS
 BEGIN
@@ -30,6 +42,21 @@ BEGIN
     EXEC tSQLt.ExpectException 'tSQLt.ApplyConstraint failed. Constraint:<Constraint1> on table <Schema1.Table1> does not exist.'
 
     EXEC tSQLt.ApplyConstraint 'Schema1.Table1', 'Constraint1';
+END;
+GO
+
+CREATE PROCEDURE Test_ApplyConstraint.Test_ConstraintExistsOnOtherTable
+AS
+BEGIN
+    EXEC('CREATE SCHEMA Schema1;');
+    CREATE TABLE Schema1.Table1 (Column1 INT);
+    CREATE TABLE Schema1.Table2 (Column1 INT CONSTRAINT Check1 CHECK (Column1 = 0));
+
+    EXEC tSQLt.FakeTable 'Schema1.Table1';
+
+    EXEC tSQLt.ExpectException 'tSQLt.ApplyConstraint failed. Constraint:<Check1> on table <Schema1.Table1> does not exist.'
+
+    EXEC tSQLt.ApplyConstraint 'Schema1.Table1', 'Check1';
 END;
 GO
 

@@ -28,6 +28,14 @@ BEGIN
 
     DECLARE @NL NVARCHAR(MAX) = CHAR(13) + CHAR(10);
 
+    -- [ApplyConstraintTests].[test ApplyConstraint throws error if called with constraint existsing on different table]
+    IF  @ErrorMessage = 'tSQLt.ApplyConstraint failed. Constraint:<MyConstraint> on table <schemaA.tableA> does not exist.'
+    SET @ErrorMessage = 'ApplyConstraint could not resolve the object names';
+
+    -- [ApplyConstraintTests].[test ApplyConstraint throws error if called with invalid constraint]
+    IF  @ErrorMessage = 'tSQLt.ApplyConstraint failed. Constraint:<thisIsNotAConstraint> on table <schemaA.tableA> does not exist.'
+    SET @ErrorMessage = 'ApplyConstraint could not resolve the object names, ''schemaA.tableA'', ''thisIsNotAConstraint''. Be sure to call ApplyConstraint and pass in two parameters, such as: EXEC tSQLt.ApplyConstraint ''MySchema.MyTable'', ''MyConstraint''';
+
     -- [ApplyTriggerTests].[test cannot apply trigger if table does not exist]
     IF  @ErrorMessage = 'tSQLt.AssertObjectExists failed. Object:<ApplyTriggerTests.NotThere> does not exist.'
     SET @ErrorMessage = 'ApplyTriggerTests.NotThere does not exist or was not faked by tSQLt.FakeTable.';
