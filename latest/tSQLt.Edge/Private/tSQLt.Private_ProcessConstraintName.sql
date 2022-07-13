@@ -7,10 +7,18 @@ CREATE PROCEDURE tSQLt.Private_ProcessConstraintName
     @SchemaName NVARCHAR(MAX) = NULL
 AS
 BEGIN
+    IF SCHEMA_ID(@TableName) IS NOT NULL AND OBJECT_ID(CONCAT(@TableName, '.', @ConstraintName), 'U') IS NOT NULL
+    BEGIN
+        DECLARE @TableName1 NVARCHAR(MAX) = @ConstraintName, @ConstraintName1 NVARCHAR(MAX) = @SchemaName, @SchemaName1 NVARCHAR(MAX) = @TableName;
+        SELECT @TableName = @TableName1, @ConstraintName = @ConstraintName1, @SchemaName = @SchemaName1
+    END
+
     SET @ObjectName = @TableName;
 
     IF @SchemaName IS NOT NULL
-        SET @ObjectName = CONCAT(@SchemaName, '.', @TableName)
+    BEGIN
+        SET @ObjectName = CONCAT(@SchemaName, '.', @TableName);
+    END
 
     EXEC tSQLt.AssertObjectExists @ObjectName;
 

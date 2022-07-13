@@ -51,7 +51,6 @@ END;
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new foreign key]'); --tSQLt.RemoveObject failed. ObjectName:<tSQLt.Private_MarktSQLtTempObject> does not exist.
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new primary key]'); --tSQLt.RemoveObject failed. ObjectName:<tSQLt.Private_MarktSQLtTempObject> does not exist.
     EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new unique key]'); --tSQLt.RemoveObject failed. ObjectName:<tSQLt.Private_MarktSQLtTempObject> does not exist.
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint can be called with 3 parameters]'); --tSQLt.AssertObjectExists failed. Object:<testConstraint.schemaA> does not exist.
 
     EXEC ('DROP PROCEDURE [ApplyTriggerTests].[test ApplyTrigger calls tSQLt.Private_MarktSQLtTempObject on new check constraints]');
     EXEC ('DROP PROCEDURE [ApplyTriggerTests].[test cannot apply trigger if trigger exist on wrong table]'); --todo
