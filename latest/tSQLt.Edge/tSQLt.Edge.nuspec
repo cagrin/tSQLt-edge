@@ -4,7 +4,7 @@
     <id>tSQLt.Edge</id>
     <title></title>
     <authors>Krzysztof Strugiński</authors>
-		<description>tSQLt-compatible unit testing framework for Azure SQL Edge and SQL Server 2019.</description>
+		<description>tSQLt-compatible unit testing framework for Azure SQL Edge, SQL Server 2019 and 2022.</description>
     <owners>cagrin</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="file">LICENSE</license>

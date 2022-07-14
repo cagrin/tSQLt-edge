@@ -6,61 +6,47 @@ on:
     - main
 
 jobs:
-  build-on-azure-sql-edge:
+  test-edge:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            image: mcr.microsoft.com/azure-sql-edge
+          - os: ubuntu-latest
+            image: mcr.microsoft.com/mssql/server:2019-latest
+          - os: ubuntu-latest
+            image: mcr.microsoft.com/mssql/server:2022-latest
+          - os: windows-latest
+            image: cagrin/mssql-server-ltsc2022:2019-latest
+            windows: --windows-container
+          - os: windows-latest
+            image: cagrin/mssql-server-ltsc2022:2022-preview
+            windows: --windows-container
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Checkout submodules
+        run: git submodule update --init
+      - name: Setup sqltest tool
+        shell: pwsh
+        run: |
+          dotnet tool install -g dotnet-sqltest
+          docker pull ${{matrix.image}}
+      - name: Unit tests
+        shell: pwsh
+        run: |
+          sqltest runall --image ${{matrix.image}} ${{matrix.windows}} --project ./latest/tSQLt.Edge.Tests --cc-include-tsqlt
+          sqltest runall --image ${{matrix.image}} ${{matrix.windows}} --project ./latest/tSQLt.Original.Tests --cc-disable
+          sqltest runall --image ${{matrix.image}} ${{matrix.windows}} --project ./current/Example.Tests
+  test-xmlresult:
     runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME: mcr.microsoft.com/azure-sql-edge
     steps:
       - uses: actions/checkout@v3
       - name: Checkout submodules
         run: git submodule update --init
-      - name: Setup sqltest tool
-        shell: pwsh
-        run: |
-          dotnet tool install -g dotnet-sqltest
-          docker pull ${{env.IMAGE_NAME}}
-      - name: Unit tests
-        shell: pwsh
-        run: |
-          sqltest runall --image ${{env.IMAGE_NAME}} --project ./latest/tSQLt.Edge.Tests --cc-include-tsqlt
-          sqltest runall --image ${{env.IMAGE_NAME}} --project ./latest/tSQLt.Original.Tests --cc-disable
-          sqltest runall --image ${{env.IMAGE_NAME}} --project ./current/Example.Tests
-          dotnet test -c Release ./latest/tSQLt.XmlResult.Tests
-  build-on-mssql-server:
-    runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME: mcr.microsoft.com/mssql/server:2019-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Checkout submodules
-        run: git submodule update --init
-      - name: Setup sqltest tool
-        shell: pwsh
-        run: |
-          dotnet tool install -g dotnet-sqltest
-          docker pull ${{env.IMAGE_NAME}}
-      - name: Unit tests
-        shell: pwsh
-        run: |
-          sqltest runall --image ${{env.IMAGE_NAME}} --project ./latest/tSQLt.Edge.Tests --cc-include-tsqlt
-          sqltest runall --image ${{env.IMAGE_NAME}} --project ./latest/tSQLt.Original.Tests --cc-disable
-          sqltest runall --image ${{env.IMAGE_NAME}} --project ./current/Example.Tests
-  build-on-mssql-server-ltsc2022:
-    runs-on: windows-latest
-    env:
-      IMAGE_NAME: cagrin/mssql-server-ltsc2022:2019-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Checkout submodules
-        run: git submodule update --init
-      - name: Setup sqltest tool
-        shell: pwsh
-        run: |
-          dotnet tool install -g dotnet-sqltest
-          docker pull ${{env.IMAGE_NAME}}
-      - name: Unit tests
-        shell: pwsh
-        run: |
-          sqltest runall --image ${{env.IMAGE_NAME}} --windows-container --project ./latest/tSQLt.Edge.Tests --cc-include-tsqlt
-          sqltest runall --image ${{env.IMAGE_NAME}} --windows-container --project ./latest/tSQLt.Original.Tests --cc-disable
-          sqltest runall --image ${{env.IMAGE_NAME}} --windows-container --project ./current/Example.Tests
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@master
+        with:
+          dotnet-version: '6.0'
+      - name: XmlResult tests
+        run: dotnet test -c Release ./latest/tSQLt.XmlResult.Tests

@@ -2,12 +2,10 @@
 [![Nuget](https://img.shields.io/nuget/dt/tSQLt.Edge)](https://www.nuget.org/stats/packages/tSQLt.Edge?groupby=Version)
 
 # tSQLt-edge
-tSQLt-compatible unit testing framework for Azure SQL Edge and SQL Server 2019.
+tSQLt-compatible unit testing framework for Azure SQL Edge, SQL Server 2019 and 2022. It is available as a [nuget package](https://www.nuget.org/packages/tSQLt.Edge) and works perfectly with [MSBuild.SDK.SqlProj](https://github.com/rr-wfm/MSBuild.Sdk.SqlProj) project format.
 
 ## Description
-This project was created in order to practice code writing in TDD. When it is finished, it should contain the vast majority of the tSQLt framework functionalities for Azure SQL Edge and SQL Server 2019 based on the MSBuild.SDK.SqlProj project format.
-
-Detailed principles:
+This project was created in order to practice code writing in TDD. Here are some detailed principles I was followed:
 - Use modern Sql150 syntax
 - Include nuget package
 - No CLR code
