@@ -1,20 +1,28 @@
 CREATE PROCEDURE tSQLt.Private_ProcessTriggerName
+    @ObjectName NVARCHAR(MAX) OUTPUT,
+    @TriggerId INT OUTPUT,
     @TableName NVARCHAR(MAX),
-    @TriggerName NVARCHAR(MAX) OUTPUT
+    @TriggerName NVARCHAR(MAX)
 AS
 BEGIN
     EXEC tSQLt.AssertObjectExists @TableName;
 
-    IF NOT EXISTS
-    (
-        SELECT 1 FROM tSQLt.Private_FakeTables
-        WHERE FakeObjectId = OBJECT_ID(@TableName)
-    )
+    DECLARE @ObjectId INT;
+    SELECT
+        @ObjectId = ObjectId
+    FROM tSQLt.Private_FakeTables
+    WHERE FakeObjectId = OBJECT_ID(@TableName)
+
+    IF @ObjectId IS NULL
     BEGIN
         EXEC tSQLt.Fail 'Table', @TableName, 'was not faked by tSQLt.FakeTable.';
     END
 
-    SET @TriggerName = CONCAT(OBJECT_SCHEMA_NAME(OBJECT_ID(@TableName)), '.', @TriggerName);
-    EXEC tSQLt.AssertObjectExists @TriggerName;
+    SELECT
+        @TriggerId = [object_id],
+        @ObjectName = CONCAT(QUOTENAME(SCHEMA_NAME([schema_id])), '.', QUOTENAME([name]))
+    FROM tSQLt.System_Objects()
+    WHERE [parent_object_id] = @ObjectId
+    AND ([name] = @TriggerName OR QUOTENAME([name]) = @TriggerName)
 END;
 GO

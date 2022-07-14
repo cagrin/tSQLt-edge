@@ -17,7 +17,7 @@ BEGIN
 
     EXEC tSQLt.FakeTable 'Table1';
 
-    EXEC tSQLt.ExpectException 'tSQLt.AssertObjectExists failed. Object:<dbo.Trigger1> does not exist.'
+    EXEC tSQLt.ExpectException 'tSQLt.ApplyTrigger failed. Trigger:<Trigger1> on table <Table1> does not exist.'
 
     EXEC tSQLt.ApplyTrigger 'Table1', 'Trigger1';
 END;
@@ -87,6 +87,22 @@ BEGIN
     EXEC('CREATE TRIGGER Trigger1 ON Schema1.Table1 INSTEAD OF INSERT AS BEGIN RAISERROR(N''Trigger1 triggered!'', 16, 10); END;');
 
     EXEC tSQLt.ExpectException 'Table Schema1.Table1 was not faked by tSQLt.FakeTable.';
+
+    EXEC tSQLt.ApplyTrigger 'Schema1.Table1', 'Trigger1';
+END;
+GO
+
+CREATE PROCEDURE Test_ApplyTrigger.Test_TriggerExistsOnOtherTable
+AS
+BEGIN
+    EXEC('CREATE SCHEMA Schema1;');
+    EXEC('CREATE TABLE Schema1.Table1 (Column1 INT);');
+    EXEC('CREATE TABLE Schema1.Table2 (Column1 INT);');
+    EXEC('CREATE TRIGGER Trigger1 ON Schema1.Table2 INSTEAD OF INSERT AS BEGIN RAISERROR(N''Trigger1 triggered!'', 16, 10); END;');
+
+    EXEC tSQLt.FakeTable 'Schema1.Table1';
+
+    EXEC tSQLt.ExpectException 'tSQLt.ApplyTrigger failed. Trigger:<Trigger1> on table <Schema1.Table1> does not exist.'
 
     EXEC tSQLt.ApplyTrigger 'Schema1.Table1', 'Trigger1';
 END;

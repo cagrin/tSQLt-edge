@@ -48,6 +48,13 @@ BEGIN
     IF  @ErrorMessage = 'Table ApplyTriggerTests.NotAFakeTable was not faked by tSQLt.FakeTable.'
     SET @ErrorMessage = 'ApplyTriggerTests.NotAFakeTable does not exist or was not faked by tSQLt.FakeTable.';
 
+    -- [ApplyTriggerTests].[test cannot apply trigger if trigger exist on wrong table]
+    IF  @ErrorMessage = 'tSQLt.ApplyTrigger failed. Trigger:<AlsoNotThere> on table <ApplyTriggerTests.TableWithoutTrigger> does not exist.'
+    SET @ErrorMessage = 'AlsoNotThere is not a trigger on ApplyTriggerTests.TableWithoutTrigger';
+    ELSE
+    IF  @ErrorMessage = 'tSQLt.ApplyTrigger failed. Trigger:<MyTrigger> on table <ApplyTriggerTests.TableWithoutTrigger> does not exist.'
+    SET @ErrorMessage = 'MyTrigger is not a trigger on ApplyTriggerTests.TableWithoutTrigger';
+
     -- [AsertEqualsStringTests].[test AssertEqualsString should produce formatted fail message]
     IF  @ErrorMessage = 'tSQLt.AssertEqualsString failed. Expected:<Hello>. Actual:<World!>.'
     SET @ErrorMessage = @NL+'Expected: <Hello>'+@NL+'but was : <World!>';
