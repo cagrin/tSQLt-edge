@@ -3,6 +3,8 @@ CREATE PROCEDURE tSQLt.Private_GetMetaData
     @MetaData NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
+    EXEC tSQLt.Private_RemoveLastCharacter @CommandToExecute OUTPUT, @Character = ';'
+
     DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
     (
         ' ',

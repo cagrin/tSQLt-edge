@@ -47,10 +47,10 @@ END;
 ';
     EXEC (@AlterFail);
 
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new check constraints]'); --tSQLt.RemoveObject failed. ObjectName:<tSQLt.Private_MarktSQLtTempObject> does not exist.
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new foreign key]'); --tSQLt.RemoveObject failed. ObjectName:<tSQLt.Private_MarktSQLtTempObject> does not exist.
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new primary key]'); --tSQLt.RemoveObject failed. ObjectName:<tSQLt.Private_MarktSQLtTempObject> does not exist.
-    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new unique key]'); --tSQLt.RemoveObject failed. ObjectName:<tSQLt.Private_MarktSQLtTempObject> does not exist.
+    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new check constraints]');
+    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new foreign key]');
+    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new primary key]');
+    EXEC ('DROP PROCEDURE [ApplyConstraintTests].[test ApplyConstraint calls tSQLt.Private_MarktSQLtTempObject on new unique key]');
 
     EXEC ('DROP PROCEDURE [ApplyTriggerTests].[test ApplyTrigger calls tSQLt.Private_MarktSQLtTempObject on new check constraints]');
 
@@ -62,7 +62,6 @@ END;
     EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test RC table is created in the tSQLt schema]');
     EXEC ('DROP PROCEDURE [AssertEqualsTableTests].[test RC table is marked as tSQLt.IsTempObject]');
 
-    EXEC ('DROP PROCEDURE [tSQLt_test_AssertResultSetsHaveSameMetaData].[test AssertResultSetsHaveSameMetaData does not compare hidden columns]'); --todo
     EXEC ('DROP PROCEDURE [tSQLt_test_AssertResultSetsHaveSameMetaData].[test AssertResultSetsHaveSameMetaData fails when one result set has no rows for versions before SQL Server 2012]');
 
     EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test a single ExpectNoException can be followed by a single ExpectException]'); --todo

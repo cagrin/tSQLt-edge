@@ -96,3 +96,10 @@ BEGIN
     EXEC tSQLt.AssertResultSetsHaveSameMetaData 'SELECT * FROM #TestTable1', 'SELECT * FROM #TestTable2';
 END;
 GO
+
+CREATE PROCEDURE Test_AssertResultSetsHaveSameMetaData.Test_Select1_WithSemicolon
+AS
+BEGIN
+    EXEC tSQLt.AssertResultSetsHaveSameMetaData 'SELECT 1 Column1;', 'SELECT 1 Column1;';
+END;
+GO
