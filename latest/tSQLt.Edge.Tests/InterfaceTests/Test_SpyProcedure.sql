@@ -17,6 +17,23 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE Test_SpyProcedure.Test_ProcedureWithWeirdName
+AS
+BEGIN
+    EXEC ('CREATE SCHEMA [Weird''s Schema]');
+    EXEC ('CREATE PROCEDURE [Weird''s Schema].[Test.Procedure] AS BEGIN RETURN; END;');
+
+    EXEC tSQLt.SpyProcedure '[Weird''s Schema].[Test.Procedure]';
+
+    EXEC [Weird's Schema].[Test.Procedure];
+
+    IF NOT EXISTS (SELECT 1 FROM [Weird's Schema].[Test.Procedure_SpyProcedureLog] WHERE _id_ = 1)
+    BEGIN
+        EXEC tSQLt.Fail '[Weird''s Schema].[Test.Procedure_SpyProcedureLog] should exists.';
+    END
+END;
+GO
+
 CREATE PROCEDURE Test_SpyProcedure.Test_ProcedureWithP1
 AS
 BEGIN

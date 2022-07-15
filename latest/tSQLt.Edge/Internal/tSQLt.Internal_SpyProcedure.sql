@@ -21,11 +21,23 @@ BEGIN
         ';'
     );
 
+    DECLARE @SpyProcedureOriginalObjectName NVARCHAR(MAX) = CONCAT
+    (
+        QUOTENAME(OBJECT_SCHEMA_NAME(@ObjectId)),
+        '.',
+        QUOTENAME(@NewName)
+    );
+
+    DECLARE @SpyProcedureOriginalObjectNameVariable NVARCHAR(MAX) = CONCAT
+    (
+        'DECLARE @SpyProcedureOriginalObjectName NVARCHAR(MAX) = ''',
+        REPLACE(@SpyProcedureOriginalObjectName, '''', ''''''),
+        ''''
+    );
+
     DECLARE @CallOriginalCommand NVARCHAR(MAX) = CONCAT
     (
-        'EXEC ',
-        QUOTENAME(OBJECT_SCHEMA_NAME(@ObjectId)), '.', QUOTENAME(@NewName),
-        ' ',
+        'EXEC @SpyProcedureOriginalObjectName ',
         @Parameters,
         ';'
     );
@@ -48,6 +60,7 @@ BEGIN
         @ParametersWithTypesDefaultNulls,
         'AS BEGIN',
         @InsertIntoLogTableCommand,
+        @SpyProcedureOriginalObjectNameVariable,
         @CommandToExecute, NCHAR(10),
         CASE WHEN @CallOriginal = 1 THEN @CallOriginalCommand END,
         'RETURN; END;'
