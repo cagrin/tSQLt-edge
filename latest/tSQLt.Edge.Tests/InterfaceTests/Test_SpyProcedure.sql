@@ -17,19 +17,19 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE Test_SpyProcedure.Test_ProcedureWithWeirdName
+CREATE PROCEDURE Test_SpyProcedure.Test_AllWeirdName
 AS
 BEGIN
-    EXEC ('CREATE SCHEMA [Weird''s Schema]');
-    EXEC ('CREATE PROCEDURE [Weird''s Schema].[Test.Procedure] AS BEGIN RETURN; END;');
+    EXEC ('CREATE SCHEMA [O''clock.Schema]');
+    EXEC ('CREATE PROCEDURE [O''clock.Schema].[O''clock.Procedure] AS BEGIN RETURN; END;');
 
-    EXEC tSQLt.SpyProcedure '[Weird''s Schema].[Test.Procedure]';
+    EXEC tSQLt.SpyProcedure '[O''clock.Schema].[O''clock.Procedure]';
 
-    EXEC [Weird's Schema].[Test.Procedure];
+    EXEC [O'clock.Schema].[O'clock.Procedure];
 
-    IF NOT EXISTS (SELECT 1 FROM [Weird's Schema].[Test.Procedure_SpyProcedureLog] WHERE _id_ = 1)
+    IF NOT EXISTS (SELECT 1 FROM [O'clock.Schema].[O'clock.Procedure_SpyProcedureLog] WHERE _id_ = 1)
     BEGIN
-        EXEC tSQLt.Fail '[Weird''s Schema].[Test.Procedure_SpyProcedureLog] should exists.';
+        EXEC tSQLt.Fail '[O''clock.Schema].[O''clock.Procedure_SpyProcedureLog] should exists.';
     END
 END;
 GO

@@ -293,3 +293,16 @@ BEGIN
     ALTER TABLE #TempTable2 ADD PRIMARY KEY (Column1) -- Works too
 END;
 GO
+
+CREATE PROCEDURE Test_FakeTable.Test_AllWeirdNames
+AS
+BEGIN
+    EXEC ('CREATE SCHEMA [O''clock.Schema]');
+    EXEC ('CREATE TABLE [O''clock.Schema].[O''clock.Table1] ([O''clock.Column1] int NOT NULL)');
+    EXEC ('CREATE TABLE [O''clock.Schema].[O''clock.Table2] ([O''clock.Column1] int NULL)');
+
+    EXEC tSQLt.FakeTable '[O''clock.Schema].[O''clock.Table1]';
+
+    EXEC tSQLt.AssertEqualsTableSchema '[O''clock.Schema].[O''clock.Table2]', '[O''clock.Schema].[O''clock.Table1]';
+END;
+GO
