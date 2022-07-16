@@ -5,10 +5,9 @@ AS
 BEGIN
     IF @SchemaName IS NOT NULL
     BEGIN
-        IF OBJECT_ID(CONCAT(@TableName, '.', @SchemaName)) IS NOT NULL
-            SET @TableName = CONCAT(@TableName, '.', @SchemaName)
-        ELSE
-            SET @TableName = CONCAT(@SchemaName, '.', @TableName)
+        SELECT
+            @TableName = CONCAT(ISNULL(CleanSchemaName, @SchemaName), '.', ISNULL(CleanTableName, @TableName))
+        FROM tSQLt.Private_ResolveFakeTableNamesForBackwardCompatibility (@TableName, @SchemaName)
     END
 
     EXEC tSQLt.AssertObjectExists @TableName;

@@ -103,14 +103,6 @@ END;
     EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable calls tSQLt.Private_MarktSQLtTempObject on new object]');
     EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable doesn''t produce output]');
     EXEC ('DROP PROCEDURE [FakeTableTests].[test FakeTable works if new name of original table requires quoting]');
-    EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility accepts full name as 1st parm if 2nd parm is null]');
-    EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility accepts parms in wrong order]');
-    EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility can handle quoted names]');
-    EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility returns NULL schema name when table does not exist]');
-    EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility returns NULL table name when table does not exist]');
-    EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility returns NULLs when table name has special char]');
-    EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility returns quoted schema when schema and table provided]');
-    EXEC ('DROP PROCEDURE [FakeTableTests].[test Private_ResolveFakeTableNamesForBackwardCompatibility returns quoted table when schema and table provided]');
 
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test calls original procedure with cursor parameters if @CallOriginal = 1]');
     EXEC ('DROP PROCEDURE [SpyProcedureTests].[test new Procedure Spy is marked as tSQLt.IsTempObject]');
