@@ -9,7 +9,8 @@ AS
 BEGIN
     EXEC tSQLt.Private_ProcessTableName @TableName OUTPUT, @SchemaName;
 
-    DECLARE @FakeColumns NVARCHAR(MAX) = tSQLt.Private_GetFakeColumns (@TableName, @Identity, @ComputedColumns, @Defaults, @NotNulls);
+    DECLARE @FakeColumns NVARCHAR(MAX);
+    EXEC tSQLt.Private_GetFakeColumns @FakeColumns OUTPUT, @TableName, @Identity, @ComputedColumns, @Defaults, @NotNulls;
 
     DECLARE @CreateFakeTableCommand NVARCHAR(MAX) = CONCAT_WS
     (
