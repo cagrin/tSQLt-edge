@@ -4,7 +4,9 @@ GO
 CREATE PROCEDURE Test_GetColumns.Test_DataTypes
 AS
 BEGIN
-    DECLARE @Actual NVARCHAR(MAX) = REPLACE(tSQLt.Private_GetColumns('dbo.TestTable'), ', [', CONCAT(',', NCHAR(10), '['));
+    DECLARE @Actual NVARCHAR(MAX);
+    EXEC tSQLt.Private_GetColumns @Actual OUTPUT, 'dbo.TestTable';
+    SET @Actual = REPLACE(@Actual, ', [', CONCAT(',', NCHAR(10), '['));
 
     DECLARE @Expected NVARCHAR(MAX) =
 '[col1] bigint NULL,

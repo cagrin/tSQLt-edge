@@ -9,7 +9,7 @@ BEGIN
     (
         ' ',
         'SELECT TOP 1 * INTO #MetaData FROM (', @CommandToExecute, ') A;',
-        'SELECT @MetaData = tSQLt.Private_GetColumns(''#MetaData'');'
+        'EXEC tSQLt.Private_GetColumns @MetaData OUTPUT, ''#MetaData'';'
     );
 
     EXEC sys.sp_executesql @Command, N'@MetaData NVARCHAR(MAX) OUTPUT', @MetaData OUTPUT;

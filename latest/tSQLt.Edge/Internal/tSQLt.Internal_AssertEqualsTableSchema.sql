@@ -7,8 +7,10 @@ BEGIN
     EXEC tSQLt.Private_ProcessTableName @Expected OUTPUT;
     EXEC tSQLt.Private_ProcessTableName @Actual OUTPUT;
 
-    DECLARE @ExpectedColumns NVARCHAR(MAX) = tSQLt.Private_GetColumns (@Expected);
-    DECLARE @ActualColumns NVARCHAR(MAX) = tSQLt.Private_GetColumns (@Actual);
+    DECLARE @ExpectedColumns NVARCHAR(MAX);
+    EXEC tSQLt.Private_GetColumns @ExpectedColumns OUTPUT, @Expected;
+    DECLARE @ActualColumns NVARCHAR(MAX);
+    EXEC tSQLt.Private_GetColumns @ActualColumns OUTPUT, @Actual;
 
     IF (@ExpectedColumns = @ActualColumns)
     BEGIN
