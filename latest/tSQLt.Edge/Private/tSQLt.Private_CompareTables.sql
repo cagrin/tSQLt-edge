@@ -4,7 +4,8 @@ CREATE PROCEDURE tSQLt.Private_CompareTables
     @Diffs INT OUTPUT
 AS
 BEGIN
-    DECLARE @ColumnsNames NVARCHAR(MAX) = tSQLt.Private_GetColumnsNames(@Expected);
+    DECLARE @ColumnsNames NVARCHAR(MAX);
+    EXEC tSQLt.Private_GetColumnsNames @ColumnsNames OUTPUT, @Expected;
 
     EXEC tSQLt.Private_ProcessUncomparableColumns @Expected OUTPUT;
     EXEC tSQLt.Private_ProcessUncomparableColumns @Actual OUTPUT;
