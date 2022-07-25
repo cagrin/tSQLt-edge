@@ -1,5 +1,4 @@
-CREATE FUNCTION tSQLt.System_Columns (@ObjectName NVARCHAR(MAX))
-RETURNS @Columns TABLE
+CREATE TYPE tSQLt.System_ColumnsType AS TABLE
 (
 	[object_id] [int] NOT NULL,
 	[name] [sysname] NULL,
@@ -37,9 +36,16 @@ RETURNS @Columns TABLE
 	[is_masked] [bit] NOT NULL,
 	[graph_type] [int] NULL,
 	[graph_type_desc] [nvarchar](60) NULL
-) AS
+);
+GO
+
+CREATE PROCEDURE tSQLt.System_Columns
+	@ObjectName NVARCHAR(MAX)
+AS
 BEGIN
-    INSERT INTO @Columns
+	DECLARE @Columns tSQLt.System_ColumnsType;
+
+	INSERT INTO @Columns
     SELECT
 		[object_id],
 		[name],
@@ -120,6 +126,6 @@ BEGIN
 	FROM tempdb.sys.columns
     WHERE object_id = OBJECT_ID(CONCAT('tempdb..', @ObjectName))
 
-    RETURN;
+	SELECT * FROM @Columns
 END;
 GO

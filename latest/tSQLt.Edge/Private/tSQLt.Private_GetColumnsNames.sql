@@ -3,12 +3,16 @@ CREATE PROCEDURE tSQLt.Private_GetColumnsNames
     @ObjectName NVARCHAR(MAX)
 AS
 BEGIN
+    DECLARE @System_Columns tSQLt.System_ColumnsType;
+    INSERT INTO @System_Columns
+    EXEC tSQLt.System_Columns @ObjectName
+
     SELECT
         @ColumnsNames = STRING_AGG
         (
             QUOTENAME(name),
             ', '
         ) WITHIN GROUP (ORDER BY column_id)
-    FROM tSQLt.System_Columns(@ObjectName)
+    FROM @System_Columns
 END;
 GO

@@ -2,6 +2,10 @@ CREATE PROCEDURE tSQLt.Private_ProcessUncomparableColumns
     @ObjectName NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
+    DECLARE @System_Columns tSQLt.System_ColumnsType;
+    INSERT INTO @System_Columns
+    EXEC tSQLt.System_Columns @ObjectName
+
     DECLARE @OutputName NVARCHAR(MAX) = QUOTENAME(NEWID());
     DECLARE @Command NVARCHAR(MAX) =
     (
@@ -20,7 +24,7 @@ BEGIN
                 ),
                 '; '
             ) WITHIN GROUP (ORDER BY column_id)
-        FROM tSQLt.System_Columns(@ObjectName)
+        FROM @System_Columns
         WHERE TYPE_NAME(user_type_id) IN ('XML')
     );
 

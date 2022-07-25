@@ -7,6 +7,10 @@ CREATE PROCEDURE tSQLt.Private_GetFakeColumns
     @NotNulls BIT
 AS
 BEGIN
+    DECLARE @System_Columns tSQLt.System_ColumnsType;
+    INSERT INTO @System_Columns
+    EXEC tSQLt.System_Columns @ObjectName
+
     SELECT
         @FakeColumns = STRING_AGG
         (
@@ -27,6 +31,6 @@ BEGIN
             ),
             ', '
         ) WITHIN GROUP (ORDER BY column_id)
-    FROM tSQLt.System_Columns(@ObjectName)
+    FROM @System_Columns
 END;
 GO
