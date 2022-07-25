@@ -59,7 +59,8 @@ BEGIN
         DECLARE @ComputedColumn NVARCHAR(MAX)
         EXEC tSQLt.Private_GetComputedColumn @ComputedColumn OUTPUT, @ObjectName, @column_id
         DECLARE @Type NVARCHAR(MAX) = tSQLt.Private_GetType(@user_type_id, @max_length, @precision, @scale, @collation_name)
-        DECLARE @IdentityColumn NVARCHAR(MAX) = tSQLt.Private_GetIdentityColumn(@ObjectName, @column_id)
+        DECLARE @IdentityColumn NVARCHAR(MAX)
+        EXEC tSQLt.Private_GetIdentityColumn @IdentityColumn OUTPUT, @ObjectName, @column_id
         DECLARE @DefaultConstraints NVARCHAR(MAX) = tSQLt.Private_GetDefaultConstraints(@ObjectName, @column_id)
 
         UPDATE @result

@@ -1,10 +1,17 @@
-CREATE FUNCTION tSQLt.Private_GetIdentityColumn (@ObjectName NVARCHAR(MAX), @ColumnId INT)
-RETURNS NVARCHAR(MAX) AS
+CREATE PROCEDURE tSQLt.Private_GetIdentityColumn
+    @IdentityColumn NVARCHAR(MAX) OUTPUT,
+    @ObjectName NVARCHAR(MAX),
+    @ColumnId INT
+AS
 BEGIN
-    RETURN
+    SELECT @IdentityColumn = CONCAT
     (
-        SELECT CONCAT('IDENTITY(', CONVERT(NVARCHAR(MAX), seed_value), ',', CONVERT(NVARCHAR(MAX), increment_value), ')')
-        FROM tSQLt.System_IdentityColumns(@ObjectName, @ColumnId)
-    );
+        'IDENTITY(',
+        CONVERT(NVARCHAR(MAX), seed_value),
+        ',',
+        CONVERT(NVARCHAR(MAX), increment_value),
+        ')'
+    )
+    FROM tSQLt.System_IdentityColumns(@ObjectName, @ColumnId)
 END;
 GO
