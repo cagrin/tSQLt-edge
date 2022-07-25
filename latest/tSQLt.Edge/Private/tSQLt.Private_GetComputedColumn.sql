@@ -1,10 +1,16 @@
-CREATE FUNCTION tSQLt.Private_GetComputedColumn (@ObjectName NVARCHAR(MAX), @ColumnId INT)
-RETURNS NVARCHAR(MAX) AS
+CREATE PROCEDURE tSQLt.Private_GetComputedColumn
+    @ComputedColumn NVARCHAR(MAX) OUTPUT,
+    @ObjectName NVARCHAR(MAX),
+    @ColumnId INT
+AS
 BEGIN
-    RETURN
+    SELECT @ComputedColumn = CONCAT_WS
     (
-        SELECT CONCAT_WS(' ', 'AS', definition, CASE WHEN is_persisted = 1 THEN 'PERSISTED' ELSE NULL END)
-        FROM tSQLt.System_ComputedColumns(@ObjectName, @ColumnId)
-    );
+        ' ',
+        'AS',
+        definition,
+        CASE WHEN is_persisted = 1 THEN 'PERSISTED' ELSE NULL END
+    )
+    FROM tSQLt.System_ComputedColumns(@ObjectName, @ColumnId)
 END;
 GO
