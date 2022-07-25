@@ -60,12 +60,15 @@ BEGIN
         FROM @System_Columns
         WHERE column_id = (SELECT column_id FROM @result WHERE _id_ = @_i_)
 
-        DECLARE @ComputedColumn NVARCHAR(MAX)
+        DECLARE
+            @Type NVARCHAR(MAX) = tSQLt.Private_GetType(@user_type_id, @max_length, @precision, @scale, @collation_name),
+            @ComputedColumn NVARCHAR(MAX),
+            @IdentityColumn NVARCHAR(MAX),
+            @DefaultConstraints NVARCHAR(MAX)
+
         EXEC tSQLt.Private_GetComputedColumn @ComputedColumn OUTPUT, @ObjectName, @column_id
-        DECLARE @Type NVARCHAR(MAX) = tSQLt.Private_GetType(@user_type_id, @max_length, @precision, @scale, @collation_name)
-        DECLARE @IdentityColumn NVARCHAR(MAX)
         EXEC tSQLt.Private_GetIdentityColumn @IdentityColumn OUTPUT, @ObjectName, @column_id
-        DECLARE @DefaultConstraints NVARCHAR(MAX) = tSQLt.Private_GetDefaultConstraints(@ObjectName, @column_id)
+        EXEC tSQLt.Private_GetDefaultConstraints @DefaultConstraints OUTPUT, @ObjectName, @column_id
 
         UPDATE @result
         SET definition =
