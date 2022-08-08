@@ -1,5 +1,4 @@
-CREATE FUNCTION tSQLt.System_CheckConstraints ()
-RETURNS @CheckConstraints TABLE
+CREATE TYPE tSQLt.System_CheckConstraintsType AS TABLE
 (
 	[name] [sysname] NOT NULL,
 	[object_id] [int] NOT NULL,
@@ -20,8 +19,14 @@ RETURNS @CheckConstraints TABLE
 	[definition] [nvarchar](max) NULL,
 	[uses_database_collation] [bit] NULL,
 	[is_system_named] [bit] NOT NULL
-) AS
+);
+GO
+
+CREATE PROCEDURE tSQLt.System_CheckConstraints
+AS
 BEGIN
+	DECLARE @CheckConstraints tSQLt.System_CheckConstraintsType;
+
     INSERT INTO @CheckConstraints
     SELECT
 		[name],
@@ -45,6 +50,6 @@ BEGIN
 		[is_system_named]
 	FROM sys.check_constraints
 
-    RETURN;
+    SELECT * FROM @CheckConstraints
 END;
 GO
