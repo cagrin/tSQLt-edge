@@ -1,5 +1,4 @@
-CREATE FUNCTION tSQLt.System_ComputedColumns (@ObjectName NVARCHAR(MAX), @ColumnId INT)
-RETURNS @ComputedColumns TABLE
+CREATE TYPE tSQLt.System_ComputedColumnsType AS TABLE
 (
 	[object_id] [int] NOT NULL,
 	[name] [sysname] NULL,
@@ -40,8 +39,16 @@ RETURNS @ComputedColumns TABLE
 	[is_masked] [bit] NOT NULL,
 	[graph_type] [int] NULL,
 	[graph_type_desc] [nvarchar](60) NULL
-) AS
+);
+GO
+
+CREATE PROCEDURE tSQLt.System_ComputedColumns
+	@ObjectName NVARCHAR(MAX),
+	@ColumnId INT
+AS
 BEGIN
+	DECLARE @ComputedColumns tSQLt.System_ComputedColumnsType;
+
     INSERT INTO @ComputedColumns
     SELECT
 		[object_id],
@@ -129,6 +136,6 @@ BEGIN
 	FROM tempdb.sys.computed_columns
     WHERE object_id = OBJECT_ID(CONCAT('tempdb..', @ObjectName)) AND column_id = @ColumnId
 
-    RETURN;
+    SELECT * FROM @ComputedColumns
 END;
 GO
