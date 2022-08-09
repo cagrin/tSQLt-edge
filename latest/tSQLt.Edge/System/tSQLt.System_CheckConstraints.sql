@@ -23,6 +23,7 @@ CREATE TYPE tSQLt.System_CheckConstraintsType AS TABLE
 GO
 
 CREATE PROCEDURE tSQLt.System_CheckConstraints
+	@ConstraintId INT
 AS
 BEGIN
 	DECLARE @CheckConstraints tSQLt.System_CheckConstraintsType;
@@ -49,6 +50,7 @@ BEGIN
 		[uses_database_collation],
 		[is_system_named]
 	FROM sys.check_constraints
+	WHERE [object_id] = @ConstraintId
 
     SELECT * FROM @CheckConstraints
 END;

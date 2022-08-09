@@ -5,7 +5,7 @@ AS
 BEGIN
     DECLARE @System_CheckConstraints tSQLt.System_CheckConstraintsType
     INSERT INTO @System_CheckConstraints
-    EXEC tSQLt.System_CheckConstraints
+    EXEC tSQLt.System_CheckConstraints @ConstraintId
 
     DECLARE @ParentName NVARCHAR(MAX), @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX);
     SELECT
@@ -13,7 +13,6 @@ BEGIN
         @ConstraintName = QUOTENAME(OBJECT_NAME([object_id])),
         @ConstraintDefinition = [definition]
     FROM @System_CheckConstraints
-    WHERE [object_id] = @ConstraintId
 
     DECLARE @CreateConstraint NVARCHAR(MAX) = CONCAT_WS
     (
