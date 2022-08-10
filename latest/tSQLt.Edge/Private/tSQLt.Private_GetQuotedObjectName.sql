@@ -1,7 +1,9 @@
-CREATE FUNCTION tSQLt.Private_GetQuotedObjectName (@ObjectName NVARCHAR(MAX))
-RETURNS NVARCHAR(MAX) AS
+CREATE PROCEDURE tSQLt.Private_GetQuotedObjectName
+    @QuotedObjectName NVARCHAR(MAX) OUTPUT,
+    @ObjectName NVARCHAR(MAX)
+AS
 BEGIN
-    DECLARE @QuotedObjectName NVARCHAR(MAX) = @ObjectName;
+    SET @QuotedObjectName = @ObjectName;
     IF (OBJECT_ID(@ObjectName) IS NOT NULL)
     BEGIN
         SET @QuotedObjectName = CONCAT(QUOTENAME(OBJECT_SCHEMA_NAME(OBJECT_ID(@ObjectName))), '.', QUOTENAME(OBJECT_NAME(OBJECT_ID(@ObjectName))));
@@ -10,6 +12,5 @@ BEGIN
     BEGIN
         SET @QuotedObjectName = CONCAT('[#', SUBSTRING(@ObjectName, 2, LEN(@ObjectName) - 1), ']');
     END
-    RETURN @QuotedObjectName;
 END;
 GO

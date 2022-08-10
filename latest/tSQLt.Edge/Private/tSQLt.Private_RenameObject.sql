@@ -5,10 +5,13 @@ AS
 BEGIN
     SET @NewName = ISNULL(@NewName, NEWID());
 
+    DECLARE @QuotedObjectName NVARCHAR(MAX);
+    EXEC tSQLt.Private_GetQuotedObjectName @QuotedObjectName OUTPUT, @ObjectName;
+
     DECLARE @Command NVARCHAR(MAX) = CONCAT
     (
         'EXEC sp_rename ''',
-        REPLACE(tSQLt.Private_GetQuotedObjectName(@ObjectName), '''', ''''''),
+        REPLACE(@QuotedObjectName, '''', ''''''),
         ''', ''',
         @NewName,
         ''', ''OBJECT'';'
