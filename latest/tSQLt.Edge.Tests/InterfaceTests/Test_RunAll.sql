@@ -4,6 +4,10 @@ GO
 CREATE PROCEDURE Test_RunAll.Test_Interfaces
 AS
 BEGIN
+    DECLARE @System_Interfaces tSQLt.System_InterfacesType
+    INSERT INTO @System_Interfaces
+    EXEC tSQLt.System_Interfaces
+
     DECLARE @Actual NVARCHAR(MAX) =
     (
         SELECT
@@ -21,7 +25,7 @@ BEGIN
                 ),
                 NCHAR(10)
             ) WITHIN GROUP (ORDER BY name)
-        FROM tSQLt.System_Interfaces()
+        FROM @System_Interfaces
     );
 
     DECLARE @Expected NVARCHAR(MAX) =
@@ -61,6 +65,10 @@ GO
 CREATE PROCEDURE Test_RunAll.Test_InterfacesWithTypes
 AS
 BEGIN
+    DECLARE @System_Interfaces tSQLt.System_InterfacesType
+    INSERT INTO @System_Interfaces
+    EXEC tSQLt.System_Interfaces
+    
     DECLARE @Actual NVARCHAR(MAX) =
     (
         SELECT
@@ -77,7 +85,7 @@ BEGIN
                 ),
                 NCHAR(10)
             ) WITHIN GROUP (ORDER BY name)
-        FROM tSQLt.System_Interfaces()
+        FROM @System_Interfaces
     );
 
     DECLARE @Expected NVARCHAR(MAX) =

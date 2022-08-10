@@ -1,5 +1,4 @@
-CREATE FUNCTION tSQLt.System_Interfaces ()
-RETURNS @Interfaces TABLE
+CREATE TYPE tSQLt.System_InterfacesType AS TABLE
 (
 	[name] [sysname] NOT NULL,
 	[object_id] [int] NOT NULL,
@@ -17,8 +16,14 @@ RETURNS @Interfaces TABLE
 	[is_execution_replicated] [bit] NULL,
 	[is_repl_serializable_only] [bit] NULL,
 	[skips_repl_constraints] [bit] NULL
-) AS
+);
+GO
+
+CREATE PROCEDURE tSQLt.System_Interfaces
+AS
 BEGIN
+	DECLARE @Interfaces tSQLt.System_InterfacesType;
+
 	INSERT INTO @Interfaces
     SELECT
 		[name],
@@ -44,6 +49,6 @@ BEGIN
     AND name NOT LIKE 'System[_]%'
     AND name <> 'RunAll'
 
-    RETURN;
+    SELECT * FROM @Interfaces
 END;
 GO
