@@ -1,5 +1,4 @@
-CREATE FUNCTION tSQLt.System_Objects ()
-RETURNS @Objects TABLE
+CREATE TYPE tSQLt.System_ObjectsType AS TABLE
 (
 	[name] [sysname] NOT NULL,
 	[object_id] [int] NOT NULL,
@@ -13,8 +12,14 @@ RETURNS @Objects TABLE
 	[is_ms_shipped] [bit] NOT NULL,
 	[is_published] [bit] NOT NULL,
 	[is_schema_published] [bit] NOT NULL
-) AS
+);
+GO
+
+CREATE PROCEDURE tSQLt.System_Objects
+AS
 BEGIN
+	DECLARE @Objects tSQLt.System_ObjectsType;
+
     INSERT INTO @Objects
     SELECT
 		[name],
@@ -31,6 +36,6 @@ BEGIN
 		[is_schema_published]
 	FROM sys.objects
 
-    RETURN;
+    SELECT * FROM @Objects
 END;
 GO

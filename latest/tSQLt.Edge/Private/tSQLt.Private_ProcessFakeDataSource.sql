@@ -26,8 +26,10 @@ BEGIN
             EXEC tSQLt.Fail 'Parameters of both functions must match! (This includes the return type for scalar functions.)';
     END
 
-    DECLARE @FunctionType CHAR(2) = tSQLt.Private_GetObjectType(@ObjectId);
-    DECLARE @FakeFunctionType CHAR(2) = tSQLt.Private_GetObjectType(@FakeObjectId);
+    DECLARE @FunctionType CHAR(2);
+    EXEC tSQLt.Private_GetObjectType @FunctionType OUTPUT, @ObjectId;
+    DECLARE @FakeFunctionType CHAR(2);
+    EXEC tSQLt.Private_GetObjectType @FakeFunctionType OUTPUT, @FakeObjectId;
 
     IF @FunctionType IN ('IF', 'TF', 'FT') AND (@FakeFunctionType IN ('IF', 'TF') OR @FakeDataSource IS NOT NULL)
     BEGIN

@@ -33,10 +33,14 @@ BEGIN
         EXEC tSQLt.Fail 'Table', @ObjectName, 'was not faked by tSQLt.FakeTable.';
     END
 
+    DECLARE @System_Objects tSQLt.System_ObjectsType
+    INSERT INTO @System_Objects
+    EXEC tSQLt.System_Objects
+
     SELECT
         @ConstraintId = [object_id],
         @ConstraintType = [type]
-    FROM tSQLt.System_Objects()
+    FROM @System_Objects
     WHERE [parent_object_id] = @ObjectId
     AND ([name] = @ConstraintName OR QUOTENAME([name]) = @ConstraintName)
 END;

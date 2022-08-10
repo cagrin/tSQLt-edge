@@ -41,10 +41,14 @@ CREATE PROCEDURE Test_Extensions.FakeObjectType
     @FakeType CHAR(2)
 AS
 BEGIN
-    SELECT * INTO dbo.FakeSystemObjects FROM tSQLt.System_Objects();
+    DECLARE @System_Objects tSQLt.System_ObjectsType
+    INSERT INTO @System_Objects
+    EXEC tSQLt.System_Objects
+
+    SELECT * INTO dbo.FakeSystemObjects FROM @System_Objects;
 
     UPDATE dbo.FakeSystemObjects SET [type] = @FakeType WHERE [object_id] = OBJECT_ID(@ObjectName)
 
-    EXEC tSQLt.FakeFunction 'tSQLt.System_Objects', @FakeDataSource = 'SELECT * FROM dbo.FakeSystemObjects'
+    EXEC tSQLt.SpyProcedure 'tSQLt.System_Objects', @CommandToExecute = 'SELECT * FROM dbo.FakeSystemObjects'
 END;
 GO

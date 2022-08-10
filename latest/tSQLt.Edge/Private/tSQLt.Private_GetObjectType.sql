@@ -1,11 +1,15 @@
-CREATE FUNCTION tSQLt.Private_GetObjectType (@ObjectId INT)
-RETURNS CHAR(2) AS
+CREATE PROCEDURE tSQLt.Private_GetObjectType
+    @ObjectType CHAR(2) OUTPUT,
+    @ObjectId INT
+AS
 BEGIN
-    RETURN
-    (
-        SELECT type
-        FROM tSQLt.System_Objects()
-        WHERE object_id = @ObjectId
-    );
+    DECLARE @System_Objects tSQLt.System_ObjectsType
+    INSERT INTO @System_Objects
+    EXEC tSQLt.System_Objects
+
+    SELECT
+        @ObjectType = type
+    FROM @System_Objects
+    WHERE object_id = @ObjectId
 END;
 GO
