@@ -1,5 +1,4 @@
-CREATE FUNCTION tSQLt.System_IdentityColumns (@ObjectName NVARCHAR(MAX), @ColumnId INT)
-RETURNS @IdentityColumns TABLE
+CREATE TYPE tSQLt.System_IdentityColumnsType AS TABLE
 (
 	[object_id] [int] NOT NULL,
 	[name] [sysname] NULL,
@@ -41,8 +40,16 @@ RETURNS @IdentityColumns TABLE
 	[is_masked] [bit] NOT NULL,
 	[graph_type] [int] NULL,
 	[graph_type_desc] [nvarchar](60) NULL
-) AS
+);
+GO
+
+CREATE PROCEDURE tSQLt.System_IdentityColumns
+	@ObjectName NVARCHAR(MAX),
+	@ColumnId INT
+AS
 BEGIN
+	DECLARE @IdentityColumns tSQLt.System_IdentityColumnsType;
+
     INSERT INTO @IdentityColumns
     SELECT
 		[object_id],
@@ -132,6 +139,6 @@ BEGIN
 	FROM tempdb.sys.identity_columns
     WHERE object_id = OBJECT_ID(CONCAT('tempdb..', @ObjectName)) AND column_id = @ColumnId
 
-    RETURN;
+    SELECT * FROM @IdentityColumns
 END;
 GO

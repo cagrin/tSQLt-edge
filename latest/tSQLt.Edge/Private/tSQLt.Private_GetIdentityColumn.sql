@@ -4,6 +4,10 @@ CREATE PROCEDURE tSQLt.Private_GetIdentityColumn
     @ColumnId INT
 AS
 BEGIN
+    DECLARE @IdentityColumns tSQLt.System_IdentityColumnsType
+    INSERT INTO @IdentityColumns
+    EXEC tSQLt.System_IdentityColumns @ObjectName, @ColumnId
+
     SELECT @IdentityColumn = CONCAT
     (
         'IDENTITY(',
@@ -12,6 +16,6 @@ BEGIN
         CONVERT(NVARCHAR(MAX), increment_value),
         ')'
     )
-    FROM tSQLt.System_IdentityColumns(@ObjectName, @ColumnId)
+    FROM @IdentityColumns
 END;
 GO
