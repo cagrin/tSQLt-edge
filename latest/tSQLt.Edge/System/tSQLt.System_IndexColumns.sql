@@ -1,5 +1,4 @@
-CREATE FUNCTION tSQLt.System_IndexColumns ()
-RETURNS @IndexColumns TABLE
+CREATE TYPE tSQLt.System_IndexColumnsType AS TABLE
 (
 	[object_id] [int] NOT NULL,
 	[schema_id] [int] NOT NULL,
@@ -22,8 +21,14 @@ RETURNS @IndexColumns TABLE
 	[precision] [tinyint] NOT NULL,
 	[scale] [tinyint] NOT NULL,
 	[collation_name] [sysname] NULL
-) AS
+);
+GO
+
+CREATE PROCEDURE tSQLt.System_IndexColumns
+AS
 BEGIN
+	DECLARE @IndexColumns tSQLt.System_IndexColumnsType;
+
     INSERT INTO @IndexColumns
 	SELECT
 		t.[object_id],
@@ -52,6 +57,6 @@ BEGIN
 	INNER JOIN sys.index_columns ic ON ic.[object_id] = t.[object_id] AND ic.[index_id] = i.[index_id]
 	INNER JOIN sys.columns c ON c.[object_id] = t.[object_id] AND c.[column_id] = ic.[column_id]
 
-    RETURN;
+    SELECT * FROM @IndexColumns
 END;
 GO
