@@ -1,5 +1,4 @@
-CREATE FUNCTION tSQLt.System_DefaultConstraints (@ObjectName NVARCHAR(MAX), @ColumnId INT)
-RETURNS @DefaultConstraints TABLE
+CREATE TYPE tSQLt.System_DefaultConstraintsType AS TABLE
 (
 	[name] [sysname] NOT NULL,
 	[object_id] [int] NOT NULL,
@@ -16,8 +15,16 @@ RETURNS @DefaultConstraints TABLE
 	[parent_column_id] [int] NOT NULL,
 	[definition] [nvarchar](max) NULL,
 	[is_system_named] [bit] NOT NULL
-) AS
+);
+GO
+
+CREATE PROCEDURE tSQLt.System_DefaultConstraints
+	@ObjectName NVARCHAR(MAX),
+	@ColumnId INT
+AS
 BEGIN
+	DECLARE @DefaultConstraints tSQLt.System_DefaultConstraintsType;
+
     INSERT INTO @DefaultConstraints
     SELECT
 		[name],
@@ -57,6 +64,6 @@ BEGIN
 	FROM tempdb.sys.default_constraints
     WHERE parent_object_id = OBJECT_ID(CONCAT('tempdb..', @ObjectName)) AND parent_column_id = @ColumnId
 
-    RETURN;
+    SELECT * FROM @DefaultConstraints
 END;
 GO
