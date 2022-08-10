@@ -1,5 +1,4 @@
-CREATE FUNCTION tSQLt.System_ForeignKeys ()
-RETURNS @ForeignKeyColumns TABLE
+CREATE TYPE tSQLt.System_ForeignKeysType AS TABLE
 (
 	[object_id] [int] NOT NULL,
 	[schema_id] [int] NOT NULL,
@@ -12,8 +11,14 @@ RETURNS @ForeignKeyColumns TABLE
 	[referenced_schema_id] [int] NOT NULL,
 	[referenced_name] [sysname] NOT NULL,
 	[referenced_columns] [nvarchar](MAX) NOT NULL
-) AS
+);
+GO
+
+CREATE PROCEDURE tSQLt.System_ForeignKeys
+AS
 BEGIN
+	DECLARE @ForeignKeyColumns tSQLt.System_ForeignKeysType;
+
     INSERT INTO @ForeignKeyColumns
 	SELECT
 		fk.object_id,
@@ -46,6 +51,6 @@ BEGIN
     FROM sys.foreign_keys fk
     INNER JOIN sys.tables t ON fk.referenced_object_id = t.object_id
 
-    RETURN;
+    SELECT* FROM @ForeignKeyColumns
 END;
 GO

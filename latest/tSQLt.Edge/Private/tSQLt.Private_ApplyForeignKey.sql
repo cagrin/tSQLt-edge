@@ -4,6 +4,10 @@ CREATE PROCEDURE tSQLt.Private_ApplyForeignKey
     @NoCascade BIT
 AS
 BEGIN
+    DECLARE @System_ForeignKeys tSQLt.System_ForeignKeysType
+    INSERT INTO @System_ForeignKeys
+    EXEC tSQLt.System_ForeignKeys
+
     DECLARE @ParentName NVARCHAR(MAX), @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX), @CreateUniqueIndex NVARCHAR(MAX);
     SELECT
         @ParentName = CONCAT(QUOTENAME(SCHEMA_NAME(fk.schema_id)), '.', QUOTENAME(OBJECT_NAME(fk.parent_object_id))),
@@ -27,7 +31,7 @@ BEGIN
             ' ON ', QUOTENAME(SCHEMA_NAME(fk.referenced_schema_id)), '.', QUOTENAME(ISNULL(OBJECT_NAME(ft.FakeObjectId), fk.referenced_name)),
             ' (', fk.referenced_columns, ')'
         ) END
-    FROM tSQLt.System_ForeignKeys() fk
+    FROM @System_ForeignKeys fk
     LEFT JOIN tSQLt.Private_FakeTables ft ON fk.referenced_object_id = ft.ObjectId
     WHERE fk.schema_id = SCHEMA_ID(OBJECT_SCHEMA_NAME(OBJECT_ID(@ObjectName)))
     AND fk.name = OBJECT_NAME(@ConstraintId)
