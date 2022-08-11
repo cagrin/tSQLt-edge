@@ -1,5 +1,4 @@
-CREATE FUNCTION tSQLt.System_Parameters (@ObjectId INT)
-RETURNS @Parameters TABLE
+CREATE TYPE tSQLt.System_ParametersType AS TABLE
 (
 	[object_id] [int] NOT NULL,
 	[name] [sysname] NULL,
@@ -22,8 +21,15 @@ RETURNS @Parameters TABLE
 	[encryption_algorithm_name] [sysname] NULL,
 	[column_encryption_key_id] [int] NULL,
 	[column_encryption_key_database_name] [sysname] NULL
-) AS
+);
+GO
+
+CREATE PROCEDURE tSQLt.System_Parameters
+	@ObjectId INT
+AS
 BEGIN
+	DECLARE @Parameters tSQLt.System_ParametersType;
+
 	INSERT INTO @Parameters
     SELECT
 		[object_id],
@@ -50,6 +56,6 @@ BEGIN
 	FROM sys.parameters
     WHERE object_id = @ObjectId
 
-    RETURN;
+    SELECT * FROM @Parameters
 END;
 GO

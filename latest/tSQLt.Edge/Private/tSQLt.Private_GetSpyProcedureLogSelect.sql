@@ -3,6 +3,10 @@ CREATE PROCEDURE tSQLt.Private_GetSpyProcedureLogSelect
     @ObjectId INT
 AS
 BEGIN
+    DECLARE @System_Parameters tSQLt.System_ParametersType
+    INSERT INTO @System_Parameters
+    EXEC tSQLt.System_Parameters @ObjectId
+    
     SELECT
         @SpyProcedureLogSelect = STRING_AGG
         (
@@ -20,7 +24,7 @@ BEGIN
     FROM
     (
         SELECT *, is_table_type = (SELECT is_table_type FROM tSQLt.System_Types(user_type_id))
-        FROM tSQLt.System_Parameters(@ObjectId)
+        FROM @System_Parameters
     ) P
 END;
 GO

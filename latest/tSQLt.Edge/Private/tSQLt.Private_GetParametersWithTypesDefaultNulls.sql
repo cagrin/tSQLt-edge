@@ -3,6 +3,10 @@ CREATE PROCEDURE tSQLt.Private_GetParametersWithTypesDefaultNulls
     @ObjectId INT
 AS
 BEGIN
+    DECLARE @System_Parameters tSQLt.System_ParametersType
+    INSERT INTO @System_Parameters
+    EXEC tSQLt.System_Parameters @ObjectId
+    
     SELECT
         @ParametersWithTypesDefaultNulls = STRING_AGG
         (
@@ -16,6 +20,6 @@ BEGIN
             ),
             ', '
         ) WITHIN GROUP (ORDER BY parameter_id)
-    FROM tSQLt.System_Parameters(@ObjectId)
+    FROM @System_Parameters
 END;
 GO

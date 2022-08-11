@@ -3,6 +3,10 @@ CREATE PROCEDURE tSQLt.Private_GetScalarParametersWithTypesDefaultNulls
     @ObjectId INT
 AS
 BEGIN
+    DECLARE @System_Parameters tSQLt.System_ParametersType
+    INSERT INTO @System_Parameters
+    EXEC tSQLt.System_Parameters @ObjectId
+    
     SELECT
         @ScalarParametersWithTypesDefaultNulls = STRING_AGG
         (
@@ -16,7 +20,7 @@ BEGIN
             ),
             ', '
         ) WITHIN GROUP (ORDER BY parameter_id)
-    FROM tSQLt.System_Parameters(@ObjectId)
+    FROM @System_Parameters
     WHERE parameter_id > 0
 END;
 GO
