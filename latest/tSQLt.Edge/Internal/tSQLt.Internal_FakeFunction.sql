@@ -23,7 +23,8 @@ BEGIN
     END
     ELSE
     BEGIN
-        DECLARE @ScalarReturnType NVARCHAR(MAX) = tSQLt.Private_GetScalarReturnType(@Objectid);
+        DECLARE @ScalarReturnType NVARCHAR(MAX);
+        EXEC tSQLt.Private_GetScalarReturnType @ScalarReturnType OUTPUT, @ObjectId;
         DECLARE @ScalarParameters NVARCHAR(MAX) = tSQLt.Private_GetScalarParameters(@Objectid);
         DECLARE @ScalarParametersWithTypesDefaultNulls NVARCHAR(MAX) = tSQLt.Private_GetScalarParametersWithTypesDefaultNulls(@Objectid);
 
