@@ -25,7 +25,8 @@ BEGIN
     BEGIN
         DECLARE @ScalarReturnType NVARCHAR(MAX);
         EXEC tSQLt.Private_GetScalarReturnType @ScalarReturnType OUTPUT, @ObjectId;
-        DECLARE @ScalarParameters NVARCHAR(MAX) = tSQLt.Private_GetScalarParameters(@Objectid);
+        DECLARE @ScalarParameters NVARCHAR(MAX);
+        EXEC tSQLt.Private_GetScalarParameters @ScalarParameters OUTPUT, @ObjectId;
         DECLARE @ScalarParametersWithTypesDefaultNulls NVARCHAR(MAX) = tSQLt.Private_GetScalarParametersWithTypesDefaultNulls(@Objectid);
 
         SET @CreateFakeFunctionCommand = CONCAT_WS
