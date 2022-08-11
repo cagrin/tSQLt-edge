@@ -8,7 +8,8 @@ BEGIN
     DECLARE @ObjectId INT = OBJECT_ID(@ProcedureName);
     DECLARE @Parameters NVARCHAR(MAX) = tSQLt.Private_GetParameters (@Objectid);
     DECLARE @ParametersNames NVARCHAR(MAX) = tSQLt.Private_GetParametersNames (@Objectid);
-    DECLARE @SpyProcedureLogSelect NVARCHAR(MAX) = tSQLt.Private_GetSpyProcedureLogSelect (@Objectid);
+    DECLARE @SpyProcedureLogSelect NVARCHAR(MAX);
+    EXEC tSQLt.Private_GetSpyProcedureLogSelect @SpyProcedureLogSelect OUTPUT, @ObjectId;
     DECLARE @SpyProcedureLogColumns NVARCHAR(MAX);
     EXEC tSQLt.Private_GetSpyProcedureLogColumns @SpyProcedureLogColumns OUTPUT, @ObjectId;
     DECLARE @ParametersWithTypesDefaultNulls NVARCHAR(MAX) = tSQLt.Private_GetParametersWithTypesDefaultNulls (@Objectid);
