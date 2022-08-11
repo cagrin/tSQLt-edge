@@ -11,7 +11,8 @@ BEGIN
 
     IF @FakeDataSource IS NOT NULL
     BEGIN
-        DECLARE @ParametersWithTypesDefaultNulls NVARCHAR(MAX) = tSQLt.Private_GetParametersWithTypesDefaultNulls(@Objectid);
+        DECLARE @ParametersWithTypesDefaultNulls NVARCHAR(MAX);
+        EXEC tSQLt.Private_GetParametersWithTypesDefaultNulls @ParametersWithTypesDefaultNulls OUTPUT, @ObjectId;
 
         SET @CreateFakeFunctionCommand = CONCAT_WS
         (
