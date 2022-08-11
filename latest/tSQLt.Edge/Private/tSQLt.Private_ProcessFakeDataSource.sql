@@ -35,7 +35,8 @@ BEGIN
     BEGIN
         IF @FakeDataSource IS NULL
         BEGIN
-            DECLARE @Parameters NVARCHAR(MAX) = tSQLt.Private_GetParameters(@Objectid);
+            DECLARE @Parameters NVARCHAR(MAX);
+            EXEC tSQLt.Private_GetParameters @Parameters OUTPUT, @ObjectId;
             SET @FakeDataSource = CONCAT('SELECT * FROM ', @FakeFunctionName, ' (', @Parameters, ');');
         END
         ELSE

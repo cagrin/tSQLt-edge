@@ -1,20 +1,19 @@
-CREATE FUNCTION tSQLt.Private_GetParameters (@ObjectId INT)
-RETURNS NVARCHAR(MAX) AS
+CREATE PROCEDURE tSQLt.Private_GetParameters
+    @Parameters NVARCHAR(MAX) OUTPUT,
+    @ObjectId INT
+AS
 BEGIN
-    RETURN
-    (
-        SELECT
-            STRING_AGG
+    SELECT
+        @Parameters = STRING_AGG
+        (
+            CONCAT_WS
             (
-                CONCAT_WS
-                (
-                    ' ',
-                    name,
-                    CASE WHEN is_output = 1 THEN 'OUTPUT' ELSE NULL END
-                ),
-                ', '
-            ) WITHIN GROUP (ORDER BY parameter_id)
-        FROM tSQLt.System_Parameters(@ObjectId)
-    );
+                ' ',
+                name,
+                CASE WHEN is_output = 1 THEN 'OUTPUT' ELSE NULL END
+            ),
+            ', '
+        ) WITHIN GROUP (ORDER BY parameter_id)
+    FROM tSQLt.System_Parameters(@ObjectId)
 END;
 GO

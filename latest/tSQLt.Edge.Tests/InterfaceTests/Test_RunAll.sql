@@ -4,9 +4,51 @@ GO
 CREATE PROCEDURE Test_RunAll.Test_Interfaces
 AS
 BEGIN
+    DECLARE
+        @schema_id [int],
+        @object_id [int],
+        @name [sysname]
+
     DECLARE @System_Interfaces tSQLt.System_InterfacesType
     INSERT INTO @System_Interfaces
     EXEC tSQLt.System_Interfaces
+
+    DECLARE @result TABLE
+    (
+        [_id_] INT IDENTITY(1,1),
+        [definition] NVARCHAR(MAX),
+        [schema_id] [int],
+        [object_id] [int],
+        [name] [sysname]
+    )
+
+    INSERT INTO @Result (schema_id, object_id, name)
+    SELECT schema_id, object_id, name
+    FROM @System_Interfaces
+    ORDER BY name
+
+    DECLARE
+        @_i_ INT = 1,
+        @_m_ INT = (SELECT COUNT(1) FROM @Result)
+
+    WHILE (@_i_ <= @_m_)
+    BEGIN
+        SELECT
+            @schema_id = [schema_id],
+            @object_id = [object_id],
+            @name = [name]
+        FROM @System_Interfaces
+        WHERE object_id = (SELECT object_id FROM @Result WHERE _id_ = @_i_)
+
+        DECLARE @Parameters NVARCHAR(MAX);
+        EXEC tSQLt.Private_GetParameters @Parameters OUTPUT, @object_id;
+
+        UPDATE @Result
+        SET definition = @Parameters
+        WHERE _id_ = @_i_
+
+        SET @_i_ = @_i_ + 1
+    END
 
     DECLARE @Actual NVARCHAR(MAX) =
     (
@@ -20,12 +62,12 @@ BEGIN
                     '.',
                     QUOTENAME(name),
                     ' ',
-                    tSQLt.Private_GetParameters(object_id),
+                    definition,
                     ';'
                 ),
                 NCHAR(10)
             ) WITHIN GROUP (ORDER BY name)
-        FROM @System_Interfaces
+        FROM @Result
     );
 
     DECLARE @Expected NVARCHAR(MAX) =
@@ -68,7 +110,7 @@ BEGIN
     DECLARE @System_Interfaces tSQLt.System_InterfacesType
     INSERT INTO @System_Interfaces
     EXEC tSQLt.System_Interfaces
-    
+
     DECLARE @Actual NVARCHAR(MAX) =
     (
         SELECT
