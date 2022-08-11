@@ -9,7 +9,8 @@ BEGIN
     DECLARE @Parameters NVARCHAR(MAX) = tSQLt.Private_GetParameters (@Objectid);
     DECLARE @ParametersNames NVARCHAR(MAX) = tSQLt.Private_GetParametersNames (@Objectid);
     DECLARE @SpyProcedureLogSelect NVARCHAR(MAX) = tSQLt.Private_GetSpyProcedureLogSelect (@Objectid);
-    DECLARE @SpyProcedureLogColumns NVARCHAR(MAX) = tSQLt.Private_GetSpyProcedureLogColumns (@Objectid);
+    DECLARE @SpyProcedureLogColumns NVARCHAR(MAX);
+    EXEC tSQLt.Private_GetSpyProcedureLogColumns @SpyProcedureLogColumns OUTPUT, @ObjectId;
     DECLARE @ParametersWithTypesDefaultNulls NVARCHAR(MAX) = tSQLt.Private_GetParametersWithTypesDefaultNulls (@Objectid);
     DECLARE @LogTableName NVARCHAR(MAX) = CONCAT(QUOTENAME(OBJECT_SCHEMA_NAME(@ObjectId)), '.', QUOTENAME(CONCAT(OBJECT_NAME(@ObjectId), '_SpyProcedureLog')));
 
