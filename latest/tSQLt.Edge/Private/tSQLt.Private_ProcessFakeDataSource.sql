@@ -19,8 +19,13 @@ BEGIN
     BEGIN
         EXEC tSQLt.AssertObjectExists @FakeFunctionName;
 
-        DECLARE @ParametersWithTypes NVARCHAR(MAX) = ISNULL(tSQLt.Private_GetParametersWithTypes(@Objectid), '');
-        DECLARE @FakeParametersWithTypes NVARCHAR(MAX) = ISNULL(tSQLt.Private_GetParametersWithTypes(@FakeObjectId), '');
+        DECLARE @ParametersWithTypes NVARCHAR(MAX);
+        EXEC tSQLt.Private_GetParametersWithTypes @ParametersWithTypes OUTPUT, @ObjectId;
+        SET @ParametersWithTypes = ISNULL(@ParametersWithTypes, '');
+
+        DECLARE @FakeParametersWithTypes NVARCHAR(MAX);
+        EXEC tSQLt.Private_GetParametersWithTypes @FakeParametersWithTypes OUTPUT, @FakeObjectId;
+        SET @FakeParametersWithTypes = ISNULL(@FakeParametersWithTypes, '');
 
         IF @ParametersWithTypes <> @FakeParametersWithTypes
             EXEC tSQLt.Fail 'Parameters of both functions must match! (This includes the return type for scalar functions.)';
