@@ -7,7 +7,8 @@ BEGIN
     DECLARE @NewName NVARCHAR(MAX) = NEWID();
     DECLARE @ObjectId INT = OBJECT_ID(@ProcedureName);
     DECLARE @Parameters NVARCHAR(MAX) = tSQLt.Private_GetParameters (@Objectid);
-    DECLARE @ParametersNames NVARCHAR(MAX) = tSQLt.Private_GetParametersNames (@Objectid);
+    DECLARE @ParametersNames NVARCHAR(MAX);
+    EXEC tSQLt.Private_GetParametersNames @ParametersNames OUTPUT, @ObjectId;
     DECLARE @SpyProcedureLogSelect NVARCHAR(MAX);
     EXEC tSQLt.Private_GetSpyProcedureLogSelect @SpyProcedureLogSelect OUTPUT, @ObjectId;
     DECLARE @SpyProcedureLogColumns NVARCHAR(MAX);
