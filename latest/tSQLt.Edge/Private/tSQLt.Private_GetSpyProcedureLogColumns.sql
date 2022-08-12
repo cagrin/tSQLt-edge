@@ -24,7 +24,7 @@ BEGIN
         ) WITHIN GROUP (ORDER BY parameter_id)
     FROM
     (
-        SELECT *, is_table_type = (SELECT is_table_type FROM tSQLt.System_Types(user_type_id))
+        SELECT *, is_table_type = (SELECT is_table_type FROM tSQLt.System_Types2(user_type_id))
         FROM @System_Parameters
     ) P
 END;

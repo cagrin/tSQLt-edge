@@ -3,11 +3,15 @@ CREATE PROCEDURE tSQLt.Private_GetTypeName
     @TypeId INT
 AS
 BEGIN
+    DECLARE @Types tSQLt.System_TypesType
+    INSERT INTO @Types
+    EXEC tSQLt.System_Types @TypeId
+
     SELECT
         @TypeName = CASE
             WHEN SCHEMA_NAME(schema_id) <> 'sys' THEN CONCAT(QUOTENAME(SCHEMA_NAME(schema_id)), '.', QUOTENAME(TYPE_NAME(@TypeId)))
             ELSE TYPE_NAME(@TypeId) END
-        FROM tSQLt.System_Types(@TypeId)
+        FROM @Types
 END;
 GO
 
@@ -20,7 +24,7 @@ BEGIN
         CASE
         WHEN SCHEMA_NAME(schema_id) <> 'sys' THEN CONCAT(QUOTENAME(SCHEMA_NAME(schema_id)), '.', QUOTENAME(TYPE_NAME(@TypeId)))
         ELSE TYPE_NAME(@TypeId) END
-        FROM tSQLt.System_Types(@TypeId)
+        FROM tSQLt.System_Types2(@TypeId)
     );
 END;
 GO

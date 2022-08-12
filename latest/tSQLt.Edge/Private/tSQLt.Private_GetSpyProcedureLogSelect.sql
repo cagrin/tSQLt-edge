@@ -6,7 +6,7 @@ BEGIN
     DECLARE @System_Parameters tSQLt.System_ParametersType
     INSERT INTO @System_Parameters
     EXEC tSQLt.System_Parameters @ObjectId
-    
+
     SELECT
         @SpyProcedureLogSelect = STRING_AGG
         (
@@ -23,7 +23,7 @@ BEGIN
         ) WITHIN GROUP (ORDER BY parameter_id)
     FROM
     (
-        SELECT *, is_table_type = (SELECT is_table_type FROM tSQLt.System_Types(user_type_id))
+        SELECT *, is_table_type = (SELECT is_table_type FROM tSQLt.System_Types2(user_type_id))
         FROM @System_Parameters
     ) P
 END;
