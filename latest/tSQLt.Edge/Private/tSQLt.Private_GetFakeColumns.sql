@@ -61,11 +61,12 @@ BEGIN
         WHERE column_id = (SELECT column_id FROM @result WHERE _id_ = @_i_)
 
         DECLARE
-            @Type NVARCHAR(MAX) = tSQLt.Private_GetType(@user_type_id, @max_length, @precision, @scale, @collation_name),
+            @Type NVARCHAR(MAX),
             @ComputedColumn NVARCHAR(MAX),
             @IdentityColumn NVARCHAR(MAX),
             @DefaultConstraints NVARCHAR(MAX)
 
+        EXEC tSQLt.Private_GetType @Type OUTPUT, @user_type_id, @max_length, @precision, @scale, @collation_name
         EXEC tSQLt.Private_GetComputedColumn @ComputedColumn OUTPUT, @ObjectName, @column_id
         EXEC tSQLt.Private_GetIdentityColumn @IdentityColumn OUTPUT, @ObjectName, @column_id
         EXEC tSQLt.Private_GetDefaultConstraints @DefaultConstraints OUTPUT, @ObjectName, @column_id

@@ -33,7 +33,7 @@ BEGIN
             (
                 ' ',
                 'ALTER TABLE', @ObjectName, 'ALTER COLUMN', QUOTENAME([column_name]),
-                tSQLt.Private_GetType([user_type_id], [max_length], [precision], [scale], [collation_name]),
+                tSQLt.Private_GetType2([user_type_id], [max_length], [precision], [scale], [collation_name]),
                 'NOT NULL'
             ),
             ' '
