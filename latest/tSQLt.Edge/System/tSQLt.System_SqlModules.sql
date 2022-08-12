@@ -1,5 +1,4 @@
-CREATE FUNCTION tSQLt.System_SqlModules ()
-RETURNS @SqlModules TABLE
+CREATE TYPE tSQLt.System_SqlModulesType AS TABLE
 (
 	[object_id] [int] NOT NULL,
 	[definition] [nvarchar](max) NULL,
@@ -13,8 +12,14 @@ RETURNS @SqlModules TABLE
 	[uses_native_compilation] [bit] NULL,
 	[inline_type] [bit] NULL,
 	[is_inlineable] [bit] NULL
-) AS
+);
+GO
+
+CREATE PROCEDURE tSQLt.System_SqlModules
+AS
 BEGIN
+	DECLARE @SqlModules tSQLt.System_SqlModulesType;
+
     INSERT INTO @SqlModules
     SELECT
 		[object_id],
@@ -31,6 +36,6 @@ BEGIN
 		[is_inlineable]
 	FROM sys.sql_modules
 
-    RETURN;
+    SELECT * FROM @SqlModules
 END;
 GO
