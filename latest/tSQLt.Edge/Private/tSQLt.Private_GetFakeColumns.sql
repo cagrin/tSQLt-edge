@@ -7,7 +7,62 @@ CREATE PROCEDURE tSQLt.Private_GetFakeColumns
     @NotNulls BIT
 AS
 BEGIN
+    DECLARE @System_Columns tSQLt.System_ColumnsType
+    INSERT INTO @System_Columns
+    EXEC tSQLt.System_Columns @ObjectName
+
+    DECLARE @Result TABLE
+    (
+        [_id_] INT IDENTITY(1,1),
+        [definition] NVARCHAR(MAX),
+        [object_id] [int] NOT NULL,
+        [name] [sysname] NULL,
+        [column_id] [int] NOT NULL,
+        [user_type_id] [int] NOT NULL,
+        [max_length] [smallint] NOT NULL,
+        [precision] [tinyint] NOT NULL,
+        [scale] [tinyint] NOT NULL,
+        [collation_name] [sysname] NULL,
+        [is_nullable] [bit] NULL,
+        [is_identity] [bit] NOT NULL,
+        [is_computed] [bit] NOT NULL,
+        [default_object_id] [int] NOT NULL
+    )
+
+    INSERT INTO @Result
+    (
+        [object_id],
+        [name],
+        [column_id],
+        [user_type_id],
+        [max_length],
+        [precision],
+        [scale],
+        [collation_name],
+        [is_nullable],
+        [is_identity],
+        [is_computed],
+        [default_object_id]
+    )
+    SELECT
+        [object_id],
+        [name],
+        [column_id],
+        [user_type_id],
+        [max_length],
+        [precision],
+        [scale],
+        [collation_name],
+        [is_nullable],
+        [is_identity],
+        [is_computed],
+        [default_object_id]
+    FROM @System_Columns
+    ORDER BY column_id
+
     DECLARE
+        @_i_ INT = 1,
+        @_m_ INT = (SELECT COUNT(1) FROM @Result),
         @object_id [int],
         @name [sysname],
         @column_id [int],
@@ -20,27 +75,6 @@ BEGIN
         @is_identity [bit],
         @is_computed [bit],
         @default_object_id [int]
-
-    DECLARE @System_Columns tSQLt.System_ColumnsType
-    INSERT INTO @System_Columns
-    EXEC tSQLt.System_Columns @ObjectName
-
-    DECLARE @result TABLE
-    (
-        [_id_] INT IDENTITY(1,1),
-        [definition] NVARCHAR(MAX),
-        [column_id] [int],
-        [name] [sysname]
-    )
-
-    INSERT INTO @result (column_id, name)
-    SELECT column_id, name
-    FROM @System_Columns
-    ORDER BY column_id
-
-    DECLARE
-        @_i_ INT = 1,
-        @_m_ INT = (SELECT COUNT(1) FROM @result)
 
     WHILE (@_i_ <= @_m_)
     BEGIN
@@ -57,8 +91,8 @@ BEGIN
             @is_identity = [is_identity],
             @is_computed = [is_computed],
             @default_object_id = [default_object_id]
-        FROM @System_Columns
-        WHERE column_id = (SELECT column_id FROM @result WHERE _id_ = @_i_)
+        FROM @Result
+        WHERE _id_ = @_i_
 
         DECLARE
             @Type NVARCHAR(MAX),
@@ -71,7 +105,7 @@ BEGIN
         EXEC tSQLt.Private_GetIdentityColumn @IdentityColumn OUTPUT, @ObjectName, @column_id
         EXEC tSQLt.Private_GetDefaultConstraints @DefaultConstraints OUTPUT, @ObjectName, @column_id
 
-        UPDATE @result
+        UPDATE @Result
         SET definition =
             CASE
                 WHEN @ComputedColumns = 1 AND @is_computed = 1 THEN @ComputedColumn
@@ -99,6 +133,6 @@ BEGIN
             ),
             ', '
         ) WITHIN GROUP (ORDER BY column_id)
-    FROM @result
+    FROM @Result
 END;
 GO

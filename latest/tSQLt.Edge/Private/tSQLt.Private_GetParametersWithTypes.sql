@@ -11,13 +11,13 @@ BEGIN
     (
         [_id_] INT IDENTITY(1,1),
         [definition] NVARCHAR(MAX),
-        [name] [sysname],
-        [parameter_id] [int],
-        [user_type_id] [int],
-        [max_length] [smallint],
-        [precision] [tinyint],
-        [scale] [tinyint],
-        [is_output] [bit]
+        [name] [sysname] NULL,
+        [parameter_id] [int] NOT NULL,
+        [user_type_id] [int] NOT NULL,
+        [max_length] [smallint] NOT NULL,
+        [precision] [tinyint] NOT NULL,
+        [scale] [tinyint] NOT NULL,
+        [is_output] [bit] NOT NULL
     )
 
     INSERT INTO @Result
