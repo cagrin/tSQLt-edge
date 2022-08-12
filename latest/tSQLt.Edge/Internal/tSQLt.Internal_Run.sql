@@ -5,14 +5,16 @@ AS
 BEGIN
     DELETE FROM tSQLt.TestResult;
 
-    DECLARE @TestNames TABLE (Id INT IDENTITY(1,1), TestName NVARCHAR(MAX) NOT NULL);
-    INSERT INTO @TestNames (TestName) SELECT TestName FROM tSQLt.Private_FindTestNames(@TestName) ORDER BY TestName;
+    DECLARE @TestNames tSQLt.Private_TestNamesType;
+    INSERT INTO @TestNames EXEC tSQLt.Private_TestNames @TestName;
+    DECLARE @TestNamesOrdered TABLE (Id INT IDENTITY(1,1), TestName NVARCHAR(MAX) NOT NULL);
+    INSERT INTO @TestNamesOrdered (TestName) SELECT TestName FROM @TestNames ORDER BY TestName;
     DECLARE @TestCase NVARCHAR(MAX), @ErrorMessage NVARCHAR(MAX), @Idx int = 1, @Max int = (SELECT COUNT(1) FROM @TestNames);
     DECLARE @TranName CHAR(32); EXEC tSQLt.Private_GetNewTranName @TranName OUTPUT;
 
     WHILE @Idx <= @Max
     BEGIN
-        SET @TestCase = (SELECT TestName FROM @TestNames WHERE Id = @Idx)
+        SET @TestCase = (SELECT TestName FROM @TestNamesOrdered WHERE Id = @Idx)
 
         INSERT INTO tSQLt.TestResult (Class, TestCase, TranName)
         SELECT
