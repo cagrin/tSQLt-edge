@@ -12,10 +12,14 @@ BEGIN
 
     EXEC tSQLt.AssertObjectExists @TableName;
 
+    DECLARE @System_Synonyms tSQLt.System_SynonymsType
+    INSERT INTO @System_Synonyms
+    EXEC tSQLt.System_Synonyms
+
     DECLARE @BaseObjectName NVARCHAR(MAX) =
     (
         SELECT base_object_name
-        FROM tSQLt.System_Synonyms()
+        FROM @System_Synonyms
         WHERE object_id = OBJECT_ID(@TableName)
     )
 

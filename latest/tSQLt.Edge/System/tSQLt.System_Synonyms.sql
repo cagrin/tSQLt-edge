@@ -1,5 +1,4 @@
-CREATE FUNCTION tSQLt.System_Synonyms ()
-RETURNS @Synonyms TABLE
+CREATE TYPE tSQLt.System_SynonymsType AS TABLE
 (
 	[name] [sysname] NOT NULL,
 	[object_id] [int] NOT NULL,
@@ -14,8 +13,14 @@ RETURNS @Synonyms TABLE
 	[is_published] [bit] NOT NULL,
 	[is_schema_published] [bit] NOT NULL,
 	[base_object_name] [nvarchar](1035) NULL
-) AS
+);
+GO
+
+CREATE PROCEDURE tSQLt.System_Synonyms
+AS
 BEGIN
+	DECLARE @Synonyms tSQLt.System_SynonymsType;
+
     INSERT INTO @Synonyms
     SELECT
 		[name],
@@ -33,6 +38,6 @@ BEGIN
 		[base_object_name]
 	FROM sys.synonyms
 
-    RETURN;
+    SELECT * FROM @Synonyms
 END;
 GO
