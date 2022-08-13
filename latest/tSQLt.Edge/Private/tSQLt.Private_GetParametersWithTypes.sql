@@ -1,6 +1,8 @@
 CREATE PROCEDURE tSQLt.Private_GetParametersWithTypes
     @ParametersWithTypes NVARCHAR(MAX) OUTPUT,
-    @ObjectId INT
+    @ObjectId INT,
+    @DefaultNulls BIT = NULL,
+    @Scalar BIT = NULL
 AS
 BEGIN
     DECLARE @System_Parameters tSQLt.System_ParametersType
@@ -17,7 +19,8 @@ BEGIN
         [max_length] [smallint] NOT NULL,
         [precision] [tinyint] NOT NULL,
         [scale] [tinyint] NOT NULL,
-        [is_output] [bit] NOT NULL
+        [is_output] [bit] NOT NULL,
+        [is_readonly] [bit] NOT NULL
     )
 
     INSERT INTO @Result
@@ -28,7 +31,8 @@ BEGIN
         [max_length],
         [precision],
         [scale],
-        [is_output]
+        [is_output],
+        [is_readonly]
     )
     SELECT
         [name],
@@ -37,7 +41,8 @@ BEGIN
         [max_length],
         [precision],
         [scale],
-        [is_output]
+        [is_output],
+        [is_readonly]
     FROM @System_Parameters
     ORDER BY parameter_id
 
@@ -77,10 +82,12 @@ BEGIN
                 ' ',
                 name,
                 definition,
+                CASE WHEN @DefaultNulls = 1 THEN CASE WHEN is_readonly = 1 THEN 'READONLY' ELSE '= NULL' END END,
                 CASE WHEN is_output = 1 THEN 'OUTPUT' ELSE NULL END
             ),
             ', '
         ) WITHIN GROUP (ORDER BY parameter_id)
     FROM @Result
+    WHERE (@Scalar = 1 AND parameter_id > 0) OR ISNULL(@Scalar, 0) = 0
 END;
 GO

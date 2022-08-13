@@ -12,7 +12,7 @@ BEGIN
     IF @FakeDataSource IS NOT NULL
     BEGIN
         DECLARE @ParametersWithTypesDefaultNulls NVARCHAR(MAX);
-        EXEC tSQLt.Private_GetParametersWithTypesDefaultNulls @ParametersWithTypesDefaultNulls OUTPUT, @ObjectId;
+        EXEC tSQLt.Private_GetParametersWithTypes @ParametersWithTypesDefaultNulls OUTPUT, @ObjectId, @DefaultNulls = 1;
 
         SET @CreateFakeFunctionCommand = CONCAT_WS
         (
@@ -29,7 +29,7 @@ BEGIN
         DECLARE @ScalarParameters NVARCHAR(MAX);
         EXEC tSQLt.Private_GetScalarParameters @ScalarParameters OUTPUT, @ObjectId;
         DECLARE @ScalarParametersWithTypesDefaultNulls NVARCHAR(MAX);
-        EXEC tSQLt.Private_GetScalarParametersWithTypesDefaultNulls @ScalarParametersWithTypesDefaultNulls OUTPUT, @ObjectId;
+        EXEC tSQLt.Private_GetParametersWithTypes @ScalarParametersWithTypesDefaultNulls OUTPUT, @ObjectId, @DefaultNulls = 1, @Scalar = 1;
 
         SET @CreateFakeFunctionCommand = CONCAT_WS
         (

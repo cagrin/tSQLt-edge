@@ -15,7 +15,7 @@ BEGIN
     DECLARE @SpyProcedureLogColumns NVARCHAR(MAX);
     EXEC tSQLt.Private_GetSpyProcedureLogColumns @SpyProcedureLogColumns OUTPUT, @ObjectId;
     DECLARE @ParametersWithTypesDefaultNulls NVARCHAR(MAX);
-    EXEC tSQLt.Private_GetParametersWithTypesDefaultNulls @ParametersWithTypesDefaultNulls OUTPUT, @ObjectId;
+    EXEC tSQLt.Private_GetParametersWithTypes @ParametersWithTypesDefaultNulls OUTPUT, @ObjectId, @DefaultNulls = 1;
     DECLARE @LogTableName NVARCHAR(MAX) = CONCAT(QUOTENAME(OBJECT_SCHEMA_NAME(@ObjectId)), '.', QUOTENAME(CONCAT(OBJECT_NAME(@ObjectId), '_SpyProcedureLog')));
 
     DECLARE @InsertIntoLogTableCommand NVARCHAR(MAX) = CONCAT
