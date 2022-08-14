@@ -103,3 +103,13 @@ BEGIN
     EXEC tSQLt.AssertResultSetsHaveSameMetaData 'SELECT 1 Column1;', 'SELECT 1 Column1;';
 END;
 GO
+
+CREATE PROCEDURE Test_AssertResultSetsHaveSameMetaData.Test_SelectFromExternal
+AS
+BEGIN
+    CREATE TABLE master.dbo.TestTable1 (Column1 INT, Column2 CHAR(3));
+    CREATE TABLE master.dbo.TestTable2 (Column1 INT, Column2 CHAR(3));
+
+    EXEC tSQLt.AssertResultSetsHaveSameMetaData 'SELECT * FROM master.dbo.TestTable1', 'SELECT * FROM master.dbo.TestTable2';
+END;
+GO
