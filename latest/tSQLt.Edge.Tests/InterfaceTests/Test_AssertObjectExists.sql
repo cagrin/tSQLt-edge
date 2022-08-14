@@ -45,3 +45,21 @@ BEGIN
     EXEC tSQLt.AssertObjectExists '#TestTable1';
 END;
 GO
+
+CREATE PROCEDURE Test_AssertObjectExists.Test_ExternalDoesExists
+AS
+BEGIN
+    CREATE TABLE master.dbo.TestTable1 (Column1 INT);
+
+    EXEC tSQLt.AssertObjectExists 'master.dbo.TestTable1';
+END;
+GO
+
+CREATE PROCEDURE Test_AssertObjectExists.Test_ExternalDoesNotExist
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'tSQLt.AssertObjectExists failed. Object:<master.dbo.TestTable1> does not exist.';
+
+    EXEC tSQLt.AssertObjectExists 'master.dbo.TestTable1';
+END;
+GO
