@@ -172,3 +172,13 @@ BEGIN
     EXEC tSQLt.AssertEqualsTableSchema 'dbo.TestSynonym1', 'dbo.TestSynonym2';
 END;
 GO
+
+CREATE PROCEDURE Test_AssertEqualsTableSchema.Test_ExternalTables
+AS
+BEGIN
+    CREATE TABLE master.dbo.TestTable1 (Column1 INT);
+    CREATE TABLE master.dbo.TestTable2 (Column1 INT);
+
+    EXEC tSQLt.AssertEqualsTableSchema 'master.dbo.TestTable1', 'master.dbo.TestTable2';
+END;
+GO

@@ -77,3 +77,11 @@ tSQLt-edge has some additional features:
 |AssertEqualsTable|Add XML column comparison using convertion to NVARCHAR(MAX)|
 |AssertNotEqualsString|Same as AssertNotEquals, but for NVARCHAR(MAX)|
 |FakeTable|Add @NotNulls optional parameter to preserve NOT NULLs|
+
+tSQLt-edge can operate on different database, same server:
+
+|Stored procedure with external objects support|
+|---|
+|AssertEqualsTableSchema|
+|AssertObjectDoesNotExists|
+|AssertObjectExists|

@@ -43,89 +43,66 @@ CREATE PROCEDURE tSQLt.System_Columns
 	@ObjectName NVARCHAR(MAX)
 AS
 BEGIN
-	DECLARE @Columns tSQLt.System_ColumnsType;
+	DECLARE
+		@SourceTable NVARCHAR(MAX) = 'sys.columns',
+		@SourceObject NVARCHAR(MAX) = CONCAT('OBJECT_ID(''', REPLACE(@ObjectName, '''', ''''''), ''')')
 
-	INSERT INTO @Columns
-    SELECT
-		[object_id],
-		[name],
-		[column_id],
-		[system_type_id],
-		[user_type_id],
-		[max_length],
-		[precision],
-		[scale],
-		[collation_name],
-		[is_nullable],
-		[is_ansi_padded],
-		[is_rowguidcol],
-		[is_identity],
-		[is_computed],
-		[is_filestream],
-		[is_replicated],
-		[is_non_sql_subscribed],
-		[is_merge_published],
-		[is_dts_replicated],
-		[is_xml_document],
-		[xml_collection_id],
-		[default_object_id],
-		[rule_object_id],
-		[is_sparse],
-		[is_column_set],
-		[generated_always_type],
-		[generated_always_type_desc],
-		[encryption_type],
-		[encryption_type_desc],
-		[encryption_algorithm_name],
-		[column_encryption_key_id],
-		[column_encryption_key_database_name],
-		[is_hidden],
-		[is_masked],
-		[graph_type],
-		[graph_type_desc]
-	FROM sys.columns
-    WHERE object_id = OBJECT_ID(@ObjectName)
-    UNION ALL
-    SELECT
-		[object_id],
-		[name],
-		[column_id],
-		[system_type_id],
-		[user_type_id],
-		[max_length],
-		[precision],
-		[scale],
-		[collation_name],
-		[is_nullable],
-		[is_ansi_padded],
-		[is_rowguidcol],
-		[is_identity],
-		[is_computed],
-		[is_filestream],
-		[is_replicated],
-		[is_non_sql_subscribed],
-		[is_merge_published],
-		[is_dts_replicated],
-		[is_xml_document],
-		[xml_collection_id],
-		[default_object_id],
-		[rule_object_id],
-		[is_sparse],
-		[is_column_set],
-		[generated_always_type],
-		[generated_always_type_desc],
-		[encryption_type],
-		[encryption_type_desc],
-		[encryption_algorithm_name],
-		[column_encryption_key_id],
-		[column_encryption_key_database_name],
-		[is_hidden],
-		[is_masked],
-		[graph_type],
-		[graph_type_desc]
-	FROM tempdb.sys.columns
-    WHERE object_id = OBJECT_ID(CONCAT('tempdb..', @ObjectName))
+	IF OBJECT_ID(CONCAT('tempdb..', @ObjectName)) IS NOT NULL
+	BEGIN
+		SET @SourceTable = 'tempdb.sys.columns'
+		SET @SourceObject = CONCAT('OBJECT_ID(CONCAT(''tempdb..'',''', REPLACE(@ObjectName, '''', ''''''), '''))')
+	END
+	ELSE IF PARSENAME(@ObjectName, 3) IS NOT NULL
+	BEGIN
+		SET @SourceTable = CONCAT(QUOTENAME(PARSENAME(@ObjectName, 3)), '.', @SourceTable)
+	END
 
-	SELECT * FROM @Columns
+	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
+	(
+		' ',
+		'DECLARE @Columns tSQLt.System_ColumnsType;',
+		'INSERT INTO @Columns SELECT
+			[object_id],
+			[name],
+			[column_id],
+			[system_type_id],
+			[user_type_id],
+			[max_length],
+			[precision],
+			[scale],
+			[collation_name],
+			[is_nullable],
+			[is_ansi_padded],
+			[is_rowguidcol],
+			[is_identity],
+			[is_computed],
+			[is_filestream],
+			[is_replicated],
+			[is_non_sql_subscribed],
+			[is_merge_published],
+			[is_dts_replicated],
+			[is_xml_document],
+			[xml_collection_id],
+			[default_object_id],
+			[rule_object_id],
+			[is_sparse],
+			[is_column_set],
+			[generated_always_type],
+			[generated_always_type_desc],
+			[encryption_type],
+			[encryption_type_desc],
+			[encryption_algorithm_name],
+			[column_encryption_key_id],
+			[column_encryption_key_database_name],
+			[is_hidden],
+			[is_masked],
+			[graph_type],
+			[graph_type_desc]
+		FROM', @SourceTable,
+		'WHERE object_id =', @SourceObject,
+		'SELECT * FROM @Columns'
+	);
+
+	EXEC (@Command);
 END;
 GO

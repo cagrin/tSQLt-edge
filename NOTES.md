@@ -1,6 +1,6 @@
 ## Create Azure SQL Edge instance in docker
 ```
-docker run -e 'ACCEPT_EULA=1' -e 'MSSQL_SA_PASSWORD=A.794613' -e 'MSSQL_COLLATION=Polish_CI_AS' -p 51433:1433 -d mcr.microsoft.com/azure-sql-edge
+docker run -e 'ACCEPT_EULA=1' -e 'MSSQL_SA_PASSWORD=A.794613' -e 'MSSQL_COLLATION=SQL_Latin1_General_CP1_CI_AS' -p 51433:1433 -d mcr.microsoft.com/azure-sql-edge
 ```
 
 ## Build and publish project Tests to localhost
