@@ -57,48 +57,15 @@ BEGIN
 		SET @SourceTable = CONCAT(QUOTENAME(PARSENAME(@ObjectName, 3)), '.', @SourceTable)
 	END
 
+	DECLARE @TableTypeColumns NVARCHAR(MAX)
+	EXEC tSQLt.System_GetTableTypeColumns @TableTypeColumns OUTPUT, @TableTypeName = 'System_ColumnsType'
+
 	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
 	(
 		' ',
 		'DECLARE @Columns tSQLt.System_ColumnsType;',
-		'INSERT INTO @Columns SELECT
-			[object_id],
-			[name],
-			[column_id],
-			[system_type_id],
-			[user_type_id],
-			[max_length],
-			[precision],
-			[scale],
-			[collation_name],
-			[is_nullable],
-			[is_ansi_padded],
-			[is_rowguidcol],
-			[is_identity],
-			[is_computed],
-			[is_filestream],
-			[is_replicated],
-			[is_non_sql_subscribed],
-			[is_merge_published],
-			[is_dts_replicated],
-			[is_xml_document],
-			[xml_collection_id],
-			[default_object_id],
-			[rule_object_id],
-			[is_sparse],
-			[is_column_set],
-			[generated_always_type],
-			[generated_always_type_desc],
-			[encryption_type],
-			[encryption_type_desc],
-			[encryption_algorithm_name],
-			[column_encryption_key_id],
-			[column_encryption_key_database_name],
-			[is_hidden],
-			[is_masked],
-			[graph_type],
-			[graph_type_desc]
-		FROM', @SourceTable,
+		'INSERT INTO @Columns SELECT', @TableTypeColumns,
+		'FROM', @SourceTable,
 		'WHERE object_id =', @SourceObject,
 		'SELECT * FROM @Columns'
 	);
