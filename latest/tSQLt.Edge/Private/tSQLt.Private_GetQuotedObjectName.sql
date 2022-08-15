@@ -6,7 +6,12 @@ BEGIN
     SET @QuotedObjectName = @ObjectName;
     IF (OBJECT_ID(@ObjectName) IS NOT NULL)
     BEGIN
-        SET @QuotedObjectName = CONCAT(QUOTENAME(OBJECT_SCHEMA_NAME(OBJECT_ID(@ObjectName))), '.', QUOTENAME(OBJECT_NAME(OBJECT_ID(@ObjectName))));
+        SET @QuotedObjectName = CONCAT
+        (
+            CASE WHEN PARSENAME(@ObjectName, 3) IS NOT NULL THEN CONCAT(QUOTENAME(PARSENAME(@ObjectName, 3)), '.') END,
+            QUOTENAME(PARSENAME(@ObjectName, 2)), '.',
+            QUOTENAME(PARSENAME(@ObjectName, 1))
+        );
     END
     ELSE IF (OBJECT_ID(CONCAT('tempdb..', @ObjectName)) IS NOT NULL AND SUBSTRING(@ObjectName, 1, 1) = '#')
     BEGIN

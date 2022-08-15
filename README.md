@@ -82,6 +82,7 @@ tSQLt-edge can operate on different database, same server:
 
 |Stored procedure with external objects support|
 |---|
+|AssertEmptyTable|
 |AssertEqualsTable|
 |AssertEqualsTableSchema|
 |AssertObjectDoesNotExists|
