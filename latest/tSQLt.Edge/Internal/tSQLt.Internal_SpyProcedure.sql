@@ -7,15 +7,15 @@ BEGIN
     DECLARE @NewName NVARCHAR(MAX) = NEWID();
     DECLARE @ObjectId INT = OBJECT_ID(@ProcedureName);
     DECLARE @Parameters NVARCHAR(MAX);
-    EXEC tSQLt.Private_GetParameters @Parameters OUTPUT, @ObjectId;
+    EXEC tSQLt.Private_GetParameters @Parameters OUTPUT, @ProcedureName;
     DECLARE @ParametersNames NVARCHAR(MAX);
-    EXEC tSQLt.Private_GetParametersNames @ParametersNames OUTPUT, @ObjectId;
+    EXEC tSQLt.Private_GetParametersNames @ParametersNames OUTPUT, @ProcedureName;
     DECLARE @SpyProcedureLogSelect NVARCHAR(MAX);
-    EXEC tSQLt.Private_GetSpyProcedureLogSelect @SpyProcedureLogSelect OUTPUT, @ObjectId;
+    EXEC tSQLt.Private_GetSpyProcedureLogSelect @SpyProcedureLogSelect OUTPUT, @ProcedureName;
     DECLARE @SpyProcedureLogColumns NVARCHAR(MAX);
-    EXEC tSQLt.Private_GetSpyProcedureLogColumns @SpyProcedureLogColumns OUTPUT, @ObjectId;
+    EXEC tSQLt.Private_GetSpyProcedureLogColumns @SpyProcedureLogColumns OUTPUT, @ProcedureName;
     DECLARE @ParametersWithTypesDefaultNulls NVARCHAR(MAX);
-    EXEC tSQLt.Private_GetParametersWithTypes @ParametersWithTypesDefaultNulls OUTPUT, @ObjectId, @DefaultNulls = 1;
+    EXEC tSQLt.Private_GetParametersWithTypes @ParametersWithTypesDefaultNulls OUTPUT, @ProcedureName, @DefaultNulls = 1;
     DECLARE @LogTableName NVARCHAR(MAX) = CONCAT(QUOTENAME(OBJECT_SCHEMA_NAME(@ObjectId)), '.', QUOTENAME(CONCAT(OBJECT_NAME(@ObjectId), '_SpyProcedureLog')));
 
     DECLARE @InsertIntoLogTableCommand NVARCHAR(MAX) = CONCAT

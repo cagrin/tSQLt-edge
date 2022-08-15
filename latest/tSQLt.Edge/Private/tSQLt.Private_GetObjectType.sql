@@ -1,6 +1,6 @@
 CREATE PROCEDURE tSQLt.Private_GetObjectType
     @ObjectType CHAR(2) OUTPUT,
-    @ObjectId INT
+    @ObjectName NVARCHAR(MAX)
 AS
 BEGIN
     DECLARE @System_Objects tSQLt.System_ObjectsType
@@ -10,6 +10,6 @@ BEGIN
     SELECT
         @ObjectType = type
     FROM @System_Objects
-    WHERE object_id = @ObjectId
+    WHERE object_id = OBJECT_ID(@ObjectName)
 END;
 GO

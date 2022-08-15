@@ -6,13 +6,12 @@ AS
 BEGIN
     EXEC tSQLt.Private_ProcessFakeDataSource @FunctionName, @FakeFunctionName, @FakeDataSource OUTPUT;
 
-    DECLARE @ObjectId INT = OBJECT_ID(@FunctionName);
     DECLARE @CreateFakeFunctionCommand NVARCHAR(MAX);
 
     IF @FakeDataSource IS NOT NULL
     BEGIN
         DECLARE @ParametersWithTypesDefaultNulls NVARCHAR(MAX);
-        EXEC tSQLt.Private_GetParametersWithTypes @ParametersWithTypesDefaultNulls OUTPUT, @ObjectId, @DefaultNulls = 1;
+        EXEC tSQLt.Private_GetParametersWithTypes @ParametersWithTypesDefaultNulls OUTPUT, @FunctionName, @DefaultNulls = 1;
 
         SET @CreateFakeFunctionCommand = CONCAT_WS
         (
@@ -25,11 +24,11 @@ BEGIN
     ELSE
     BEGIN
         DECLARE @ScalarReturnType NVARCHAR(MAX);
-        EXEC tSQLt.Private_GetScalarReturnType @ScalarReturnType OUTPUT, @ObjectId;
+        EXEC tSQLt.Private_GetScalarReturnType @ScalarReturnType OUTPUT, @FunctionName;
         DECLARE @ScalarParameters NVARCHAR(MAX);
-        EXEC tSQLt.Private_GetScalarParameters @ScalarParameters OUTPUT, @ObjectId;
+        EXEC tSQLt.Private_GetScalarParameters @ScalarParameters OUTPUT, @FunctionName;
         DECLARE @ScalarParametersWithTypesDefaultNulls NVARCHAR(MAX);
-        EXEC tSQLt.Private_GetParametersWithTypes @ScalarParametersWithTypesDefaultNulls OUTPUT, @ObjectId, @DefaultNulls = 1, @Scalar = 1;
+        EXEC tSQLt.Private_GetParametersWithTypes @ScalarParametersWithTypesDefaultNulls OUTPUT, @FunctionName, @DefaultNulls = 1, @Scalar = 1;
 
         SET @CreateFakeFunctionCommand = CONCAT_WS
         (

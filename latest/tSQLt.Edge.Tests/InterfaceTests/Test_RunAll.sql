@@ -40,8 +40,9 @@ BEGIN
         FROM @System_Interfaces
         WHERE object_id = (SELECT object_id FROM @Result WHERE _id_ = @_i_)
 
+        DECLARE @TestName NVARCHAR(MAX) = CONCAT(QUOTENAME(SCHEMA_NAME(@schema_id)), '.', QUOTENAME(@name))
         DECLARE @Parameters NVARCHAR(MAX);
-        EXEC tSQLt.Private_GetParameters @Parameters OUTPUT, @object_id;
+        EXEC tSQLt.Private_GetParameters @Parameters OUTPUT, @TestName;
 
         UPDATE @Result
         SET definition = @Parameters
@@ -143,8 +144,9 @@ BEGIN
         FROM @System_Interfaces
         WHERE object_id = (SELECT object_id FROM @Result WHERE _id_ = @_i_)
 
+        DECLARE @TestName NVARCHAR(MAX) = CONCAT(QUOTENAME(SCHEMA_NAME(@schema_id)), '.', QUOTENAME(@name))
         DECLARE @ParametersWithTypes NVARCHAR(MAX);
-        EXEC tSQLt.Private_GetParametersWithTypes @ParametersWithTypes OUTPUT, @object_id;
+        EXEC tSQLt.Private_GetParametersWithTypes @ParametersWithTypes OUTPUT, @TestName;
 
         UPDATE @Result
         SET definition = @ParametersWithTypes

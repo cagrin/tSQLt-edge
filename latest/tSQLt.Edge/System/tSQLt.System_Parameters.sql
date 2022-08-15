@@ -25,37 +25,31 @@ CREATE TYPE tSQLt.System_ParametersType AS TABLE
 GO
 
 CREATE PROCEDURE tSQLt.System_Parameters
-	@ObjectId INT
+	@ObjectName NVARCHAR(MAX)
 AS
 BEGIN
-	DECLARE @Parameters tSQLt.System_ParametersType;
+	DECLARE
+		@SourceTable NVARCHAR(MAX) = 'sys.parameters',
+		@SourceObject NVARCHAR(MAX) = CONCAT('OBJECT_ID(''', REPLACE(@ObjectName, '''', ''''''), ''')')
 
-	INSERT INTO @Parameters
-    SELECT
-		[object_id],
-		[name],
-		[parameter_id],
-		[system_type_id],
-		[user_type_id],
-		[max_length],
-		[precision],
-		[scale],
-		[is_output],
-		[is_cursor_ref],
-		[has_default_value],
-		[is_xml_document],
-		[default_value],
-		[xml_collection_id],
-		[is_readonly],
-		[is_nullable],
-		[encryption_type],
-		[encryption_type_desc],
-		[encryption_algorithm_name],
-		[column_encryption_key_id],
-		[column_encryption_key_database_name]
-	FROM sys.parameters
-    WHERE object_id = @ObjectId
+	IF PARSENAME(@ObjectName, 3) IS NOT NULL
+	BEGIN
+		SET @SourceTable = CONCAT(QUOTENAME(PARSENAME(@ObjectName, 3)), '.', @SourceTable)
+	END
 
-    SELECT * FROM @Parameters
+	DECLARE @TableTypeColumns NVARCHAR(MAX)
+	EXEC tSQLt.System_GetTableTypeColumns @TableTypeColumns OUTPUT, @TableTypeName = 'System_ParametersType'
+
+	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
+	(
+		' ',
+		'DECLARE @Parameters tSQLt.System_ParametersType;',
+		'INSERT INTO @Parameters SELECT', @TableTypeColumns,
+		'FROM', @SourceTable,
+		'WHERE object_id =', @SourceObject,
+		'SELECT * FROM @Parameters'
+	);
+
+	EXEC (@Command);
 END;
 GO
