@@ -20,6 +20,13 @@ BEGIN
         ''', ''OBJECT'';'
     );
 
+    SET @NewName = CONCAT
+    (
+        @DatabaseName,
+        QUOTENAME(PARSENAME(@QuotedObjectName, 2)), '.',
+        QUOTENAME(@NewName)
+    );
+
     EXEC (@Command);
 END;
 GO

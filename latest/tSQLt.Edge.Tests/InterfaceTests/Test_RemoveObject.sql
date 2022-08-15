@@ -75,7 +75,7 @@ BEGIN
 
     EXEC tSQLt.RemoveObject 'dbo.NewTable', @NewName OUTPUT;
 
-    EXEC tSQLt.AssertEqualsString 'NewName', @NewName;
+    EXEC tSQLt.AssertEqualsString '[dbo].[NewName]', @NewName;
 END;
 GO
 
@@ -87,5 +87,18 @@ BEGIN
     EXEC tSQLt.RemoveObject 'master.dbo.NewTable';
 
     EXEC tSQLt.AssertObjectDoesNotExist 'master.dbo.NewTable';
+END;
+GO
+
+CREATE PROCEDURE Test_RemoveObject.Test_ExternalTableNewName
+AS
+BEGIN
+    EXEC ('CREATE TABLE master.dbo.NewTable (Id int);');
+
+    DECLARE @NewName NVARCHAR(MAX);
+
+    EXEC tSQLt.RemoveObject 'master.dbo.NewTable', @NewName OUTPUT;
+
+    EXEC tSQLt.AssertLike '[[]master_.[[]dbo_.[[]________-____-____-____-_____________', @NewName;
 END;
 GO
