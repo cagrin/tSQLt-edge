@@ -306,3 +306,15 @@ BEGIN
     EXEC tSQLt.AssertEqualsTableSchema '[O''clock.Schema].[O''clock.Table2]', '[O''clock.Schema].[O''clock.Table1]';
 END;
 GO
+
+CREATE PROCEDURE Test_FakeTable.Test_CanFakeExternalTable
+AS
+BEGIN
+    CREATE TABLE master.dbo.TestTable1 (Column1 int IDENTITY(1,2) NOT NULL, Column2 AS 2*Column1, Column3 VARCHAR(100) COLLATE Polish_100_CI_AS DEFAULT '-');
+    CREATE TABLE master.dbo.TestTable2 (Column1 int,                        Column2 int         , Column3 VARCHAR(100) COLLATE Polish_100_CI_AS);
+
+    EXEC tSQLt.FakeTable 'master.dbo.TestTable1';
+
+    EXEC tSQLt.AssertEqualsTableSchema 'master.dbo.TestTable2', 'master.dbo.TestTable1';
+END;
+GO
