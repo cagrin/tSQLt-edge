@@ -277,3 +277,15 @@ BEGIN
     EXEC tSQLt.AssertEqualsTable 'dbo.TestTable1', 'dbo.TestTable2';
 END;
 GO
+
+CREATE PROCEDURE Test_AssertEqualsTable.Test_ExternalTables
+AS
+BEGIN
+    CREATE TABLE master.dbo.TestTable1 (Column1 INT);
+    CREATE TABLE master.dbo.TestTable2 (Column1 INT);
+    INSERT INTO master.dbo.TestTable1 (Column1) VALUES (1);
+    INSERT INTO master.dbo.TestTable2 (Column1) VALUES (1);
+
+    EXEC tSQLt.AssertEqualsTable 'master.dbo.TestTable1', 'master.dbo.TestTable2';
+END;
+GO
