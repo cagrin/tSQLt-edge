@@ -1,11 +1,12 @@
 CREATE PROCEDURE tSQLt.Private_ApplyPrimaryKey
+    @ParentName NVARCHAR(MAX),
     @ObjectName NVARCHAR(MAX),
     @ConstraintId INT
 AS
 BEGIN
     DECLARE @System_IndexColumns tSQLt.System_IndexColumnsType
     INSERT INTO @System_IndexColumns
-    EXEC tSQLt.System_IndexColumns
+    EXEC tSQLt.System_IndexColumns @ParentName
 
     DECLARE @Result TABLE
     (
@@ -60,8 +61,7 @@ BEGIN
         [scale],
         [collation_name]
     FROM @System_IndexColumns
-    WHERE [schema_id] = SCHEMA_ID(OBJECT_SCHEMA_NAME(OBJECT_ID(@ObjectName)))
-    AND [index_name] = OBJECT_NAME(@ConstraintId)
+    WHERE [index_name] = OBJECT_NAME(@ConstraintId)
     AND [is_primary_key] = 1
 
     DECLARE
@@ -109,9 +109,8 @@ BEGIN
         )
     FROM @Result
 
-    DECLARE @ParentName NVARCHAR(MAX), @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX);
+    DECLARE @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX);
     SELECT
-        @ParentName = CONCAT(QUOTENAME(SCHEMA_NAME([schema_id])), '.', QUOTENAME([table_name])),
         @ConstraintName = QUOTENAME([index_name]),
         @ConstraintDefinition = CONCAT
         (

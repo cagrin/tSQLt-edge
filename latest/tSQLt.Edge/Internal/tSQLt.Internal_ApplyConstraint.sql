@@ -5,8 +5,8 @@ CREATE PROCEDURE tSQLt.Internal_ApplyConstraint
     @NoCascade BIT = 0
 AS
 BEGIN
-    DECLARE @ObjectName NVARCHAR(MAX), @ConstraintId INT, @ConstraintType CHAR(2);
-    EXEC tSQLt.Private_ProcessConstraintName @ObjectName OUTPUT, @ConstraintId OUTPUT, @ConstraintType OUTPUT, @TableName, @ConstraintName, @SchemaName;
+    DECLARE @ParentName NVARCHAR(MAX), @ObjectName NVARCHAR(MAX), @ConstraintId INT, @ConstraintType CHAR(2);
+    EXEC tSQLt.Private_ProcessConstraintName @ParentName OUTPUT, @ObjectName OUTPUT, @ConstraintId OUTPUT, @ConstraintType OUTPUT, @TableName, @ConstraintName, @SchemaName;
 
     IF @ConstraintType = 'C'
     BEGIN
@@ -18,7 +18,7 @@ BEGIN
     END
     ELSE IF @ConstraintType = 'PK'
     BEGIN
-        EXEC tSQLt.Private_ApplyPrimaryKey @Objectname, @ConstraintId;
+        EXEC tSQLt.Private_ApplyPrimaryKey @ParentName, @ObjectName, @ConstraintId;
     END
     ELSE IF @ConstraintType = 'UQ'
     BEGIN

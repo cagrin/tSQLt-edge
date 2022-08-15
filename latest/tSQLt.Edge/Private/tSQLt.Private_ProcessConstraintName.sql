@@ -1,4 +1,5 @@
 CREATE PROCEDURE tSQLt.Private_ProcessConstraintName
+    @ParentName NVARCHAR(MAX) OUTPUT,
     @ObjectName NVARCHAR(MAX) OUTPUT,
     @ConstraintId INT OUTPUT,
     @ConstraintType CHAR(2) OUTPUT,
@@ -31,6 +32,10 @@ BEGIN
     IF @ObjectId IS NULL
     BEGIN
         EXEC tSQLt.Fail 'Table', @ObjectName, 'was not faked by tSQLt.FakeTable.';
+    END
+    ELSE
+    BEGIN
+        SET @ParentName = CONCAT(QUOTENAME(OBJECT_SCHEMA_NAME(@ObjectId)), '.', QUOTENAME(OBJECT_NAME(@ObjectId)))
     END
 
     DECLARE @System_Objects tSQLt.System_ObjectsType

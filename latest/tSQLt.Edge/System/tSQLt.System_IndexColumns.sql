@@ -25,38 +25,57 @@ CREATE TYPE tSQLt.System_IndexColumnsType AS TABLE
 GO
 
 CREATE PROCEDURE tSQLt.System_IndexColumns
+	@ObjectName NVARCHAR(MAX) = NULL
 AS
 BEGIN
-	DECLARE @IndexColumns tSQLt.System_IndexColumnsType;
+	DECLARE
+		@DatabaseName NVARCHAR(MAX),
+		@ObjectFilter NVARCHAR(MAX)
 
-    INSERT INTO @IndexColumns
-	SELECT
-		t.[object_id],
-		t.[schema_id],
-		[table_name] = t.[name],
-		[index_name] = i.[name],
-		[column_name] = c.[name],
-		ic.[key_ordinal],
-		ic.[is_descending_key],
-		i.[type_desc],
-        i.[is_primary_key],
-        i.[is_unique],
-        i.[is_unique_constraint],
-        i.[has_filter],
-        i.[filter_definition],
-        c.[column_id],
-        c.[is_computed],
-        c.[is_nullable],
-		c.[user_type_id],
-		c.[max_length],
-		c.[precision],
-		c.[scale],
-		c.[collation_name]
-	FROM sys.tables t
-	INNER JOIN sys.indexes i ON i.[object_id] = t.[object_id]
-	INNER JOIN sys.index_columns ic ON ic.[object_id] = t.[object_id] AND ic.[index_id] = i.[index_id]
-	INNER JOIN sys.columns c ON c.[object_id] = t.[object_id] AND c.[column_id] = ic.[column_id]
+	IF PARSENAME(@ObjectName, 3) IS NOT NULL
+	BEGIN
+		SET @DatabaseName = CONCAT(QUOTENAME(PARSENAME(@ObjectName, 3)), '.')
+	END
+	IF @ObjectName IS NOT NULL
+	BEGIN
+		SET @ObjectFilter = CONCAT('WHERE t.object_id = OBJECT_ID(''', REPLACE(@ObjectName, '''', ''''''), ''')')
+	END
 
-    SELECT * FROM @IndexColumns
+	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
+	(
+		' ',
+		'DECLARE @IndexColumns tSQLt.System_IndexColumnsType;',
+		'INSERT INTO @IndexColumns',
+		'SELECT
+			t.[object_id],
+			t.[schema_id],
+			[table_name] = t.[name],
+			[index_name] = i.[name],
+			[column_name] = c.[name],
+			ic.[key_ordinal],
+			ic.[is_descending_key],
+			i.[type_desc],
+			i.[is_primary_key],
+			i.[is_unique],
+			i.[is_unique_constraint],
+			i.[has_filter],
+			i.[filter_definition],
+			c.[column_id],
+			c.[is_computed],
+			c.[is_nullable],
+			c.[user_type_id],
+			c.[max_length],
+			c.[precision],
+			c.[scale],
+			c.[collation_name]
+		FROM', @DatabaseName, 'sys.tables t',
+		'INNER JOIN ', @DatabaseName, 'sys.indexes i ON i.[object_id] = t.[object_id]',
+		'INNER JOIN ', @DatabaseName, 'sys.index_columns ic ON ic.[object_id] = t.[object_id] AND ic.[index_id] = i.[index_id]',
+		'INNER JOIN ', @DatabaseName, 'sys.columns c ON c.[object_id] = t.[object_id] AND c.[column_id] = ic.[column_id]',
+		@ObjectFilter,
+		'SELECT * FROM @IndexColumns'
+	);
+
+	EXEC (@Command);
 END;
 GO
