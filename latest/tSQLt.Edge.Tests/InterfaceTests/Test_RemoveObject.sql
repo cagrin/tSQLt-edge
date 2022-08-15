@@ -78,3 +78,14 @@ BEGIN
     EXEC tSQLt.AssertEqualsString 'NewName', @NewName;
 END;
 GO
+
+CREATE PROCEDURE Test_RemoveObject.Test_ExternalTable
+AS
+BEGIN
+    EXEC ('CREATE TABLE master.dbo.NewTable (Id int);');
+
+    EXEC tSQLt.RemoveObject 'master.dbo.NewTable';
+
+    EXEC tSQLt.AssertObjectDoesNotExist 'master.dbo.NewTable';
+END;
+GO
