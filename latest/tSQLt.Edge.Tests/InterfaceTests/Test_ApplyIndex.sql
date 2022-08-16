@@ -1,6 +1,15 @@
 CREATE SCHEMA Test_ApplyIndex;
 GO
 
+CREATE PROCEDURE Test_ApplyIndex.Test_TableNotExists
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'tSQLt.AssertObjectExists failed. Object:<Table1> does not exist.'
+
+    EXEC tSQLt.ApplyIndex 'Table1', 'Constraint1';
+END;
+GO
+
 CREATE PROCEDURE Test_ApplyIndex.Test_IndexNotExists
 AS
 BEGIN
@@ -46,5 +55,20 @@ BEGIN
     EXEC tSQLt.ExpectException 'Cannot create more than one clustered index on table ''Schema1.Table1''. Drop the existing clustered index ''ClusteredIndex1'' before creating another.';
 
     CREATE CLUSTERED INDEX ClusteredIndex2 ON Schema1.Table1 (Column1);
+END;
+GO
+
+CREATE PROCEDURE Test_ApplyIndex.Test_ExternalClusteredIndexApplied
+AS
+BEGIN
+    CREATE TABLE master.dbo.Table1 (Column1 INT NOT NULL);
+    CREATE CLUSTERED INDEX ClusteredIndex1 ON master.dbo.Table1 (Column1);
+
+    EXEC tSQLt.FakeTable 'master.dbo.Table1';
+    EXEC tSQLt.ApplyIndex 'master.dbo.Table1', 'ClusteredIndex1';
+
+    EXEC tSQLt.ExpectException 'Cannot create more than one clustered index on table ''master.dbo.Table1''. Drop the existing clustered index ''ClusteredIndex1'' before creating another.';
+
+    CREATE CLUSTERED INDEX ClusteredIndex2 ON master.dbo.Table1 (Column1);
 END;
 GO
