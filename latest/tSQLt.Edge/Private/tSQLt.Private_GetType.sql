@@ -7,20 +7,22 @@ CREATE PROCEDURE tSQLt.Private_GetType
     @CollationName NVARCHAR(MAX) = NULL
 AS
 BEGIN
-    DECLARE @TypeName NVARCHAR(MAX)
-    EXEC tSQLt.Private_GetTypeName @TypeName OUTPUT, @TypeId
+    DECLARE @TypeName NVARCHAR(MAX) = TYPE_NAME(@TypeId)
+    IF @TypeId > 256
+    BEGIN
+        EXEC tSQLt.Private_GetTypeName @TypeName OUTPUT, @TypeId
+    END
 
     SELECT
         @Type = CONCAT
         (
             @TypeName,
             CASE
-            WHEN @Length = -1 AND TYPE_NAME(@TypeId) IN ('nchar', 'nvarchar',
-                                        'char', 'varchar', 'binary', 'varbinary') THEN '(max)'
-            WHEN TYPE_NAME(@TypeId) IN ('nchar', 'nvarchar')                      THEN CONCAT('(', @Length / 2, ')')
-            WHEN TYPE_NAME(@TypeId) IN ('char', 'varchar', 'binary', 'varbinary') THEN CONCAT('(', @Length, ')')
-            WHEN TYPE_NAME(@TypeId) IN ('decimal', 'numeric')                     THEN CONCAT('(', @Precision, ',', @Scale, ')')
-            WHEN TYPE_NAME(@TypeId) IN ('datetime2', 'datetimeoffset', 'time')    THEN CONCAT('(', @Scale, ')')
+            WHEN @Length = -1 AND @TypeName IN ('nchar', 'nvarchar', 'char', 'varchar', 'binary', 'varbinary') THEN '(max)'
+            WHEN @TypeName IN ('nchar', 'nvarchar')                      THEN CONCAT('(', @Length / 2, ')')
+            WHEN @TypeName IN ('char', 'varchar', 'binary', 'varbinary') THEN CONCAT('(', @Length, ')')
+            WHEN @TypeName IN ('decimal', 'numeric')                     THEN CONCAT('(', @Precision, ',', @Scale, ')')
+            WHEN @TypeName IN ('datetime2', 'datetimeoffset', 'time')    THEN CONCAT('(', @Scale, ')')
             ELSE ''
             END,
             CASE
