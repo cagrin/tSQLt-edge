@@ -23,12 +23,25 @@ CREATE PROCEDURE tSQLt.System_Types
 	@ObjectName NVARCHAR(MAX) = NULL
 AS
 BEGIN
-	DECLARE @ObjectFilter NVARCHAR(MAX) = CONCAT('WHERE user_type_id = ', @TypeId)
+	DECLARE @SourceTable NVARCHAR(MAX) = 'sys.types'
+	IF PARSENAME(@ObjectName, 3) IS NOT NULL
+	BEGIN
+		SET @SourceTable = CONCAT(QUOTENAME(PARSENAME(@ObjectName, 3)), '.', @SourceTable)
+	END
 
-	EXEC tSQLt.System_Table
-		@SysTableType = 'System_TypesType',
-		@SysTableName = 'sys.types',
-		@ObjectName = @ObjectName,
-		@ObjectFilter = @ObjectFilter
+	DECLARE @TableTypeColumns NVARCHAR(MAX)
+	EXEC tSQLt.System_GetTableTypeColumns @TableTypeColumns OUTPUT, @TableTypeName = 'System_TypesType'
+
+	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
+	(
+		' ',
+		'DECLARE @Types tSQLt.System_TypesType',
+		'INSERT INTO @Types SELECT', @TableTypeColumns,
+		'FROM', @SourceTable,
+		'WHERE user_type_id = @TypeId',
+		'SELECT * FROM @Types'
+	);
+
+	EXEC sys.sp_executesql @Command, N'@TypeId INT', @TypeId;
 END;
 GO

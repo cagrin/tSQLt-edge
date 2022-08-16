@@ -43,14 +43,11 @@ CREATE PROCEDURE tSQLt.System_Columns
 	@ObjectName NVARCHAR(MAX)
 AS
 BEGIN
-	DECLARE
-		@SourceTable NVARCHAR(MAX) = 'sys.columns',
-		@SourceObject NVARCHAR(MAX) = CONCAT('OBJECT_ID(''', REPLACE(@ObjectName, '''', ''''''), ''')')
-
+	DECLARE	@SourceTable NVARCHAR(MAX) = 'sys.columns'
 	IF OBJECT_ID(CONCAT('tempdb..', @ObjectName)) IS NOT NULL
 	BEGIN
 		SET @SourceTable = 'tempdb.sys.columns'
-		SET @SourceObject = CONCAT('OBJECT_ID(CONCAT(''tempdb..'',''', REPLACE(@ObjectName, '''', ''''''), '''))')
+		SET @ObjectName = CONCAT('tempdb..', @ObjectName)
 	END
 	ELSE IF PARSENAME(@ObjectName, 3) IS NOT NULL
 	BEGIN
@@ -66,10 +63,10 @@ BEGIN
 		'DECLARE @Columns tSQLt.System_ColumnsType;',
 		'INSERT INTO @Columns SELECT', @TableTypeColumns,
 		'FROM', @SourceTable,
-		'WHERE object_id =', @SourceObject,
+		'WHERE object_id = OBJECT_ID(@ObjectName)',
 		'SELECT * FROM @Columns'
 	);
 
-	EXEC (@Command);
+	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX)', @ObjectName;
 END;
 GO

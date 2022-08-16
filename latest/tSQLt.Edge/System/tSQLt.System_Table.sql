@@ -1,8 +1,7 @@
 CREATE PROCEDURE tSQLt.System_Table
 	@SysTableType NVARCHAR(MAX) = 'System_ObjectsType',
 	@SysTableName NVARCHAR(MAX) = 'sys.objects',
-	@ObjectName NVARCHAR(MAX) = NULL,
-	@ObjectFilter NVARCHAR(MAX) = NULL
+	@ObjectName NVARCHAR(MAX) = NULL
 AS
 BEGIN
 	DECLARE @DatabaseName NVARCHAR(MAX)
@@ -20,7 +19,6 @@ BEGIN
 		'DECLARE @Objects tSQLt.', @SysTableType,
 		'INSERT INTO @Objects SELECT', @TableTypeColumns,
 		'FROM', @DatabaseName, @SysTableName,
-		@ObjectFilter,
 		'SELECT * FROM @Objects'
 	);
 

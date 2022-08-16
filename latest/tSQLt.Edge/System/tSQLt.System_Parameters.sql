@@ -28,10 +28,7 @@ CREATE PROCEDURE tSQLt.System_Parameters
 	@ObjectName NVARCHAR(MAX)
 AS
 BEGIN
-	DECLARE
-		@SourceTable NVARCHAR(MAX) = 'sys.parameters',
-		@SourceObject NVARCHAR(MAX) = CONCAT('OBJECT_ID(''', REPLACE(@ObjectName, '''', ''''''), ''')')
-
+	DECLARE @SourceTable NVARCHAR(MAX) = 'sys.parameters'
 	IF PARSENAME(@ObjectName, 3) IS NOT NULL
 	BEGIN
 		SET @SourceTable = CONCAT(QUOTENAME(PARSENAME(@ObjectName, 3)), '.', @SourceTable)
@@ -46,10 +43,10 @@ BEGIN
 		'DECLARE @Parameters tSQLt.System_ParametersType;',
 		'INSERT INTO @Parameters SELECT', @TableTypeColumns,
 		'FROM', @SourceTable,
-		'WHERE object_id =', @SourceObject,
+		'WHERE object_id = OBJECT_ID(@ObjectName)',
 		'SELECT * FROM @Parameters'
 	);
 
-	EXEC (@Command);
+	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX)', @ObjectName;
 END;
 GO
