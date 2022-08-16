@@ -19,31 +19,16 @@ CREATE TYPE tSQLt.System_TypesType AS TABLE
 GO
 
 CREATE PROCEDURE tSQLt.System_Types
-	@TypeId INT
+	@TypeId INT,
+	@ObjectName NVARCHAR(MAX) = NULL
 AS
 BEGIN
-	DECLARE @Types tSQLt.System_TypesType;
+	DECLARE @ObjectFilter NVARCHAR(MAX) = CONCAT('WHERE user_type_id = ', @TypeId)
 
-    INSERT INTO @Types
-    SELECT
-		[name],
-		[system_type_id],
-		[user_type_id],
-		[schema_id],
-		[principal_id],
-		[max_length],
-		[precision],
-		[scale],
-		[collation_name],
-		[is_nullable],
-		[is_user_defined],
-		[is_assembly_type],
-		[default_object_id],
-		[rule_object_id],
-		[is_table_type]
-	FROM sys.types
-    WHERE user_type_id = @TypeId
-
-    SELECT * FROM @Types
+	EXEC tSQLt.System_Table
+		@SysTableType = 'System_TypesType',
+		@SysTableName = 'sys.types',
+		@ObjectName = @ObjectName,
+		@ObjectFilter = @ObjectFilter
 END;
 GO
