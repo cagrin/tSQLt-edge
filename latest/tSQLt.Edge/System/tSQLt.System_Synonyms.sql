@@ -17,27 +17,12 @@ CREATE TYPE tSQLt.System_SynonymsType AS TABLE
 GO
 
 CREATE PROCEDURE tSQLt.System_Synonyms
+	@ObjectName NVARCHAR(MAX) = NULL
 AS
 BEGIN
-	DECLARE @Synonyms tSQLt.System_SynonymsType;
-
-    INSERT INTO @Synonyms
-    SELECT
-		[name],
-		[object_id],
-		[principal_id],
-		[schema_id],
-		[parent_object_id],
-		[type],
-		[type_desc],
-		[create_date],
-		[modify_date],
-		[is_ms_shipped],
-		[is_published],
-		[is_schema_published],
-		[base_object_name]
-	FROM sys.synonyms
-
-    SELECT * FROM @Synonyms
+	EXEC tSQLt.System_Table
+		@SysTableType = 'System_SynonymsType',
+		@SysTableName = 'sys.synonyms',
+		@ObjectName = @ObjectName
 END;
 GO

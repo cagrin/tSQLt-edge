@@ -16,26 +16,12 @@ CREATE TYPE tSQLt.System_SqlModulesType AS TABLE
 GO
 
 CREATE PROCEDURE tSQLt.System_SqlModules
+	@ObjectName NVARCHAR(MAX) = NULL
 AS
 BEGIN
-	DECLARE @SqlModules tSQLt.System_SqlModulesType;
-
-    INSERT INTO @SqlModules
-    SELECT
-		[object_id],
-		[definition],
-		[uses_ansi_nulls],
-		[uses_quoted_identifier],
-		[is_schema_bound],
-		[uses_database_collation],
-		[is_recompiled],
-		[null_on_null_input],
-		[execute_as_principal_id],
-		[uses_native_compilation],
-		[inline_type],
-		[is_inlineable]
-	FROM sys.sql_modules
-
-    SELECT * FROM @SqlModules
+	EXEC tSQLt.System_Table
+		@SysTableType = 'System_SqlModulesType',
+		@SysTableName = 'sys.sql_modules',
+		@ObjectName = @ObjectName
 END;
 GO

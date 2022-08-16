@@ -16,26 +16,12 @@ CREATE TYPE tSQLt.System_ObjectsType AS TABLE
 GO
 
 CREATE PROCEDURE tSQLt.System_Objects
+	@ObjectName NVARCHAR(MAX) = NULL
 AS
 BEGIN
-	DECLARE @Objects tSQLt.System_ObjectsType;
-
-    INSERT INTO @Objects
-    SELECT
-		[name],
-		[object_id],
-		[principal_id],
-		[schema_id],
-		[parent_object_id],
-		[type],
-		[type_desc],
-		[create_date],
-		[modify_date],
-		[is_ms_shipped],
-		[is_published],
-		[is_schema_published]
-	FROM sys.objects
-
-    SELECT * FROM @Objects
+	EXEC tSQLt.System_Table
+		@SysTableType = 'System_ObjectsType',
+		@SysTableName = 'sys.objects',
+		@ObjectName = @ObjectName
 END;
 GO
