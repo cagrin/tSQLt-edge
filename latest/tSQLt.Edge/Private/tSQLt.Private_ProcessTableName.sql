@@ -12,25 +12,28 @@ BEGIN
 
     EXEC tSQLt.AssertObjectExists @TableName;
 
-    DECLARE @System_Synonyms tSQLt.System_SynonymsType
-    INSERT INTO @System_Synonyms
-    EXEC tSQLt.System_Synonyms
-
-    DECLARE @BaseObjectName NVARCHAR(MAX) =
-    (
-        SELECT base_object_name
-        FROM @System_Synonyms
-        WHERE object_id = OBJECT_ID(@TableName)
-    )
-
-    IF (@BaseObjectName IS NOT NULL)
+    IF OBJECT_ID(@TableName, 'SN') IS NOT NULL
     BEGIN
-        IF (COALESCE(OBJECT_ID(@BaseObjectName, 'U'), OBJECT_ID(@BaseObjectName, 'V')) IS NULL)
-        BEGIN
-            EXEC tSQLt.Fail 'Cannot process synonym', @TableName, 'as it is pointing to', @BaseObjectName, 'which is not a table or view.';
-        END;
+        DECLARE @System_Synonyms tSQLt.System_SynonymsType
+        INSERT INTO @System_Synonyms
+        EXEC tSQLt.System_Synonyms
 
-        SET @TableName = @BaseObjectName;
+        DECLARE @BaseObjectName NVARCHAR(MAX) =
+        (
+            SELECT base_object_name
+            FROM @System_Synonyms
+            WHERE object_id = OBJECT_ID(@TableName)
+        )
+
+        IF (@BaseObjectName IS NOT NULL)
+        BEGIN
+            IF (COALESCE(OBJECT_ID(@BaseObjectName, 'U'), OBJECT_ID(@BaseObjectName, 'V')) IS NULL)
+            BEGIN
+                EXEC tSQLt.Fail 'Cannot process synonym', @TableName, 'as it is pointing to', @BaseObjectName, 'which is not a table or view.';
+            END;
+
+            SET @TableName = @BaseObjectName;
+        END
     END
 END;
 GO
