@@ -25,7 +25,7 @@ CREATE TYPE tSQLt.System_IndexColumnsType AS TABLE
 GO
 
 CREATE PROCEDURE tSQLt.System_IndexColumns
-	@ObjectName NVARCHAR(MAX) = NULL
+	@ObjectName NVARCHAR(MAX)
 AS
 BEGIN
 	DECLARE
@@ -35,10 +35,6 @@ BEGIN
 	IF PARSENAME(@ObjectName, 3) IS NOT NULL
 	BEGIN
 		SET @DatabaseName = CONCAT(QUOTENAME(PARSENAME(@ObjectName, 3)), '.')
-	END
-	IF @ObjectName IS NOT NULL
-	BEGIN
-		SET @ObjectFilter = CONCAT('WHERE t.object_id = OBJECT_ID(''', REPLACE(@ObjectName, '''', ''''''), ''')')
 	END
 
 	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
@@ -72,10 +68,10 @@ BEGIN
 		'INNER JOIN ', @DatabaseName, 'sys.indexes i ON i.[object_id] = t.[object_id]',
 		'INNER JOIN ', @DatabaseName, 'sys.index_columns ic ON ic.[object_id] = t.[object_id] AND ic.[index_id] = i.[index_id]',
 		'INNER JOIN ', @DatabaseName, 'sys.columns c ON c.[object_id] = t.[object_id] AND c.[column_id] = ic.[column_id]',
-		@ObjectFilter,
+		'WHERE t.object_id = OBJECT_ID(@ObjectName)',
 		'SELECT * FROM @IndexColumns'
 	);
 
-	EXEC (@Command);
+	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX)', @ObjectName;
 END;
 GO
