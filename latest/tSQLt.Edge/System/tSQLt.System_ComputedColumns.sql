@@ -65,11 +65,11 @@ BEGIN
 	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
 	(
 		' ',
-		'DECLARE @DefaultConstraints tSQLt.', @TableTypeName,
-		'INSERT INTO @DefaultConstraints SELECT', @TableTypeColumns,
+		'DECLARE @Columns tSQLt.', @TableTypeName,
+		'INSERT INTO @Columns SELECT', @TableTypeColumns,
 		'FROM', @SourceTable,
 		'WHERE object_id = OBJECT_ID(@ObjectName) AND column_id = @ColumnId',
-		'SELECT * FROM @DefaultConstraints'
+		'SELECT * FROM @Columns'
 	);
 
 	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX), @ColumnId INT', @ObjectName, @ColumnId;

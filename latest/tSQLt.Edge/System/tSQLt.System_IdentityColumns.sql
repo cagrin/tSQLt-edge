@@ -48,97 +48,31 @@ CREATE PROCEDURE tSQLt.System_IdentityColumns
 	@ColumnId INT
 AS
 BEGIN
-	DECLARE @IdentityColumns tSQLt.System_IdentityColumnsType;
+	DECLARE @TableTypeName NVARCHAR(MAX) = 'System_IdentityColumnsType'
+	DECLARE @SourceTable NVARCHAR(MAX) = 'sys.identity_columns'
+	IF OBJECT_ID(CONCAT('tempdb..', @ObjectName)) IS NOT NULL
+	BEGIN
+		SET @SourceTable = CONCAT('tempdb.', @SourceTable)
+		SET @ObjectName = CONCAT('tempdb..', @ObjectName)
+	END
+	ELSE IF PARSENAME(@ObjectName, 3) IS NOT NULL
+	BEGIN
+		SET @SourceTable = CONCAT(QUOTENAME(PARSENAME(@ObjectName, 3)), '.', @SourceTable)
+	END
 
-    INSERT INTO @IdentityColumns
-    SELECT
-		[object_id],
-		[name],
-		[column_id],
-		[system_type_id],
-		[user_type_id],
-		[max_length],
-		[precision],
-		[scale],
-		[collation_name],
-		[is_nullable],
-		[is_ansi_padded],
-		[is_rowguidcol],
-		[is_identity],
-		[is_filestream],
-		[is_replicated],
-		[is_non_sql_subscribed],
-		[is_merge_published],
-		[is_dts_replicated],
-		[is_xml_document],
-		[xml_collection_id],
-		[default_object_id],
-		[rule_object_id],
-		[seed_value],
-		[increment_value],
-		[last_value],
-		[is_not_for_replication],
-		[is_computed],
-		[is_sparse],
-		[is_column_set],
-		[generated_always_type],
-		[generated_always_type_desc],
-		[encryption_type],
-		[encryption_type_desc],
-		[encryption_algorithm_name],
-		[column_encryption_key_id],
-		[column_encryption_key_database_name],
-		[is_hidden],
-		[is_masked],
-		[graph_type],
-		[graph_type_desc]
-	FROM sys.identity_columns
-    WHERE object_id = OBJECT_ID(@ObjectName) AND column_id = @ColumnId
-    UNION ALL
-    SELECT
-		[object_id],
-		[name],
-		[column_id],
-		[system_type_id],
-		[user_type_id],
-		[max_length],
-		[precision],
-		[scale],
-		[collation_name],
-		[is_nullable],
-		[is_ansi_padded],
-		[is_rowguidcol],
-		[is_identity],
-		[is_filestream],
-		[is_replicated],
-		[is_non_sql_subscribed],
-		[is_merge_published],
-		[is_dts_replicated],
-		[is_xml_document],
-		[xml_collection_id],
-		[default_object_id],
-		[rule_object_id],
-		[seed_value],
-		[increment_value],
-		[last_value],
-		[is_not_for_replication],
-		[is_computed],
-		[is_sparse],
-		[is_column_set],
-		[generated_always_type],
-		[generated_always_type_desc],
-		[encryption_type],
-		[encryption_type_desc],
-		[encryption_algorithm_name],
-		[column_encryption_key_id],
-		[column_encryption_key_database_name],
-		[is_hidden],
-		[is_masked],
-		[graph_type],
-		[graph_type_desc]
-	FROM tempdb.sys.identity_columns
-    WHERE object_id = OBJECT_ID(CONCAT('tempdb..', @ObjectName)) AND column_id = @ColumnId
+	DECLARE @TableTypeColumns NVARCHAR(MAX)
+	EXEC tSQLt.System_GetTableTypeColumns @TableTypeColumns OUTPUT, @TableTypeName
 
-    SELECT * FROM @IdentityColumns
+	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
+	(
+		' ',
+		'DECLARE @Columns tSQLt.', @TableTypeName,
+		'INSERT INTO @Columns SELECT', @TableTypeColumns,
+		'FROM', @SourceTable,
+		'WHERE object_id = OBJECT_ID(@ObjectName) AND column_id = @ColumnId',
+		'SELECT * FROM @Columns'
+	);
+
+	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX), @ColumnId INT', @ObjectName, @ColumnId;
 END;
 GO
