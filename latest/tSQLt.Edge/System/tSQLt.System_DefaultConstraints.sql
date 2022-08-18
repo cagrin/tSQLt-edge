@@ -23,47 +23,31 @@ CREATE PROCEDURE tSQLt.System_DefaultConstraints
 	@ColumnId INT
 AS
 BEGIN
-	DECLARE @DefaultConstraints tSQLt.System_DefaultConstraintsType;
+	DECLARE @TableTypeName NVARCHAR(MAX) = 'System_DefaultConstraintsType'
+	DECLARE @SourceTable NVARCHAR(MAX) = 'sys.default_constraints'
+	IF OBJECT_ID(CONCAT('tempdb..', @ObjectName)) IS NOT NULL
+	BEGIN
+		SET @SourceTable = CONCAT('tempdb.', @SourceTable)
+		SET @ObjectName = CONCAT('tempdb..', @ObjectName)
+	END
+	ELSE IF PARSENAME(@ObjectName, 3) IS NOT NULL
+	BEGIN
+		SET @SourceTable = CONCAT(QUOTENAME(PARSENAME(@ObjectName, 3)), '.', @SourceTable)
+	END
 
-    INSERT INTO @DefaultConstraints
-    SELECT
-		[name],
-		[object_id],
-		[principal_id],
-		[schema_id],
-		[parent_object_id],
-		[type],
-		[type_desc],
-		[create_date],
-		[modify_date],
-		[is_ms_shipped],
-		[is_published],
-		[is_schema_published],
-		[parent_column_id],
-		[definition],
-		[is_system_named]
-	FROM sys.default_constraints
-    WHERE parent_object_id = OBJECT_ID(@ObjectName) AND parent_column_id = @ColumnId
-    UNION ALL
-    SELECT
-		[name],
-		[object_id],
-		[principal_id],
-		[schema_id],
-		[parent_object_id],
-		[type],
-		[type_desc],
-		[create_date],
-		[modify_date],
-		[is_ms_shipped],
-		[is_published],
-		[is_schema_published],
-		[parent_column_id],
-		[definition],
-		[is_system_named]
-	FROM tempdb.sys.default_constraints
-    WHERE parent_object_id = OBJECT_ID(CONCAT('tempdb..', @ObjectName)) AND parent_column_id = @ColumnId
+	DECLARE @TableTypeColumns NVARCHAR(MAX)
+	EXEC tSQLt.System_GetTableTypeColumns @TableTypeColumns OUTPUT, @TableTypeName
 
-    SELECT * FROM @DefaultConstraints
+	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
+	(
+		' ',
+		'DECLARE @DefaultConstraints tSQLt.', @TableTypeName,
+		'INSERT INTO @DefaultConstraints SELECT', @TableTypeColumns,
+		'FROM', @SourceTable,
+		'WHERE parent_object_id = OBJECT_ID(@ObjectName) AND parent_column_id = @ColumnId',
+		'SELECT * FROM @DefaultConstraints'
+	);
+
+	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX), @ColumnId INT', @ObjectName, @ColumnId;
 END;
 GO
