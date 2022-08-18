@@ -5,11 +5,10 @@ AS
 BEGIN
     DECLARE @System_Objects tSQLt.System_ObjectsType
     INSERT INTO @System_Objects
-    EXEC tSQLt.System_Objects
+    EXEC tSQLt.System_Objects @ObjectName
 
     SELECT
         @ObjectType = type
     FROM @System_Objects
-    WHERE object_id = OBJECT_ID(@ObjectName)
 END;
 GO

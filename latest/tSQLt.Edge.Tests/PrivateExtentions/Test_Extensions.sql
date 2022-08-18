@@ -41,14 +41,15 @@ CREATE PROCEDURE Test_Extensions.FakeObjectType
     @FakeType CHAR(2)
 AS
 BEGIN
-    DECLARE @System_Objects tSQLt.System_ObjectsType
-    INSERT INTO @System_Objects
-    EXEC tSQLt.System_Objects
+    DECLARE @CommandToExecute NVARCHAR(MAX) = CONCAT
+    (
+        'IF @ObjectName = ''', @ObjectName, '''',
+        ' BEGIN',
+        ' SET @ObjectType = ''', @FakeType, '''',
+        ' RETURN',
+        ' END'
+    )
 
-    SELECT * INTO dbo.FakeSystemObjects FROM @System_Objects;
-
-    UPDATE dbo.FakeSystemObjects SET [type] = @FakeType WHERE [object_id] = OBJECT_ID(@ObjectName)
-
-    EXEC tSQLt.SpyProcedure 'tSQLt.System_Objects', @CommandToExecute = 'SELECT * FROM dbo.FakeSystemObjects'
+    EXEC tSQLt.SpyProcedure 'tSQLt.Private_GetObjectType', @CommandToExecute, @CallOriginal = 1
 END;
 GO

@@ -23,9 +23,10 @@ BEGIN
 
     EXEC tSQLt.AssertObjectExists @ObjectName;
 
-    DECLARE @ObjectId INT;
+    DECLARE @ObjectId INT, @FakeObjectName NVARCHAR(MAX);
     SELECT
-        @ObjectId = ObjectId
+        @ObjectId = ObjectId,
+        @FakeObjectName = FakeObjectName
     FROM tSQLt.Private_FakeTables
     WHERE FakeObjectId = OBJECT_ID(@ObjectName)
 
@@ -40,13 +41,12 @@ BEGIN
 
     DECLARE @System_Objects tSQLt.System_ObjectsType
     INSERT INTO @System_Objects
-    EXEC tSQLt.System_Objects
+    EXEC tSQLt.System_Objects @FakeObjectName, @ParentObjectFilter = 1
 
     SELECT
         @ConstraintId = [object_id],
         @ConstraintType = [type]
     FROM @System_Objects
-    WHERE [parent_object_id] = @ObjectId
-    AND ([name] = @ConstraintName OR QUOTENAME([name]) = @ConstraintName)
+    WHERE [name] = @ConstraintName OR QUOTENAME([name]) = @ConstraintName
 END;
 GO

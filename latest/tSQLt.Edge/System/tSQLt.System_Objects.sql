@@ -16,12 +16,37 @@ CREATE TYPE tSQLt.System_ObjectsType AS TABLE
 GO
 
 CREATE PROCEDURE tSQLt.System_Objects
-	@ObjectName NVARCHAR(MAX) = NULL
+	@ObjectName NVARCHAR(MAX),
+	@ParentObjectFilter BIT = 0
 AS
 BEGIN
-	EXEC tSQLt.System_Table
-		@SysTableType = 'System_ObjectsType',
-		@SysTableName = 'sys.objects',
-		@ObjectName = @ObjectName
+	DECLARE @TableTypeName NVARCHAR(MAX) = 'System_ObjectsType'
+
+	DECLARE @SourceTable NVARCHAR(MAX) = 'sys.objects'
+	IF PARSENAME(@ObjectName, 3) IS NOT NULL
+	BEGIN
+		SET @SourceTable = CONCAT(QUOTENAME(PARSENAME(@ObjectName, 3)), '.', @SourceTable)
+	END
+
+	DECLARE @ObjectFilter NVARCHAR(MAX) = 'object_id'
+	IF @ParentObjectFilter = 1
+	BEGIN
+		SET @ObjectFilter = 'parent_object_id'
+	END
+
+	DECLARE @TableTypeColumns NVARCHAR(MAX)
+	EXEC tSQLt.System_GetTableTypeColumns @TableTypeColumns OUTPUT, @TableTypeName
+
+	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
+	(
+		' ',
+		'DECLARE @Objects tSQLt.', @TableTypeName,
+		'INSERT INTO @Objects SELECT', @TableTypeColumns,
+		'FROM', @SourceTable,
+		CASE WHEN @ObjectName IS NOT NULL THEN CONCAT('WHERE ', @ObjectFilter, ' = OBJECT_ID(@ObjectName)') ELSE '' END,
+		'SELECT * FROM @Objects'
+	);
+
+	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX)', @ObjectName;
 END;
 GO

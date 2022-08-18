@@ -7,26 +7,25 @@ AS
 BEGIN
     EXEC tSQLt.AssertObjectExists @TableName;
 
-    DECLARE @ObjectId INT;
+    DECLARE @FakeObjectName NVARCHAR(MAX);
     SELECT
-        @ObjectId = ObjectId
+        @FakeObjectName = FakeObjectName
     FROM tSQLt.Private_FakeTables
     WHERE FakeObjectId = OBJECT_ID(@TableName)
 
-    IF @ObjectId IS NULL
+    IF @FakeObjectName IS NULL
     BEGIN
         EXEC tSQLt.Fail 'Table', @TableName, 'was not faked by tSQLt.FakeTable.';
     END
 
     DECLARE @System_Objects tSQLt.System_ObjectsType
     INSERT INTO @System_Objects
-    EXEC tSQLt.System_Objects
+    EXEC tSQLt.System_Objects @FakeObjectName, @ParentObjectFilter = 1
 
     SELECT
         @TriggerId = [object_id],
         @ObjectName = CONCAT(QUOTENAME(SCHEMA_NAME([schema_id])), '.', QUOTENAME([name]))
     FROM @System_Objects
-    WHERE [parent_object_id] = @ObjectId
-    AND ([name] = @TriggerName OR QUOTENAME([name]) = @TriggerName)
+    WHERE [name] = @TriggerName OR QUOTENAME([name]) = @TriggerName
 END;
 GO
