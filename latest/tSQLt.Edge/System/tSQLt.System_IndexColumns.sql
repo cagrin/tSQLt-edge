@@ -37,8 +37,6 @@ BEGIN
 	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
 	(
 		' ',
-		'DECLARE @IndexColumns tSQLt.System_IndexColumnsType;',
-		'INSERT INTO @IndexColumns',
 		'SELECT
 			t.[object_id],
 			t.[schema_id],
@@ -65,8 +63,7 @@ BEGIN
 		'INNER JOIN ', @DatabaseName, 'sys.indexes i ON i.[object_id] = t.[object_id]',
 		'INNER JOIN ', @DatabaseName, 'sys.index_columns ic ON ic.[object_id] = t.[object_id] AND ic.[index_id] = i.[index_id]',
 		'INNER JOIN ', @DatabaseName, 'sys.columns c ON c.[object_id] = t.[object_id] AND c.[column_id] = ic.[column_id]',
-		'WHERE t.object_id = OBJECT_ID(@ObjectName)',
-		'SELECT * FROM @IndexColumns'
+		'WHERE t.object_id = OBJECT_ID(@ObjectName)'
 	);
 
 	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX)', @ObjectName;

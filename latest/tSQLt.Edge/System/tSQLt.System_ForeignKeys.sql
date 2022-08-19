@@ -28,8 +28,6 @@ BEGIN
 	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
 	(
 		' ',
-		'DECLARE @ForeignKeyColumns tSQLt.System_ForeignKeysType;',
-		'INSERT INTO @ForeignKeyColumns',
 		'SELECT
 			fk.object_id,
 			fk.schema_id,
@@ -60,8 +58,7 @@ BEGIN
 			)
 		FROM ', @DatabaseName, 'sys.foreign_keys fk
 		INNER JOIN ', @DatabaseName, 'sys.tables t ON fk.referenced_object_id = t.object_id',
-		'WHERE fk.object_id = @ConstraintId',
-		'SELECT * FROM @ForeignKeyColumns'
+		'WHERE fk.object_id = @ConstraintId'
 	);
 
 	EXEC sys.sp_executesql @Command, N'@ConstraintId INT', @ConstraintId;

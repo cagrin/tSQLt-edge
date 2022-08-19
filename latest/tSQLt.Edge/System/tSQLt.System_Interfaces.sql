@@ -22,9 +22,6 @@ GO
 CREATE PROCEDURE tSQLt.System_Interfaces
 AS
 BEGIN
-	DECLARE @Interfaces tSQLt.System_InterfacesType;
-
-	INSERT INTO @Interfaces
     SELECT
 		[name],
 		[object_id],
@@ -48,7 +45,5 @@ BEGIN
     AND name NOT LIKE 'Private[_]%'
     AND name NOT LIKE 'System[_]%'
     AND name <> 'RunAll'
-
-    SELECT * FROM @Interfaces
 END;
 GO

@@ -18,7 +18,7 @@ BEGIN
 		' ',
 		'SELECT', @TableTypeColumns,
 		'FROM', @DatabaseName, @SysTableName,
-		CASE WHEN @ObjectName IS NOT NULL THEN 'WHERE object_id = OBJECT_ID(@ObjectName)' ELSE '' END
+		'WHERE object_id = OBJECT_ID(@ObjectName)'
 	);
 
 	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX)', @ObjectName;
