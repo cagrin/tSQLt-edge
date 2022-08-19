@@ -6,11 +6,14 @@ AS
 BEGIN
     EXEC tSQLt.AssertObjectExists @TableName;
 
+    DECLARE @QuotedObjectName NVARCHAR(MAX)
+    EXEC tSQLt.Private_GetQuotedObjectName @QuotedObjectName OUTPUT, @TableName;
+
     DECLARE @FakeObjectName NVARCHAR(MAX);
     SELECT
         @FakeObjectName = FakeObjectName
     FROM tSQLt.Private_FakeTables
-    WHERE FakeObjectId = OBJECT_ID(@TableName)
+    WHERE ObjectName = @QuotedObjectName
 
     IF @FakeObjectName IS NULL
     BEGIN
