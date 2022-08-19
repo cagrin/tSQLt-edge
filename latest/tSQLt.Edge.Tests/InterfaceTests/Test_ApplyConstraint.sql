@@ -282,3 +282,17 @@ BEGIN
     INSERT INTO Schema1.Table2 (Table1Column1, Column2) VALUES (1, 1)
 END;
 GO
+
+CREATE PROCEDURE Test_ApplyConstraint.Test_ExternalCheckConstraintApplied
+AS
+BEGIN
+    CREATE TABLE master.dbo.Table1 (Column1 INT CONSTRAINT Check1 CHECK (Column1 = 0));
+
+    EXEC tSQLt.FakeTable 'master.dbo.Table1';
+    EXEC tSQLt.ApplyConstraint 'master.dbo.Table1', 'Check1';
+
+    EXEC tSQLt.ExpectException @ExpectedMessagePattern = 'The INSERT statement conflicted with the CHECK constraint "Check1". The conflict occurred in database "master", table "dbo.Table1", column ''Column1''.';
+
+    INSERT INTO master.dbo.Table1 (Column1) VALUES (1)
+END;
+GO

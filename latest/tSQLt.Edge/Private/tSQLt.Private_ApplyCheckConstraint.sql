@@ -3,16 +3,23 @@ CREATE PROCEDURE tSQLt.Private_ApplyCheckConstraint
     @ConstraintId INT
 AS
 BEGIN
+    EXEC tSQLt.Private_GetQuotedObjectName @ObjectName OUTPUT, @ObjectName;
+
     DECLARE @System_CheckConstraints tSQLt.System_CheckConstraintsType
     INSERT INTO @System_CheckConstraints
     EXEC tSQLt.System_CheckConstraints @ObjectName, @ConstraintId
 
-    DECLARE @ParentName NVARCHAR(MAX), @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX);
+    DECLARE @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX);
     SELECT
-        @ParentName = CONCAT(QUOTENAME(SCHEMA_NAME([schema_id])), '.', QUOTENAME(OBJECT_NAME([parent_object_id]))),
-        @ConstraintName = QUOTENAME(OBJECT_NAME([object_id])),
+        @ConstraintName = QUOTENAME([name]),
         @ConstraintDefinition = [definition]
     FROM @System_CheckConstraints
+
+    DECLARE @ParentName NVARCHAR(MAX);
+    SELECT
+        @ParentName = FakeObjectName
+    FROM tSQLt.Private_FakeTables
+    WHERE ObjectName = @ObjectName
 
     DECLARE @CreateConstraint NVARCHAR(MAX) = CONCAT_WS
     (
