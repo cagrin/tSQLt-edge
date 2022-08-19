@@ -63,9 +63,18 @@ BEGIN
             @DefaultConstraints NVARCHAR(MAX)
 
         EXEC tSQLt.Private_GetType @Type OUTPUT, @user_type_id, @max_length, @precision, @scale, @collation_name
-        EXEC tSQLt.Private_GetComputedColumn @ComputedColumn OUTPUT, @ObjectName, @column_id
-        EXEC tSQLt.Private_GetIdentityColumn @IdentityColumn OUTPUT, @ObjectName, @column_id
-        EXEC tSQLt.Private_GetDefaultConstraints @DefaultConstraints OUTPUT, @ObjectName, @column_id
+        IF @is_computed = 1
+        BEGIN
+            EXEC tSQLt.Private_GetComputedColumn @ComputedColumn OUTPUT, @ObjectName, @column_id
+        END
+        IF @is_identity = 1
+        BEGIN
+            EXEC tSQLt.Private_GetIdentityColumn @IdentityColumn OUTPUT, @ObjectName, @column_id
+        END
+        IF @default_object_id > 0
+        BEGIN
+            EXEC tSQLt.Private_GetDefaultConstraints @DefaultConstraints OUTPUT, @ObjectName, @column_id
+        END
 
         UPDATE @result
         SET definition =
