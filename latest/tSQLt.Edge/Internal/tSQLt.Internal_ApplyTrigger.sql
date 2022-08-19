@@ -3,20 +3,19 @@ CREATE PROCEDURE tSQLt.Internal_ApplyTrigger
     @TriggerName NVARCHAR(MAX)
 AS
 BEGIN
-    DECLARE @ObjectName NVARCHAR(MAX), @TriggerId INT;
-    EXEC tSQLt.Private_ProcessTriggerName @ObjectName OUTPUT, @TriggerId OUTPUT, @TableName, @TriggerName;
+    DECLARE @ObjectName NVARCHAR(MAX);
+    EXEC tSQLt.Private_ProcessTriggerName @ObjectName OUTPUT, @TableName, @TriggerName;
 
     DECLARE @System_SqlModules tSQLt.System_SqlModulesType
     INSERT INTO @System_SqlModules
-    EXEC tSQLt.System_SqlModules
+    EXEC tSQLt.System_SqlModules @ObjectName
 
-    IF @TriggerId IS NOT NULL
+    IF OBJECT_ID(@ObjectName, 'TR') IS NOT NULL
     BEGIN
         DECLARE @CreateTrigger NVARCHAR(MAX) =
         (
             SELECT [definition]
             FROM @System_SqlModules
-            WHERE object_id = @TriggerId
         )
 
         EXEC tSQLt.RemoveObject @ObjectName;

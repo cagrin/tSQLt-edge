@@ -1,6 +1,5 @@
 CREATE PROCEDURE tSQLt.Private_ProcessTriggerName
     @ObjectName NVARCHAR(MAX) OUTPUT,
-    @TriggerId INT OUTPUT,
     @TableName NVARCHAR(MAX),
     @TriggerName NVARCHAR(MAX)
 AS
@@ -23,7 +22,6 @@ BEGIN
     EXEC tSQLt.System_Objects @FakeObjectName, @ParentObjectFilter = 1
 
     SELECT
-        @TriggerId = [object_id],
         @ObjectName = CONCAT(QUOTENAME(SCHEMA_NAME([schema_id])), '.', QUOTENAME([name]))
     FROM @System_Objects
     WHERE [name] = @TriggerName OR QUOTENAME([name]) = @TriggerName
