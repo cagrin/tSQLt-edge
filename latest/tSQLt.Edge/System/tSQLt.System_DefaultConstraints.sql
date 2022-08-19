@@ -41,11 +41,9 @@ BEGIN
 	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
 	(
 		' ',
-		'DECLARE @DefaultConstraints tSQLt.', @TableTypeName,
-		'INSERT INTO @DefaultConstraints SELECT', @TableTypeColumns,
+		'SELECT', @TableTypeColumns,
 		'FROM', @SourceTable,
-		'WHERE parent_object_id = OBJECT_ID(@ObjectName) AND parent_column_id = @ColumnId',
-		'SELECT * FROM @DefaultConstraints'
+		'WHERE parent_object_id = OBJECT_ID(@ObjectName) AND parent_column_id = @ColumnId'
 	);
 
 	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX), @ColumnId INT', @ObjectName, @ColumnId;

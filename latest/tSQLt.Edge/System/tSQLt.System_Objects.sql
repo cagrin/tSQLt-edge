@@ -40,11 +40,9 @@ BEGIN
 	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
 	(
 		' ',
-		'DECLARE @Objects tSQLt.', @TableTypeName,
-		'INSERT INTO @Objects SELECT', @TableTypeColumns,
+		'SELECT', @TableTypeColumns,
 		'FROM', @SourceTable,
-		CASE WHEN @ObjectName IS NOT NULL THEN CONCAT('WHERE ', @ObjectFilter, ' = OBJECT_ID(@ObjectName)') ELSE '' END,
-		'SELECT * FROM @Objects'
+		CASE WHEN @ObjectName IS NOT NULL THEN CONCAT('WHERE ', @ObjectFilter, ' = OBJECT_ID(@ObjectName)') ELSE '' END
 	);
 
 	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX)', @ObjectName;

@@ -16,10 +16,8 @@ BEGIN
 	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
 	(
 		' ',
-		'DECLARE @Objects tSQLt.', @SysTableType,
-		'INSERT INTO @Objects SELECT', @TableTypeColumns,
-		'FROM', @DatabaseName, @SysTableName,
-		'SELECT * FROM @Objects'
+		'SELECT', @TableTypeColumns,
+		'FROM', @DatabaseName, @SysTableName
 	);
 
 	EXEC (@Command);

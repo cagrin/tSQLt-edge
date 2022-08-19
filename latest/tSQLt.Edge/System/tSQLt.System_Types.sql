@@ -35,11 +35,9 @@ BEGIN
 	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
 	(
 		' ',
-		'DECLARE @Types tSQLt.System_TypesType',
-		'INSERT INTO @Types SELECT', @TableTypeColumns,
+		'SELECT', @TableTypeColumns,
 		'FROM', @SourceTable,
-		'WHERE user_type_id = @TypeId',
-		'SELECT * FROM @Types'
+		'WHERE user_type_id = @TypeId'
 	);
 
 	EXEC sys.sp_executesql @Command, N'@TypeId INT', @TypeId;

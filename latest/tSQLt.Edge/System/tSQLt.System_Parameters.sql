@@ -40,11 +40,9 @@ BEGIN
 	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
 	(
 		' ',
-		'DECLARE @Parameters tSQLt.System_ParametersType;',
-		'INSERT INTO @Parameters SELECT', @TableTypeColumns,
+		'SELECT', @TableTypeColumns,
 		'FROM', @SourceTable,
-		'WHERE object_id = OBJECT_ID(@ObjectName)',
-		'SELECT * FROM @Parameters'
+		'WHERE object_id = OBJECT_ID(@ObjectName)'
 	);
 
 	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX)', @ObjectName;

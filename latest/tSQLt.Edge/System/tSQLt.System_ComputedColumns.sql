@@ -65,11 +65,9 @@ BEGIN
 	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
 	(
 		' ',
-		'DECLARE @Columns tSQLt.', @TableTypeName,
-		'INSERT INTO @Columns SELECT', @TableTypeColumns,
+		'SELECT', @TableTypeColumns,
 		'FROM', @SourceTable,
-		'WHERE object_id = OBJECT_ID(@ObjectName) AND column_id = @ColumnId',
-		'SELECT * FROM @Columns'
+		'WHERE object_id = OBJECT_ID(@ObjectName) AND column_id = @ColumnId'
 	);
 
 	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX), @ColumnId INT', @ObjectName, @ColumnId;
