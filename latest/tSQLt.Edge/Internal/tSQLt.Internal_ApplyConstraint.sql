@@ -10,7 +10,7 @@ BEGIN
 
     IF @ConstraintType = 'C'
     BEGIN
-        EXEC tSQLt.Private_ApplyCheckConstraint @Objectname, @ConstraintId;
+        EXEC tSQLt.Private_ApplyCheckConstraint @ParentName, @Objectname, @ConstraintId;
     END
     ELSE IF @ConstraintType = 'F'
     BEGIN

@@ -23,25 +23,22 @@ BEGIN
 
     EXEC tSQLt.AssertObjectExists @ObjectName;
 
-    DECLARE @ObjectId INT, @FakeObjectName NVARCHAR(MAX);
-    SELECT
-        @ObjectId = ObjectId,
-        @FakeObjectName = FakeObjectName
-    FROM tSQLt.Private_FakeTables
-    WHERE FakeObjectId = OBJECT_ID(@ObjectName)
+    DECLARE @QuotedObjectName NVARCHAR(MAX)
+    EXEC tSQLt.Private_GetQuotedObjectName @QuotedObjectName OUTPUT, @ObjectName;
 
-    IF @ObjectId IS NULL
+    SELECT
+        @ParentName = FakeObjectName
+    FROM tSQLt.Private_FakeTables
+    WHERE ObjectName = @QuotedObjectName
+
+    IF @ParentName IS NULL
     BEGIN
         EXEC tSQLt.Fail 'Table', @ObjectName, 'was not faked by tSQLt.FakeTable.';
-    END
-    ELSE
-    BEGIN
-        SET @ParentName = CONCAT(QUOTENAME(OBJECT_SCHEMA_NAME(@ObjectId)), '.', QUOTENAME(OBJECT_NAME(@ObjectId)))
     END
 
     DECLARE @System_Objects tSQLt.System_ObjectsType
     INSERT INTO @System_Objects
-    EXEC tSQLt.System_Objects @FakeObjectName, @ParentObjectFilter = 1
+    EXEC tSQLt.System_Objects @ParentName, @ParentObjectFilter = 1
 
     SELECT
         @ConstraintId = [object_id],
