@@ -23,35 +23,27 @@ CREATE TYPE tSQLt.System_CheckConstraintsType AS TABLE
 GO
 
 CREATE PROCEDURE tSQLt.System_CheckConstraints
-	@ConstraintId INT
+	@ConstraintId INT,
+	@ObjectName NVARCHAR(MAX) = NULL
 AS
 BEGIN
-	DECLARE @CheckConstraints tSQLt.System_CheckConstraintsType;
+	DECLARE @SourceTable NVARCHAR(MAX) = 'sys.check_constraints'
+	IF PARSENAME(@ObjectName, 3) IS NOT NULL
+	BEGIN
+		SET @SourceTable = CONCAT(QUOTENAME(PARSENAME(@ObjectName, 3)), '.', @SourceTable)
+	END
 
-    INSERT INTO @CheckConstraints
-    SELECT
-		[name],
-		[object_id],
-		[principal_id],
-		[schema_id],
-		[parent_object_id],
-		[type],
-		[type_desc],
-		[create_date],
-		[modify_date],
-		[is_ms_shipped],
-		[is_published],
-		[is_schema_published],
-		[is_disabled],
-		[is_not_for_replication],
-		[is_not_trusted],
-		[parent_column_id],
-		[definition],
-		[uses_database_collation],
-		[is_system_named]
-	FROM sys.check_constraints
-	WHERE [object_id] = @ConstraintId
+	DECLARE @TableTypeColumns NVARCHAR(MAX)
+	EXEC tSQLt.System_GetTableTypeColumns @TableTypeColumns OUTPUT, @TableTypeName = 'System_CheckConstraintsType'
 
-    SELECT * FROM @CheckConstraints
+	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
+	(
+		' ',
+		'SELECT', @TableTypeColumns,
+		'FROM', @SourceTable,
+		'WHERE object_id = @ConstraintId'
+	);
+
+	EXEC sys.sp_executesql @Command, N'@ConstraintId INT', @ConstraintId;
 END;
 GO
