@@ -1,4 +1,5 @@
 CREATE PROCEDURE tSQLt.Private_ApplyForeignKey
+    @ParentName NVARCHAR(MAX),
     @ObjectName NVARCHAR(MAX),
     @ConstraintId INT,
     @NoCascade BIT
@@ -8,9 +9,8 @@ BEGIN
     INSERT INTO @System_ForeignKeys
     EXEC tSQLt.System_ForeignKeys @Objectname, @ConstraintId
 
-    DECLARE @ParentName NVARCHAR(MAX), @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX), @CreateUniqueIndex NVARCHAR(MAX);
+    DECLARE @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX), @CreateUniqueIndex NVARCHAR(MAX);
     SELECT
-        @ParentName = CONCAT(QUOTENAME(SCHEMA_NAME(fk.schema_id)), '.', QUOTENAME(OBJECT_NAME(fk.parent_object_id))),
         @ConstraintName = QUOTENAME(fk.name),
         @ConstraintDefinition = CONCAT
         (

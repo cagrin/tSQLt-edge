@@ -14,7 +14,7 @@ BEGIN
     END
     ELSE IF @ConstraintType = 'F'
     BEGIN
-        EXEC tSQLt.Private_ApplyForeignKey @Objectname, @ConstraintId, @NoCascade;
+        EXEC tSQLt.Private_ApplyForeignKey @ParentName, @Objectname, @ConstraintId, @NoCascade;
     END
     ELSE IF @ConstraintType = 'PK'
     BEGIN
