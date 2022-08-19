@@ -16,13 +16,12 @@ BEGIN
     BEGIN
         DECLARE @System_Synonyms tSQLt.System_SynonymsType
         INSERT INTO @System_Synonyms
-        EXEC tSQLt.System_Synonyms
+        EXEC tSQLt.System_Synonyms @TableName
 
         DECLARE @BaseObjectName NVARCHAR(MAX) =
         (
             SELECT base_object_name
             FROM @System_Synonyms
-            WHERE object_id = OBJECT_ID(@TableName)
         )
 
         IF (@BaseObjectName IS NOT NULL)

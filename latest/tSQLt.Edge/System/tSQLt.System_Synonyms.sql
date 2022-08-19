@@ -17,7 +17,7 @@ CREATE TYPE tSQLt.System_SynonymsType AS TABLE
 GO
 
 CREATE PROCEDURE tSQLt.System_Synonyms
-	@ObjectName NVARCHAR(MAX) = NULL
+	@ObjectName NVARCHAR(MAX)
 AS
 BEGIN
 	EXEC tSQLt.System_Table
