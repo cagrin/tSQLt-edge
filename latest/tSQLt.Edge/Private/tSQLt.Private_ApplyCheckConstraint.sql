@@ -5,7 +5,7 @@ AS
 BEGIN
     DECLARE @System_CheckConstraints tSQLt.System_CheckConstraintsType
     INSERT INTO @System_CheckConstraints
-    EXEC tSQLt.System_CheckConstraints @ConstraintId
+    EXEC tSQLt.System_CheckConstraints @ObjectName, @ConstraintId
 
     DECLARE @ParentName NVARCHAR(MAX), @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX);
     SELECT

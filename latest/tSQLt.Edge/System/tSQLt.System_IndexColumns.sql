@@ -28,10 +28,7 @@ CREATE PROCEDURE tSQLt.System_IndexColumns
 	@ObjectName NVARCHAR(MAX)
 AS
 BEGIN
-	DECLARE
-		@DatabaseName NVARCHAR(MAX),
-		@ObjectFilter NVARCHAR(MAX)
-
+	DECLARE @DatabaseName NVARCHAR(MAX)
 	IF PARSENAME(@ObjectName, 3) IS NOT NULL
 	BEGIN
 		SET @DatabaseName = CONCAT(QUOTENAME(PARSENAME(@ObjectName, 3)), '.')

@@ -23,8 +23,8 @@ CREATE TYPE tSQLt.System_CheckConstraintsType AS TABLE
 GO
 
 CREATE PROCEDURE tSQLt.System_CheckConstraints
-	@ConstraintId INT,
-	@ObjectName NVARCHAR(MAX) = NULL
+	@ObjectName NVARCHAR(MAX),
+	@ConstraintId INT
 AS
 BEGIN
 	DECLARE @SourceTable NVARCHAR(MAX) = 'sys.check_constraints'

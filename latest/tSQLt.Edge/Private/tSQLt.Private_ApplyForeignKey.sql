@@ -6,7 +6,7 @@ AS
 BEGIN
     DECLARE @System_ForeignKeys tSQLt.System_ForeignKeysType
     INSERT INTO @System_ForeignKeys
-    EXEC tSQLt.System_ForeignKeys
+    EXEC tSQLt.System_ForeignKeys @Objectname, @ConstraintId
 
     DECLARE @ParentName NVARCHAR(MAX), @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX), @CreateUniqueIndex NVARCHAR(MAX);
     SELECT
@@ -33,8 +33,6 @@ BEGIN
         ) END
     FROM @System_ForeignKeys fk
     LEFT JOIN tSQLt.Private_FakeTables ft ON fk.referenced_object_id = ft.ObjectId
-    WHERE fk.schema_id = SCHEMA_ID(OBJECT_SCHEMA_NAME(OBJECT_ID(@ObjectName)))
-    AND fk.name = OBJECT_NAME(@ConstraintId)
 
     DECLARE @CreateForeignKey NVARCHAR(MAX) = CONCAT_WS
     (
