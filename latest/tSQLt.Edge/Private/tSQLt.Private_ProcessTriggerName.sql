@@ -25,13 +25,13 @@ BEGIN
     EXEC tSQLt.System_Objects @FakeObjectName, @ParentObjectFilter = 1
 
     SELECT
-        @ObjectName = CONCAT(QUOTENAME(SCHEMA_NAME([schema_id])), '.', QUOTENAME([name]))
+        @ObjectName = CONCAT(QUOTENAME(PARSENAME(@FakeObjectName, 2)), '.', QUOTENAME([name]))
     FROM @System_Objects
     WHERE [name] = @TriggerName OR QUOTENAME([name]) = @TriggerName
 
 	IF PARSENAME(@TableName, 3) IS NOT NULL
 	BEGIN
 		SET @ObjectName = CONCAT(QUOTENAME(PARSENAME(@TableName, 3)), '.', @ObjectName)
-	END  
+	END
 END;
 GO

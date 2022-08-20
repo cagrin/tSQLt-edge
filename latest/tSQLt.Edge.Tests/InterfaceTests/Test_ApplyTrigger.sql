@@ -107,7 +107,7 @@ BEGIN
     EXEC tSQLt.ApplyTrigger 'Schema1.Table1', 'Trigger1';
 END;
 GO
-/*
+
 CREATE PROCEDURE Test_ApplyTrigger.Test_IsExternalTriggeredAfterFakeTableAndApplyTrigger
 AS
 BEGIN
@@ -123,4 +123,3 @@ BEGIN
     EXEC('INSERT INTO master.Schema1.Table1 (Column1) VALUES (1);');
 END;
 GO
-*/
