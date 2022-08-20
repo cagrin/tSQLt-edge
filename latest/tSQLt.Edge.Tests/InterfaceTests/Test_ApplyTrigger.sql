@@ -107,18 +107,20 @@ BEGIN
     EXEC tSQLt.ApplyTrigger 'Schema1.Table1', 'Trigger1';
 END;
 GO
-
+/*
 CREATE PROCEDURE Test_ApplyTrigger.Test_IsExternalTriggeredAfterFakeTableAndApplyTrigger
 AS
 BEGIN
-    CREATE TABLE master.dbo.Table1 (Column1 INT);
-    EXEC('USE master; EXEC(''CREATE TRIGGER Trigger1 ON Table1 INSTEAD OF INSERT AS BEGIN RAISERROR(N''''Trigger1 triggered!'''', 16, 10); END;'');');
+    EXEC('USE master; EXEC(''CREATE SCHEMA Schema1;'')');
+    EXEC('CREATE TABLE master.Schema1.Table1 (Column1 INT);');
+    EXEC('USE master; EXEC(''CREATE TRIGGER Trigger1 ON Schema1.Table1 INSTEAD OF INSERT AS BEGIN RAISERROR(N''''Trigger1 triggered!'''', 16, 10); END;'');');
 
-    EXEC tSQLt.FakeTable 'master.dbo.Table1';
-    EXEC tSQLt.ApplyTrigger 'master.dbo.Table1', 'Trigger1';
+    EXEC tSQLt.FakeTable 'master.Schema1.Table1';
+    EXEC tSQLt.ApplyTrigger 'master.Schema1.Table1', 'Trigger1';
 
     EXEC tSQLt.ExpectException 'Trigger1 triggered!';
 
-    INSERT INTO master.dbo.Table1 (Column1) VALUES (1);
+    EXEC('INSERT INTO master.Schema1.Table1 (Column1) VALUES (1);');
 END;
 GO
+*/

@@ -286,58 +286,63 @@ GO
 CREATE PROCEDURE Test_ApplyConstraint.Test_ExternalCheckConstraintApplied
 AS
 BEGIN
-    CREATE TABLE master.dbo.Table1 (Column1 INT CONSTRAINT Check1 CHECK (Column1 = 0));
+    EXEC('USE master; EXEC(''CREATE SCHEMA Schema1;'');');
+    EXEC('CREATE TABLE master.Schema1.Table1 (Column1 INT CONSTRAINT Check1 CHECK (Column1 = 0));');
 
-    EXEC tSQLt.FakeTable 'master.dbo.Table1';
-    EXEC tSQLt.ApplyConstraint 'master.dbo.Table1', 'Check1';
+    EXEC tSQLt.FakeTable 'master.Schema1.Table1';
+    EXEC tSQLt.ApplyConstraint 'master.Schema1.Table1', 'Check1';
 
-    EXEC tSQLt.ExpectException @ExpectedMessagePattern = 'The INSERT statement conflicted with the CHECK constraint "Check1". The conflict occurred in database "master", table "dbo.Table1", column ''Column1''.';
+    EXEC tSQLt.ExpectException @ExpectedMessagePattern = 'The INSERT statement conflicted with the CHECK constraint "Check1". The conflict occurred in database "master", table "Schema1.Table1", column ''Column1''.';
 
-    INSERT INTO master.dbo.Table1 (Column1) VALUES (1)
+    EXEC('INSERT INTO master.Schema1.Table1 (Column1) VALUES (1)');
 END;
 GO
 
 CREATE PROCEDURE Test_ApplyConstraint.Test_ExternalUniqueConstraintApplied
 AS
 BEGIN
-    CREATE TABLE master.dbo.Table1 (Column1 INT CONSTRAINT Unique1 UNIQUE (Column1));
+    EXEC('USE master; EXEC(''CREATE SCHEMA Schema1;'');');
+    EXEC('CREATE TABLE master.Schema1.Table1 (Column1 INT CONSTRAINT Unique1 UNIQUE (Column1));');
 
-    EXEC tSQLt.FakeTable 'master.dbo.Table1';
-    EXEC tSQLt.ApplyConstraint 'master.dbo.Table1', 'Unique1';
+    EXEC tSQLt.FakeTable 'master.Schema1.Table1';
+    EXEC tSQLt.ApplyConstraint 'master.Schema1.Table1', 'Unique1';
 
-    EXEC tSQLt.ExpectException 'Violation of UNIQUE KEY constraint ''Unique1''. Cannot insert duplicate key in object ''dbo.Table1''. The duplicate key value is (1).';
+    EXEC tSQLt.ExpectException 'Violation of UNIQUE KEY constraint ''Unique1''. Cannot insert duplicate key in object ''Schema1.Table1''. The duplicate key value is (1).';
 
-    INSERT INTO master.dbo.Table1 (Column1) VALUES (1), (1)
+    EXEC('INSERT INTO master.Schema1.Table1 (Column1) VALUES (1), (1)');
 END;
 GO
 
 CREATE PROCEDURE Test_ApplyConstraint.Test_ExternalPrimaryKeyApplied
 AS
 BEGIN
-    CREATE TABLE master.dbo.Table1 (Column1 INT NOT NULL, CONSTRAINT PrimaryKey1 PRIMARY KEY(Column1));
+    EXEC('USE master; EXEC(''CREATE SCHEMA Schema1;'');');
+    EXEC('CREATE TABLE master.Schema1.Table1 (Column1 INT NOT NULL, CONSTRAINT PrimaryKey1 PRIMARY KEY(Column1));');
 
-    EXEC tSQLt.FakeTable 'master.dbo.Table1';
-    EXEC tSQLt.ApplyConstraint 'master.dbo.Table1', 'PrimaryKey1';
+    EXEC tSQLt.FakeTable 'master.Schema1.Table1';
+    EXEC tSQLt.ApplyConstraint 'master.Schema1.Table1', 'PrimaryKey1';
 
-    EXEC tSQLt.ExpectException 'Violation of PRIMARY KEY constraint ''PrimaryKey1''. Cannot insert duplicate key in object ''dbo.Table1''. The duplicate key value is (1).';
+    EXEC tSQLt.ExpectException 'Violation of PRIMARY KEY constraint ''PrimaryKey1''. Cannot insert duplicate key in object ''Schema1.Table1''. The duplicate key value is (1).';
 
-    INSERT INTO master.dbo.Table1 (Column1) VALUES (1), (1)
+    EXEC('INSERT INTO master.Schema1.Table1 (Column1) VALUES (1), (1);');
 END;
 GO
-
+/*
 CREATE PROCEDURE Test_ApplyConstraint.Test_ExternalForeignKeyApplied
 AS
 BEGIN
-    CREATE TABLE master.dbo.Table1 (Column1 INT NOT NULL, CONSTRAINT PrimaryKey1 PRIMARY KEY (Column1));
-    CREATE TABLE master.dbo.Table2 (Table1Column1 INT NOT NULL, Column2 INT NOT NULL, CONSTRAINT PrimaryKey2 PRIMARY KEY (Table1Column1, Column2));
+    EXEC('USE master; EXEC(''CREATE SCHEMA Schema1;'');');
+    EXEC('CREATE TABLE master.Schema1.Table1 (Column1 INT NOT NULL, CONSTRAINT PrimaryKey1 PRIMARY KEY (Column1));');
+    EXEC('CREATE TABLE master.Schema1.Table2 (Table1Column1 INT NOT NULL, Column2 INT NOT NULL, CONSTRAINT PrimaryKey2 PRIMARY KEY (Table1Column1, Column2));');
 
-    ALTER TABLE master.dbo.Table2 ADD CONSTRAINT ForeignKey1 FOREIGN KEY (Table1Column1) REFERENCES master.dbo.Table1 (Column1)
+    EXEC('ALTER TABLE master.Schema1.Table2 ADD CONSTRAINT ForeignKey1 FOREIGN KEY (Table1Column1) REFERENCES master.Schema1.Table1 (Column1);');
 
-    EXEC tSQLt.FakeTable 'master.dbo.Table2';
-    EXEC tSQLt.ApplyConstraint 'master.dbo.Table2', 'ForeignKey1';
+    EXEC tSQLt.FakeTable 'master.Schema1.Table2';
+    EXEC tSQLt.ApplyConstraint 'master.Schema1.Table2', 'ForeignKey1';
 
-    EXEC tSQLt.ExpectException @ExpectedMessagePattern = 'The INSERT statement conflicted with the FOREIGN KEY constraint "ForeignKey1"%, table "dbo.Table1", column ''Column1''.';
+    EXEC tSQLt.ExpectException @ExpectedMessagePattern = 'The INSERT statement conflicted with the FOREIGN KEY constraint "ForeignKey1"%, table "Schema1.Table1", column ''Column1''.';
 
-    INSERT INTO master.dbo.Table2 (Table1Column1, Column2) VALUES (1, 1)
+    EXEC('INSERT INTO master.Schema1.Table2 (Table1Column1, Column2) VALUES (1, 1);');
 END;
 GO
+*/

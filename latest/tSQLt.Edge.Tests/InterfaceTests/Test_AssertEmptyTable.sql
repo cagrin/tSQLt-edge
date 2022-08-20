@@ -137,7 +137,7 @@ GO
 CREATE PROCEDURE Test_AssertEmptyTable.Test_EmptyExternalTable
 AS
 BEGIN
-    CREATE TABLE master.dbo.TestTable1 (Column1 INT);
+    EXEC ('CREATE TABLE master.dbo.TestTable1 (Column1 INT);');
 
     EXEC tSQLt.AssertEmptyTable 'master.dbo.TestTable1';
 END;
@@ -146,8 +146,8 @@ GO
 CREATE PROCEDURE Test_AssertEmptyTable.Test_NonEmptyExternalTable
 AS
 BEGIN
-    CREATE TABLE master.dbo.TestTable1 (Column1 INT);
-    INSERT INTO master.dbo.TestTable1 (Column1) VALUES (1);
+    EXEC ('CREATE TABLE master.dbo.TestTable1 (Column1 INT);');
+    EXEC ('INSERT INTO master.dbo.TestTable1 (Column1) VALUES (1);');
 
     EXEC tSQLt.ExpectException 'tSQLt.AssertEmptyTable failed. Expected:<master.dbo.TestTable1> is not empty.';
 

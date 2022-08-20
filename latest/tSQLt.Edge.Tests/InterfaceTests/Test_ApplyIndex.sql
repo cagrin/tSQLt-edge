@@ -61,14 +61,15 @@ GO
 CREATE PROCEDURE Test_ApplyIndex.Test_ExternalClusteredIndexApplied
 AS
 BEGIN
-    CREATE TABLE master.dbo.Table1 (Column1 INT NOT NULL);
-    CREATE CLUSTERED INDEX ClusteredIndex1 ON master.dbo.Table1 (Column1);
+    EXEC('USE master; EXEC(''CREATE SCHEMA Schema1;'')');
+    EXEC('CREATE TABLE master.Schema1.Table1 (Column1 INT NOT NULL);');
+    EXEC('CREATE CLUSTERED INDEX ClusteredIndex1 ON master.Schema1.Table1 (Column1);');
 
-    EXEC tSQLt.FakeTable 'master.dbo.Table1';
-    EXEC tSQLt.ApplyIndex 'master.dbo.Table1', 'ClusteredIndex1';
+    EXEC tSQLt.FakeTable 'master.Schema1.Table1';
+    EXEC tSQLt.ApplyIndex 'master.Schema1.Table1', 'ClusteredIndex1';
 
-    EXEC tSQLt.ExpectException 'Cannot create more than one clustered index on table ''master.dbo.Table1''. Drop the existing clustered index ''ClusteredIndex1'' before creating another.';
+    EXEC tSQLt.ExpectException 'Cannot create more than one clustered index on table ''master.Schema1.Table1''. Drop the existing clustered index ''ClusteredIndex1'' before creating another.';
 
-    CREATE CLUSTERED INDEX ClusteredIndex2 ON master.dbo.Table1 (Column1);
+    EXEC('CREATE CLUSTERED INDEX ClusteredIndex2 ON master.Schema1.Table1 (Column1);');
 END;
 GO
