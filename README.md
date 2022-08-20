@@ -84,6 +84,7 @@ tSQLt-edge can operate on different database, same server:
 |---|
 |ApplyConstraint|
 |ApplyIndex|
+|ApplyTrigger|
 |AssertEmptyTable|
 |AssertEqualsTable|
 |AssertEqualsTableSchema|

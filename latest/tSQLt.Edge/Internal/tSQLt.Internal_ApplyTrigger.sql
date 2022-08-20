@@ -18,6 +18,15 @@ BEGIN
             FROM @System_SqlModules
         )
 
+        IF PARSENAME(@TableName, 3) IS NOT NULL
+        BEGIN
+            SET @CreateTrigger = CONCAT
+            (
+                'EXEC(''USE ', QUOTENAME(PARSENAME(@TableName, 3)), '; ',
+                'EXEC(''''', REPLACE(@CreateTrigger, '''', ''''''''''), ''''')'')'
+            )
+        END
+
         EXEC tSQLt.RemoveObject @ObjectName;
         EXEC (@CreateTrigger);
     END

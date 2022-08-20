@@ -28,5 +28,10 @@ BEGIN
         @ObjectName = CONCAT(QUOTENAME(SCHEMA_NAME([schema_id])), '.', QUOTENAME([name]))
     FROM @System_Objects
     WHERE [name] = @TriggerName OR QUOTENAME([name]) = @TriggerName
+
+	IF PARSENAME(@TableName, 3) IS NOT NULL
+	BEGIN
+		SET @ObjectName = CONCAT(QUOTENAME(PARSENAME(@TableName, 3)), '.', @ObjectName)
+	END  
 END;
 GO
