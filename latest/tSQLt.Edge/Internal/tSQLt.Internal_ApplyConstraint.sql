@@ -22,7 +22,7 @@ BEGIN
     END
     ELSE IF @ConstraintType = 'UQ'
     BEGIN
-        EXEC tSQLt.Private_ApplyUniqueConstraint @ParentName, @Objectname, @ConstraintId;
+        EXEC tSQLt.Private_ApplyUniqueConstraint @ParentName, @Objectname, @ConstraintName;
     END
     ELSE
     BEGIN

@@ -296,3 +296,17 @@ BEGIN
     INSERT INTO master.dbo.Table1 (Column1) VALUES (1)
 END;
 GO
+
+CREATE PROCEDURE Test_ApplyConstraint.Test_ExternalUniqueConstraintApplied
+AS
+BEGIN
+    CREATE TABLE master.dbo.Table1e (Column1 INT CONSTRAINT Unique1 UNIQUE (Column1));
+
+    EXEC tSQLt.FakeTable 'master.dbo.Table1e';
+    EXEC tSQLt.ApplyConstraint 'master.dbo.Table1e', 'Unique1';
+
+    EXEC tSQLt.ExpectException 'Violation of UNIQUE KEY constraint ''Unique1''. Cannot insert duplicate key in object ''dbo.Table1e''. The duplicate key value is (1).';
+
+    INSERT INTO master.dbo.Table1e (Column1) VALUES (1), (1)
+END;
+GO

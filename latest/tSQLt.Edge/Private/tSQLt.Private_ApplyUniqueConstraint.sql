@@ -1,16 +1,16 @@
 CREATE PROCEDURE tSQLt.Private_ApplyUniqueConstraint
     @ParentName NVARCHAR(MAX),
     @ObjectName NVARCHAR(MAX),
-    @ConstraintId INT
+    @ConstraintName NVARCHAR(MAX)
 AS
 BEGIN
     DECLARE @System_IndexColumns tSQLt.System_IndexColumnsType
     INSERT INTO @System_IndexColumns
     EXEC tSQLt.System_IndexColumns @ParentName
 
-    DECLARE @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX);
+    SET @ConstraintName = QUOTENAME(PARSENAME(@ConstraintName, 1))
+    DECLARE @ConstraintDefinition NVARCHAR(MAX);
     SELECT
-        @ConstraintName = QUOTENAME([index_name]),
         @ConstraintDefinition = CONCAT
         (
             '(',
@@ -22,7 +22,7 @@ BEGIN
             ')'
         )
     FROM @System_IndexColumns
-    WHERE [index_name] = OBJECT_NAME(@ConstraintId)
+    WHERE QUOTENAME([index_name]) = @ConstraintName
     AND [is_unique_constraint] = 1
     GROUP BY [index_name], [type_desc]
 
