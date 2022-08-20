@@ -18,7 +18,7 @@ BEGIN
     END
     ELSE IF @ConstraintType = 'PK'
     BEGIN
-        EXEC tSQLt.Private_ApplyPrimaryKey @ParentName, @ObjectName, @ConstraintId;
+        EXEC tSQLt.Private_ApplyPrimaryKey @ParentName, @ObjectName, @ConstraintName;
     END
     ELSE IF @ConstraintType = 'UQ'
     BEGIN
