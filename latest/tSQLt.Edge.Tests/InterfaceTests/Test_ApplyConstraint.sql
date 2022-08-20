@@ -327,22 +327,22 @@ BEGIN
     EXEC('INSERT INTO master.Schema1.Table1 (Column1) VALUES (1), (1);');
 END;
 GO
-/*
+
 CREATE PROCEDURE Test_ApplyConstraint.Test_ExternalForeignKeyApplied
 AS
 BEGIN
     EXEC('USE master; EXEC(''CREATE SCHEMA Schema1;'');');
+    EXEC('USE master; EXEC(''CREATE SCHEMA Schema2;'');');
     EXEC('CREATE TABLE master.Schema1.Table1 (Column1 INT NOT NULL, CONSTRAINT PrimaryKey1 PRIMARY KEY (Column1));');
-    EXEC('CREATE TABLE master.Schema1.Table2 (Table1Column1 INT NOT NULL, Column2 INT NOT NULL, CONSTRAINT PrimaryKey2 PRIMARY KEY (Table1Column1, Column2));');
+    EXEC('CREATE TABLE master.Schema2.Table2 (Table1Column1 INT NOT NULL, Column2 INT NOT NULL, CONSTRAINT PrimaryKey2 PRIMARY KEY (Table1Column1, Column2));');
 
-    EXEC('ALTER TABLE master.Schema1.Table2 ADD CONSTRAINT ForeignKey1 FOREIGN KEY (Table1Column1) REFERENCES master.Schema1.Table1 (Column1);');
+    EXEC('ALTER TABLE master.Schema2.Table2 ADD CONSTRAINT ForeignKey1 FOREIGN KEY (Table1Column1) REFERENCES master.Schema1.Table1 (Column1);');
 
-    EXEC tSQLt.FakeTable 'master.Schema1.Table2';
-    EXEC tSQLt.ApplyConstraint 'master.Schema1.Table2', 'ForeignKey1';
+    EXEC tSQLt.FakeTable 'master.Schema2.Table2';
+    EXEC tSQLt.ApplyConstraint 'master.Schema2.Table2', 'ForeignKey1';
 
     EXEC tSQLt.ExpectException @ExpectedMessagePattern = 'The INSERT statement conflicted with the FOREIGN KEY constraint "ForeignKey1"%, table "Schema1.Table1", column ''Column1''.';
 
-    EXEC('INSERT INTO master.Schema1.Table2 (Table1Column1, Column2) VALUES (1, 1);');
+    EXEC('INSERT INTO master.Schema2.Table2 (Table1Column1, Column2) VALUES (1, 1);');
 END;
 GO
-*/

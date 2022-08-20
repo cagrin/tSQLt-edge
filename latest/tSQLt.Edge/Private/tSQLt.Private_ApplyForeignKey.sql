@@ -15,7 +15,7 @@ BEGIN
         @ConstraintDefinition = CONCAT
         (
             '(', fk.foreign_key_columns, ')',
-            ' REFERENCES ', QUOTENAME(SCHEMA_NAME(fk.referenced_schema_id)), '.', QUOTENAME(ISNULL(OBJECT_NAME(ft.FakeObjectId), fk.referenced_name)),
+            ' REFERENCES ', QUOTENAME(fk.referenced_schema_name), '.', QUOTENAME(ISNULL(OBJECT_NAME(ft.FakeObjectId), fk.referenced_name)),
             ' (', fk.referenced_columns, ')',
             CASE WHEN @NoCascade = 1 THEN ''
             ELSE CONCAT
@@ -28,7 +28,7 @@ BEGIN
         @CreateUniqueIndex = CASE WHEN ft.FakeObjectId IS NOT NULL THEN CONCAT
         (
             'CREATE UNIQUE INDEX ', QUOTENAME(CAST(NEWID() AS NVARCHAR(MAX))),
-            ' ON ', QUOTENAME(SCHEMA_NAME(fk.referenced_schema_id)), '.', QUOTENAME(ISNULL(OBJECT_NAME(ft.FakeObjectId), fk.referenced_name)),
+            ' ON ', QUOTENAME(fk.referenced_schema_name), '.', QUOTENAME(ISNULL(OBJECT_NAME(ft.FakeObjectId), fk.referenced_name)),
             ' (', fk.referenced_columns, ')'
         ) END
     FROM @System_ForeignKeys fk
