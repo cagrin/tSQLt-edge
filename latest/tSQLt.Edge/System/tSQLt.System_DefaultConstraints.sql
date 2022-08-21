@@ -3,7 +3,7 @@ CREATE TYPE tSQLt.System_DefaultConstraintsType AS TABLE
 	[name] [sysname] NOT NULL,
 	[object_id] [int] NOT NULL,
 	[principal_id] [int] NULL,
-	[schema_id] [int] NOT NULL,
+	[schema_name] [sysname] NOT NULL,
 	[parent_object_id] [int] NOT NULL,
 	[type] [char](2) NULL,
 	[type_desc] [nvarchar](60) NULL,
@@ -23,28 +23,42 @@ CREATE PROCEDURE tSQLt.System_DefaultConstraints
 	@ColumnId INT
 AS
 BEGIN
-	DECLARE @TableTypeName NVARCHAR(MAX) = 'System_DefaultConstraintsType'
-	DECLARE @SourceTable NVARCHAR(MAX) = 'sys.default_constraints'
+	DECLARE @Command NVARCHAR(MAX) =
+	'SELECT
+		[name],
+		[object_id],
+		[principal_id],
+		[schema_name] = SCHEMA_NAME(schema_id),
+		[parent_object_id],
+		[type],
+		[type_desc],
+		[create_date],
+		[modify_date],
+		[is_ms_shipped],
+		[is_published],
+		[is_schema_published],
+		[parent_column_id],
+		[definition],
+		[is_system_named]
+	FROM sys.default_constraints
+	WHERE parent_object_id = OBJECT_ID(@ObjectName) AND parent_column_id = @ColumnId'
+
 	IF OBJECT_ID(CONCAT('tempdb..', @ObjectName)) IS NOT NULL
 	BEGIN
-		SET @SourceTable = CONCAT('tempdb.', @SourceTable)
-		SET @ObjectName = CONCAT('tempdb..', @ObjectName)
+		SET @Command = REPLACE(@Command, 'FROM sys.', 'FROM tempdb.sys.')
+		SET @Command = REPLACE(@Command, '@ObjectName', 'CONCAT(''tempdb..'', @ObjectName)')
 	END
-	ELSE IF PARSENAME(@ObjectName, 3) IS NOT NULL
+
+	DECLARE @DatabaseName NVARCHAR(MAX) = QUOTENAME(PARSENAME(@ObjectName, 3))
+	IF @DatabaseName IS NOT NULL
 	BEGIN
-		SET @SourceTable = CONCAT(QUOTENAME(PARSENAME(@ObjectName, 3)), '.', @SourceTable)
+		SET @Command = CONCAT
+		(
+			'EXEC(''USE ', @DatabaseName, '; ',
+            'DECLARE @ObjectName NVARCHAR(MAX) = ''''', @ObjectName, '''''; @ColumnId INT = ''''', @ColumnId, ''''';',
+			'EXEC sys.sp_executesql N''''', REPLACE(@Command, '''', ''''''''''), ''''', N''''@ObjectName NVARCHAR(MAX), @ColumnId INT'''', @ObjectName, @ColumnId;'')'
+		)
 	END
-
-	DECLARE @TableTypeColumns NVARCHAR(MAX)
-	EXEC tSQLt.System_GetTableTypeColumns @TableTypeColumns OUTPUT, @TableTypeName
-
-	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
-	(
-		' ',
-		'SELECT', @TableTypeColumns,
-		'FROM', @SourceTable,
-		'WHERE parent_object_id = OBJECT_ID(@ObjectName) AND parent_column_id = @ColumnId'
-	);
 
 	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX), @ColumnId INT', @ObjectName, @ColumnId;
 END;

@@ -109,31 +109,5 @@ BEGIN
 	END
 
 	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX), @ColumnId INT', @ObjectName, @ColumnId;
-/*
-	DECLARE @TableTypeName NVARCHAR(MAX) = 'System_ComputedColumnsType'
-	DECLARE @SourceTable NVARCHAR(MAX) = 'sys.computed_columns'
-	IF OBJECT_ID(CONCAT('tempdb..', @ObjectName)) IS NOT NULL
-	BEGIN
-		SET @SourceTable = CONCAT('tempdb.', @SourceTable)
-		SET @ObjectName = CONCAT('tempdb..', @ObjectName)
-	END
-	ELSE IF PARSENAME(@ObjectName, 3) IS NOT NULL
-	BEGIN
-		SET @SourceTable = CONCAT(QUOTENAME(PARSENAME(@ObjectName, 3)), '.', @SourceTable)
-	END
-
-	DECLARE @TableTypeColumns NVARCHAR(MAX)
-	EXEC tSQLt.System_GetTableTypeColumns @TableTypeColumns OUTPUT, @TableTypeName
-
-	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
-	(
-		' ',
-		'SELECT', @TableTypeColumns,
-		'FROM', @SourceTable,
-		'WHERE object_id = OBJECT_ID(@ObjectName) AND column_id = @ColumnId'
-	);
-
-	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX), @ColumnId INT', @ObjectName, @ColumnId;
-*/
 END;
 GO
