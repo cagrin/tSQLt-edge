@@ -313,16 +313,18 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE Test_FakeFunction.Test_ExternalMultiStatementTableValuedFunctionWithP1_TT
+CREATE PROCEDURE Test_FakeFunction.Test_ExternalMultiStatementTableValuedFunctionWithP1
 AS
 BEGIN
     EXEC ('USE master; EXEC(''CREATE SCHEMA Schema1;'')');
-    EXEC ('USE master; EXEC(''CREATE TYPE Schema1.TestType AS TABLE (Column1 int);'')');
-    EXEC ('USE master; EXEC(''CREATE FUNCTION Schema1.TestFunctionTF_P1_TT(@P1 int, @P2 Schema1.TestType READONLY) RETURNS @Result TABLE (Column1 int) AS BEGIN INSERT INTO @Result SELECT 13+SUM(Column1)+@P1 FROM @P2; RETURN; END;'')');
-    EXEC ('USE master; EXEC(''CREATE FUNCTION Schema1.FakeFunctionTF_P1_TT(@P1 int, @P2 Schema1.TestType READONLY) RETURNS @Result TABLE (Column1 int) AS BEGIN INSERT INTO @Result SELECT 42+SUM(Column1)+@P1 FROM @P2; RETURN; END;'')');
+    EXEC ('USE master; EXEC(''CREATE FUNCTION Schema1.TestFunctionTF_P1(@P1 int) RETURNS @Result TABLE (Column1 int) AS BEGIN INSERT INTO @Result SELECT 13+@P1; RETURN; END;'')');
+    EXEC ('USE master; EXEC(''CREATE FUNCTION Schema1.FakeFunctionTF_P1(@P1 int) RETURNS @Result TABLE (Column1 int) AS BEGIN INSERT INTO @Result SELECT 42+@P1; RETURN; END;'')');
 
-    EXEC tSQLt.FakeFunction 'master.Schema1.TestFunctionTF_P1_TT', 'master.Schema1.FakeFunctionTF_P1_TT';
+    EXEC tSQLt.FakeFunction 'master.Schema1.TestFunctionTF_P1', 'master.Schema1.FakeFunctionTF_P1';
 
-    -- Assert
+    DECLARE @Actual INT;
+    EXEC sys.sp_executesql N'SET @Actual = (SELECT Column1 FROM master.Schema1.TestFunctionTF_P1(1))', N'@Actual INT OUTPUT', @Actual OUTPUT;
+
+    EXEC tSQLt.AssertEquals 43, @Actual;
 END;
 GO
