@@ -47,6 +47,69 @@ CREATE PROCEDURE tSQLt.System_ComputedColumns
 	@ColumnId INT
 AS
 BEGIN
+	DECLARE @Command NVARCHAR(MAX) =
+	'SELECT
+		[object_id],
+		[name],
+		[column_id],
+		[system_type_id],
+		[user_type_id],
+		[max_length],
+		[precision],
+		[scale],
+		[collation_name],
+		[is_nullable],
+		[is_ansi_padded],
+		[is_rowguidcol],
+		[is_identity],
+		[is_filestream],
+		[is_replicated],
+		[is_non_sql_subscribed],
+		[is_merge_published],
+		[is_dts_replicated],
+		[is_xml_document],
+		[xml_collection_id],
+		[default_object_id],
+		[rule_object_id],
+		[definition],
+		[uses_database_collation],
+		[is_persisted],
+		[is_computed],
+		[is_sparse],
+		[is_column_set],
+		[generated_always_type],
+		[generated_always_type_desc],
+		[encryption_type],
+		[encryption_type_desc],
+		[encryption_algorithm_name],
+		[column_encryption_key_id],
+		[column_encryption_key_database_name],
+		[is_hidden],
+		[is_masked],
+		[graph_type],
+		[graph_type_desc]
+	FROM sys.computed_columns
+	WHERE object_id = OBJECT_ID(@ObjectName) AND column_id = @ColumnId'
+
+	IF OBJECT_ID(CONCAT('tempdb..', @ObjectName)) IS NOT NULL
+	BEGIN
+		SET @Command = REPLACE(@Command, 'FROM sys.', 'FROM tempdb.sys.')
+		SET @Command = REPLACE(@Command, '@ObjectName', 'CONCAT(''tempdb..'', @ObjectName)')
+	END
+
+	DECLARE @DatabaseName NVARCHAR(MAX) = QUOTENAME(PARSENAME(@ObjectName, 3))
+	IF @DatabaseName IS NOT NULL
+	BEGIN
+		SET @Command = CONCAT
+		(
+			'EXEC(''USE ', @DatabaseName, '; ',
+            'DECLARE @ObjectName NVARCHAR(MAX) = ''''', @ObjectName, '''''; @ColumnId INT = ''''', @ColumnId, ''''';',
+			'EXEC sys.sp_executesql N''''', REPLACE(@Command, '''', ''''''''''), ''''', N''''@ObjectName NVARCHAR(MAX), @ColumnId INT'''', @ObjectName, @ColumnId;'')'
+		)
+	END
+
+	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX), @ColumnId INT', @ObjectName, @ColumnId;
+/*
 	DECLARE @TableTypeName NVARCHAR(MAX) = 'System_ComputedColumnsType'
 	DECLARE @SourceTable NVARCHAR(MAX) = 'sys.computed_columns'
 	IF OBJECT_ID(CONCAT('tempdb..', @ObjectName)) IS NOT NULL
@@ -71,5 +134,6 @@ BEGIN
 	);
 
 	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX), @ColumnId INT', @ObjectName, @ColumnId;
+*/
 END;
 GO
