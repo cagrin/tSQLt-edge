@@ -43,27 +43,63 @@ CREATE PROCEDURE tSQLt.System_Columns
 	@ObjectName NVARCHAR(MAX)
 AS
 BEGIN
-	DECLARE	@SourceTable NVARCHAR(MAX) = 'sys.columns'
+	DECLARE @Command NVARCHAR(MAX) =
+	'SELECT
+		[object_id],
+		[name],
+		[column_id],
+		[system_type_id],
+		[user_type_id],
+		[max_length],
+		[precision],
+		[scale],
+		[collation_name],
+		[is_nullable],
+		[is_ansi_padded],
+		[is_rowguidcol],
+		[is_identity],
+		[is_computed],
+		[is_filestream],
+		[is_replicated],
+		[is_non_sql_subscribed],
+		[is_merge_published],
+		[is_dts_replicated],
+		[is_xml_document],
+		[xml_collection_id],
+		[default_object_id],
+		[rule_object_id],
+		[is_sparse],
+		[is_column_set],
+		[generated_always_type],
+		[generated_always_type_desc],
+		[encryption_type],
+		[encryption_type_desc],
+		[encryption_algorithm_name],
+		[column_encryption_key_id],
+		[column_encryption_key_database_name],
+		[is_hidden],
+		[is_masked],
+		[graph_type],
+		[graph_type_desc]
+	FROM sys.columns
+	WHERE object_id = OBJECT_ID(@ObjectName)'
+
 	IF OBJECT_ID(CONCAT('tempdb..', @ObjectName)) IS NOT NULL
 	BEGIN
-		SET @SourceTable = 'tempdb.sys.columns'
-		SET @ObjectName = CONCAT('tempdb..', @ObjectName)
+		SET @Command = REPLACE(@Command, 'FROM sys.', 'FROM tempdb.sys.')
+		SET @Command = REPLACE(@Command, '@ObjectName', 'CONCAT(''tempdb..'', @ObjectName)')
 	END
-	ELSE IF PARSENAME(@ObjectName, 3) IS NOT NULL
+
+	DECLARE @DatabaseName NVARCHAR(MAX) = QUOTENAME(PARSENAME(@ObjectName, 3))
+	IF @DatabaseName IS NOT NULL
 	BEGIN
-		SET @SourceTable = CONCAT(QUOTENAME(PARSENAME(@ObjectName, 3)), '.', @SourceTable)
+		SET @Command = CONCAT
+		(
+			'EXEC(''USE ', @DatabaseName, '; ',
+            'DECLARE @ObjectName NVARCHAR(MAX) = ''''', @ObjectName, '''''; ',
+			'EXEC sys.sp_executesql N''''', REPLACE(@Command, '''', ''''''''''), ''''', N''''@ObjectName NVARCHAR(MAX)'''', @ObjectName;'')'
+		)
 	END
-
-	DECLARE @TableTypeColumns NVARCHAR(MAX)
-	EXEC tSQLt.System_GetTableTypeColumns @TableTypeColumns OUTPUT, @TableTypeName = 'System_ColumnsType'
-
-	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
-	(
-		' ',
-		'SELECT', @TableTypeColumns,
-		'FROM', @SourceTable,
-		'WHERE object_id = OBJECT_ID(@ObjectName)'
-	);
 
 	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX)', @ObjectName;
 END;
