@@ -3,7 +3,7 @@ CREATE TYPE tSQLt.System_ObjectsType AS TABLE
 	[name] [sysname] NOT NULL,
 	[object_id] [int] NOT NULL,
 	[principal_id] [int] NULL,
-	[schema_id] [int] NOT NULL,
+	[schema_name] [sysname] NOT NULL,
 	[parent_object_id] [int] NOT NULL,
 	[type] [char](2) NULL,
 	[type_desc] [nvarchar](60) NULL,
@@ -20,30 +20,38 @@ CREATE PROCEDURE tSQLt.System_Objects
 	@ParentObjectFilter BIT = 0
 AS
 BEGIN
-	DECLARE @TableTypeName NVARCHAR(MAX) = 'System_ObjectsType'
+	DECLARE @Command NVARCHAR(MAX) =
+	'SELECT
+		[name],
+		[object_id],
+		[principal_id],
+		[schema_name] = SCHEMA_NAME(schema_id),
+		[parent_object_id],
+		[type],
+		[type_desc],
+		[create_date],
+		[modify_date],
+		[is_ms_shipped],
+		[is_published],
+		[is_schema_published]
+	FROM sys.objects
+	WHERE object_id = OBJECT_ID(@ObjectName)'
 
-	DECLARE @SourceTable NVARCHAR(MAX) = 'sys.objects'
-	IF PARSENAME(@ObjectName, 3) IS NOT NULL
-	BEGIN
-		SET @SourceTable = CONCAT(QUOTENAME(PARSENAME(@ObjectName, 3)), '.', @SourceTable)
-	END
-
-	DECLARE @ObjectFilter NVARCHAR(MAX) = 'object_id'
 	IF @ParentObjectFilter = 1
 	BEGIN
-		SET @ObjectFilter = 'parent_object_id'
+		SET @Command = REPLACE(@Command, 'WHERE object_id =', 'WHERE parent_object_id =')
 	END
 
-	DECLARE @TableTypeColumns NVARCHAR(MAX)
-	EXEC tSQLt.System_GetTableTypeColumns @TableTypeColumns OUTPUT, @TableTypeName
-
-	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
-	(
-		' ',
-		'SELECT', @TableTypeColumns,
-		'FROM', @SourceTable,
-		CASE WHEN @ObjectName IS NOT NULL THEN CONCAT('WHERE ', @ObjectFilter, ' = OBJECT_ID(@ObjectName)') ELSE '' END
-	);
+	DECLARE @DatabaseName NVARCHAR(MAX) = QUOTENAME(PARSENAME(@ObjectName, 3))
+	IF @DatabaseName IS NOT NULL
+	BEGIN
+		SET @Command = CONCAT
+		(
+			'EXEC(''USE ', @DatabaseName, '; ',
+            'DECLARE @ObjectName NVARCHAR(MAX) = ''''', @ObjectName, '''''; ',
+			'EXEC sys.sp_executesql N''''', REPLACE(@Command, '''', ''''''''''), ''''', N''''@ObjectName NVARCHAR(MAX)'''', @ObjectName;'')'
+		)
+	END
 
 	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX)', @ObjectName;
 END;
