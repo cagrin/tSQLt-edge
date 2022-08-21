@@ -10,8 +10,8 @@ BEGIN
 
     SELECT
         @TypeName = CASE
-            WHEN schema_name <> 'sys' THEN CONCAT(QUOTENAME(schema_name), '.', QUOTENAME(TYPE_NAME(@TypeId)))
-            ELSE TYPE_NAME(@TypeId) END
+            WHEN schema_name <> 'sys' THEN CONCAT(QUOTENAME(schema_name), '.', QUOTENAME(name))
+            ELSE name END
         FROM @Types
 END;
 GO
