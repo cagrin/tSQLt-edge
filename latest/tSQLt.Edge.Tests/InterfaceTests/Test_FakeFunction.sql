@@ -108,6 +108,7 @@ GO
 CREATE PROCEDURE Test_FakeFunction.Test_InlineTableValuedFunction_DataSourceIsTable
 AS
 BEGIN
+    CREATE TABLE dbo.FakeDataSource (Column1 int);
     INSERT INTO dbo.FakeDataSource VALUES (6);
 
     EXEC tSQLt.FakeFunction 'dbo.TestFunctionIF', @FakeDataSource = 'dbo.FakeDataSource';
