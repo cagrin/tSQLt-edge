@@ -77,18 +77,23 @@ BEGIN
         'RETURN; END;'
     );
 
+    EXEC tSQLt.RemoveObject @LogTableName, @IfExists = 1;
+    EXEC tSQLt.RemoveObject @ProcedureName, @NewName OUTPUT;
+    EXEC sys.sp_executesql @CreateLogTableCommand;
+
 	IF PARSENAME(@ProcedureName, 3) IS NOT NULL
 	BEGIN
-		SET @CreateProcedureCommand = CONCAT
+		DECLARE @Execute NVARCHAR(MAX) = CONCAT
 		(
-			'EXEC(''USE ', QUOTENAME(PARSENAME(@ProcedureName, 3)), '; ',
-			'EXEC(''''', REPLACE(@CreateProcedureCommand, '''', ''''''''''), ''''')'')'
+			'USE ', QUOTENAME(PARSENAME(@ProcedureName, 3)), '; ',
+			'EXEC sys.sp_executesql @CreateProcedureCommand;'
 		)
-	END
 
-    EXEC tSQLt.Internal_RemoveObject @LogTableName, @IfExists = 1;
-    EXEC tSQLt.Internal_RemoveObject @ProcedureName, @NewName OUTPUT;
-    EXEC (@CreateLogTableCommand);
-    EXEC (@CreateProcedureCommand);
+		EXEC sys.sp_executesql @Execute, N'@CreateProcedureCommand NVARCHAR(MAX)', @CreateProcedureCommand;
+	END
+    ELSE
+    BEGIN
+        EXEC sys.sp_executesql @CreateProcedureCommand;
+    END
 END;
 GO

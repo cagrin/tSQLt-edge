@@ -18,17 +18,22 @@ BEGIN
             FROM @System_SqlModules
         )
 
+        EXEC tSQLt.RemoveObject @ObjectName;
+
         IF PARSENAME(@TableName, 3) IS NOT NULL
         BEGIN
-            SET @CreateTrigger = CONCAT
+            DECLARE @Execute NVARCHAR(MAX) = CONCAT
             (
-                'EXEC(''USE ', QUOTENAME(PARSENAME(@TableName, 3)), '; ',
-                'EXEC(''''', REPLACE(@CreateTrigger, '''', ''''''''''), ''''')'')'
+                'USE ', QUOTENAME(PARSENAME(@TableName, 3)), '; ',
+                'EXEC sys.sp_executesql @CreateTrigger;'
             )
-        END
 
-        EXEC tSQLt.RemoveObject @ObjectName;
-        EXEC (@CreateTrigger);
+            EXEC sys.sp_executesql @Execute, N'@CreateTrigger NVARCHAR(MAX)', @CreateTrigger;
+        END
+        ELSE
+        BEGIN
+            EXEC sys.sp_executesql @CreateTrigger;
+        END
     END
     ELSE
     BEGIN
