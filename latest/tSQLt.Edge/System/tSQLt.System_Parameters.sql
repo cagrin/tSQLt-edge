@@ -28,22 +28,42 @@ CREATE PROCEDURE tSQLt.System_Parameters
 	@ObjectName NVARCHAR(MAX)
 AS
 BEGIN
-	DECLARE @SourceTable NVARCHAR(MAX) = 'sys.parameters'
-	IF PARSENAME(@ObjectName, 3) IS NOT NULL
+	DECLARE @Command NVARCHAR(MAX) =
+	'SELECT
+		[object_id],
+		[name],
+		[parameter_id],
+		[system_type_id],
+		[user_type_id],
+		[max_length],
+		[precision],
+		[scale],
+		[is_output],
+		[is_cursor_ref],
+		[has_default_value],
+		[is_xml_document],
+		[default_value],
+		[xml_collection_id],
+		[is_readonly],
+		[is_nullable],
+		[encryption_type],
+		[encryption_type_desc],
+		[encryption_algorithm_name],
+		[column_encryption_key_id],
+		[column_encryption_key_database_name]
+	FROM sys.parameters
+	WHERE object_id = OBJECT_ID(@ObjectName)'
+
+	DECLARE @DatabaseName NVARCHAR(MAX) = QUOTENAME(PARSENAME(@ObjectName, 3))
+	IF @DatabaseName IS NOT NULL
 	BEGIN
-		SET @SourceTable = CONCAT(QUOTENAME(PARSENAME(@ObjectName, 3)), '.', @SourceTable)
+		SET @Command = CONCAT
+		(
+			'EXEC(''USE ', @DatabaseName, '; ',
+            'DECLARE @ObjectName NVARCHAR(MAX) = ''''', @ObjectName, '''''; ',
+			'EXEC sys.sp_executesql N''''', REPLACE(@Command, '''', ''''''''''), ''''', N''''@ObjectName NVARCHAR(MAX)'''', @ObjectName;'')'
+		)
 	END
-
-	DECLARE @TableTypeColumns NVARCHAR(MAX)
-	EXEC tSQLt.System_GetTableTypeColumns @TableTypeColumns OUTPUT, @TableTypeName = 'System_ParametersType'
-
-	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
-	(
-		' ',
-		'SELECT', @TableTypeColumns,
-		'FROM', @SourceTable,
-		'WHERE object_id = OBJECT_ID(@ObjectName)'
-	);
 
 	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX)', @ObjectName;
 END;
