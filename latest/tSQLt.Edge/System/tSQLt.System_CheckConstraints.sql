@@ -54,14 +54,17 @@ BEGIN
 	DECLARE @DatabaseName NVARCHAR(MAX) = QUOTENAME(PARSENAME(@ObjectName, 3))
 	IF @DatabaseName IS NOT NULL
 	BEGIN
-		SET @Command = CONCAT
+		DECLARE @Execute NVARCHAR(MAX) = CONCAT
 		(
-			'EXEC(''USE ', @DatabaseName, '; ',
-            'DECLARE @ConstraintId INT = ', @ConstraintId, '; ',
-			'EXEC sys.sp_executesql N''''', REPLACE(@Command, '''', ''''''''''), ''''', N''''@ConstraintId INT'''', @ConstraintId;'')'
+			'USE ', @DatabaseName, '; ',
+			'EXEC sys.sp_executesql @Command, N''@ConstraintId INT'', @ConstraintId;'
 		)
-	END
 
-	EXEC sys.sp_executesql @Command, N'@ConstraintId INT', @ConstraintId;
+		EXEC sys.sp_executesql @Execute, N'@Command NVARCHAR(MAX), @ConstraintId INT', @Command, @ConstraintId;
+	END
+	ELSE
+	BEGIN
+		EXEC sys.sp_executesql @Command, N'@ConstraintId INT', @ConstraintId;
+	END
 END;
 GO

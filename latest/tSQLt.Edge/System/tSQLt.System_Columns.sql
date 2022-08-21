@@ -93,14 +93,17 @@ BEGIN
 	DECLARE @DatabaseName NVARCHAR(MAX) = QUOTENAME(PARSENAME(@ObjectName, 3))
 	IF @DatabaseName IS NOT NULL
 	BEGIN
-		SET @Command = CONCAT
+		DECLARE @Execute NVARCHAR(MAX) = CONCAT
 		(
-			'EXEC(''USE ', @DatabaseName, '; ',
-            'DECLARE @ObjectName NVARCHAR(MAX) = ''''', @ObjectName, '''''; ',
-			'EXEC sys.sp_executesql N''''', REPLACE(@Command, '''', ''''''''''), ''''', N''''@ObjectName NVARCHAR(MAX)'''', @ObjectName;'')'
+			'USE ', @DatabaseName, '; ',
+			'EXEC sys.sp_executesql @Command, N''@ObjectName NVARCHAR(MAX)'', @ObjectName;'
 		)
-	END
 
-	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX)', @ObjectName;
+		EXEC sys.sp_executesql @Execute, N'@Command NVARCHAR(MAX), @ObjectName NVARCHAR(MAX)', @Command, @ObjectName;
+	END
+	ELSE
+	BEGIN
+		EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX)', @ObjectName;
+	END
 END;
 GO
