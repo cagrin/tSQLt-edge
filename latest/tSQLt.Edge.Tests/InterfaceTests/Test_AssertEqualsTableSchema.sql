@@ -81,6 +81,18 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE Test_AssertEqualsTableSchema.Test_TempTablesOptionsFail
+AS
+BEGIN
+    CREATE TABLE #TestTable1 (Column1 int IDENTITY(1,2) NOT NULL, Column2 AS 2*Column1, Column3 VARCHAR(100) COLLATE Polish_100_CI_AS DEFAULT '-');
+    CREATE TABLE #TestTable2 (Column1 int,                        Column2 int         , Column3 VARCHAR(100) COLLATE Polish_100_CI_AS);
+
+    EXEC tSQLt.ExpectException 'tSQLt.AssertEqualsTableSchema failed. Expected:<[Column1] int IDENTITY(1,2) NOT NULL, [Column2] AS ((2)*[Column1]), [Column3] varchar(100) COLLATE Polish_100_CI_AS NULL>. Actual:<[Column1] int NULL, [Column2] int NULL, [Column3] varchar(100) COLLATE Polish_100_CI_AS NULL>.';
+
+    EXEC tSQLt.AssertEqualsTableSchema '#TestTable1', '#TestTable2';
+END;
+GO
+
 CREATE PROCEDURE Test_AssertEqualsTableSchema.Test_TempTables_ExpectedNotExists
 AS
 BEGIN

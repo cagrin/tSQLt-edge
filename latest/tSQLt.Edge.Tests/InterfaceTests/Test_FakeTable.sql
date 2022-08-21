@@ -312,9 +312,9 @@ AS
 BEGIN
     EXEC ('USE master; EXEC(''CREATE SCHEMA Schema1;'')');
     EXEC ('CREATE TABLE master.Schema1.TestTable1 (Column1 int IDENTITY(1,2) NOT NULL, Column2 AS 2*Column1, Column3 VARCHAR(100) COLLATE Polish_100_CI_AS DEFAULT ''-'');');
-    EXEC ('CREATE TABLE master.Schema1.TestTable2 (Column1 int,                        Column2 int         , Column3 VARCHAR(100) COLLATE Polish_100_CI_AS);');
+    EXEC ('CREATE TABLE master.Schema1.TestTable2 (Column1 int,                        Column2 int         , Column3 VARCHAR(100) COLLATE Polish_100_CI_AS DEFAULT ''-'');');
 
-    EXEC tSQLt.FakeTable 'master.Schema1.TestTable1';
+    EXEC tSQLt.FakeTable 'master.Schema1.TestTable1', @Defaults = 1;
 
     EXEC tSQLt.AssertEqualsTableSchema 'master.Schema1.TestTable2', 'master.Schema1.TestTable1';
 END;
