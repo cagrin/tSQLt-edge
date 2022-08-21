@@ -16,12 +16,37 @@ CREATE TYPE tSQLt.System_SqlModulesType AS TABLE
 GO
 
 CREATE PROCEDURE tSQLt.System_SqlModules
-	@ObjectName NVARCHAR(MAX) = NULL
+	@ObjectName NVARCHAR(MAX)
 AS
 BEGIN
-	EXEC tSQLt.System_Table
-		@SysTableType = 'System_SqlModulesType',
-		@SysTableName = 'sys.sql_modules',
-		@ObjectName = @ObjectName
+	DECLARE @Command NVARCHAR(MAX) =
+	'SELECT
+		[object_id],
+		[definition],
+		[uses_ansi_nulls],
+		[uses_quoted_identifier],
+		[is_schema_bound],
+		[uses_database_collation],
+		[is_recompiled],
+		[null_on_null_input],
+		[execute_as_principal_id],
+		[uses_native_compilation],
+		[inline_type],
+		[is_inlineable]
+	FROM sys.sql_modules
+	WHERE object_id = OBJECT_ID(@ObjectName)'
+
+	DECLARE @DatabaseName NVARCHAR(MAX) = QUOTENAME(PARSENAME(@ObjectName, 3))
+	IF @DatabaseName IS NOT NULL
+	BEGIN
+		SET @Command = CONCAT
+		(
+			'EXEC(''USE ', @DatabaseName, '; ',
+            'DECLARE @ObjectName NVARCHAR(MAX) = ''''', @ObjectName, '''''; ',
+			'EXEC sys.sp_executesql N''''', REPLACE(@Command, '''', ''''''''''), ''''', N''''@ObjectName NVARCHAR(MAX)'''', @ObjectName;'')'
+		)
+	END
+
+	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX)', @ObjectName;
 END;
 GO
