@@ -33,7 +33,7 @@ BEGIN
         SET @CreateFakeFunctionCommand = CONCAT_WS
         (
             ' ',
-            'CREATE FUNCTION', @FunctionName, CONCAT('(', @ScalarParametersWithTypesDefaultNulls, ')'),
+            'CREATE FUNCTION', CONCAT(QUOTENAME(PARSENAME(@FunctionName, 2)), '.', QUOTENAME(PARSENAME(@FunctionName, 1))), CONCAT('(', @ScalarParametersWithTypesDefaultNulls, ')'),
             'RETURNS', @ScalarReturnType,
             'AS BEGIN',
             'RETURN', @FakeFunctionName, CONCAT('(', @ScalarParameters, ');'),

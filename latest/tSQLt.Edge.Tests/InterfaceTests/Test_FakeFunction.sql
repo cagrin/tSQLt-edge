@@ -296,3 +296,19 @@ BEGIN
     EXEC tSQLt.AssertEquals 42, @Actual;
 END;
 GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_ExternalScalarFunctionWithP1
+AS
+BEGIN
+    EXEC('USE master; EXEC(''CREATE SCHEMA Schema1;'')');
+    EXEC ('USE master; EXEC(''CREATE FUNCTION Schema1.TestFunctionScalar_P1(@P1 int) RETURNS INT AS BEGIN RETURN (SELECT 13+@P1); END;'')');
+    EXEC ('USE master; EXEC(''CREATE FUNCTION Schema1.FakeFunctionScalar_P1(@P1 int) RETURNS INT AS BEGIN RETURN (SELECT 42+@P1); END;'')');
+
+    EXEC tSQLt.FakeFunction 'master.Schema1.TestFunctionScalar_P1', 'master.Schema1.FakeFunctionScalar_P1';
+
+    DECLARE @Actual INT;
+    EXEC sys.sp_executesql N'SET @Actual = master.Schema1.TestFunctionScalar_P1(1)', N'@Actual INT OUTPUT', @Actual OUTPUT;
+
+    EXEC tSQLt.AssertEquals 43, @Actual;
+END;
+GO
