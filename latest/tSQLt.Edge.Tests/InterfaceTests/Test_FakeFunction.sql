@@ -280,3 +280,19 @@ BEGIN
     EXEC tSQLt.FakeFunction 'dbo.TestFunctionIF', 'dbo.FakeFunctionIF';
 END;
 GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_ExternalInlineTableValuedFunction
+AS
+BEGIN
+    EXEC('USE master; EXEC(''CREATE SCHEMA Schema1;'')');
+    EXEC ('USE master; EXEC(''CREATE FUNCTION Schema1.TestFunctionIF() RETURNS TABLE AS RETURN SELECT 13 Column1;'')');
+    EXEC ('USE master; EXEC(''CREATE FUNCTION Schema1.FakeFunctionIF() RETURNS TABLE AS RETURN SELECT 42 Column1;'')');
+
+    EXEC tSQLt.FakeFunction 'master.Schema1.TestFunctionIF', 'master.Schema1.FakeFunctionIF';
+
+    DECLARE @Actual INT;
+    EXEC sys.sp_executesql N'SET @Actual = (SELECT Column1 FROM master.Schema1.TestFunctionIF())', N'@Actual INT OUTPUT', @Actual OUTPUT;
+
+    EXEC tSQLt.AssertEquals 42, @Actual;
+END;
+GO

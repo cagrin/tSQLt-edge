@@ -16,7 +16,7 @@ BEGIN
         SET @CreateFakeFunctionCommand = CONCAT_WS
         (
             ' ',
-            'CREATE FUNCTION', @FunctionName, CONCAT('(', @ParametersWithTypesDefaultNulls, ')'),
+            'CREATE FUNCTION', CONCAT(QUOTENAME(PARSENAME(@FunctionName, 2)), '.', QUOTENAME(PARSENAME(@FunctionName, 1))), CONCAT('(', @ParametersWithTypesDefaultNulls, ')'),
             'RETURNS TABLE AS',
             'RETURN', @FakeDataSource
         );
@@ -42,6 +42,20 @@ BEGIN
     END
 
     EXEC tSQLt.Private_RenameObject @FunctionName;
-    EXEC (@CreateFakeFunctionCommand);
+
+	IF PARSENAME(@FunctionName, 3) IS NOT NULL
+	BEGIN
+		DECLARE @Execute NVARCHAR(MAX) = CONCAT
+		(
+			'USE ', QUOTENAME(PARSENAME(@FunctionName, 3)), '; ',
+			'EXEC sys.sp_executesql @CreateFakeFunctionCommand;'
+		)
+
+		EXEC sys.sp_executesql @Execute, N'@CreateFakeFunctionCommand NVARCHAR(MAX)', @CreateFakeFunctionCommand;
+	END
+    ELSE
+    BEGIN
+        EXEC sys.sp_executesql @CreateFakeFunctionCommand;
+    END
 END;
 GO
