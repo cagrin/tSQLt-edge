@@ -212,3 +212,21 @@ BEGIN
     END
 END;
 GO
+
+CREATE PROCEDURE Test_SpyProcedure.Test_ExternalProcedure
+AS
+BEGIN
+    EXEC('USE master; EXEC(''CREATE SCHEMA Schema1;'')');
+    EXEC('USE master; EXEC(''CREATE PROCEDURE Schema1.Procedure1 @P1 int AS BEGIN RETURN; END;'')');
+
+    EXEC tSQLt.SpyProcedure 'master.Schema1.Procedure1';
+
+    EXEC('USE master; EXEC Schema1.Procedure1 @P1 = 1;');
+
+    EXEC('USE master;
+    IF NOT EXISTS (SELECT 1 FROM Schema1.Procedure1_SpyProcedureLog WHERE _id_ = 1 AND P1 = 1)
+    BEGIN
+        RAISERROR(''%s'', 16, 10, ''Schema1.Procedure1_SpyProcedureLog should exists.'');
+    END');
+END;
+GO

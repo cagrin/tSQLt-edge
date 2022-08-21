@@ -16,7 +16,13 @@ BEGIN
     EXEC tSQLt.Private_GetSpyProcedureLogColumns @SpyProcedureLogColumns OUTPUT, @ProcedureName;
     DECLARE @ParametersWithTypesDefaultNulls NVARCHAR(MAX);
     EXEC tSQLt.Private_GetParametersWithTypes @ParametersWithTypesDefaultNulls OUTPUT, @ProcedureName, @DefaultNulls = 1;
-    DECLARE @LogTableName NVARCHAR(MAX) = CONCAT(QUOTENAME(OBJECT_SCHEMA_NAME(@ObjectId)), '.', QUOTENAME(CONCAT(OBJECT_NAME(@ObjectId), '_SpyProcedureLog')));
+
+	DECLARE @LogTableName NVARCHAR(MAX) = CONCAT
+	(
+		CASE WHEN PARSENAME(@ProcedureName, 3) IS NOT NULL THEN CONCAT(QUOTENAME(PARSENAME(@ProcedureName, 3)), '.') END,
+		QUOTENAME(PARSENAME(@ProcedureName, 2)), '.',
+		QUOTENAME(CONCAT(PARSENAME(@ProcedureName, 1), '_SpyProcedureLog'))
+	);
 
     DECLARE @InsertIntoLogTableCommand NVARCHAR(MAX) = CONCAT
     (
@@ -28,7 +34,7 @@ BEGIN
 
     DECLARE @SpyProcedureOriginalObjectName NVARCHAR(MAX) = CONCAT
     (
-        QUOTENAME(OBJECT_SCHEMA_NAME(@ObjectId)),
+        QUOTENAME(PARSENAME(@ProcedureName, 2)),
         '.',
         QUOTENAME(@NewName)
     );
@@ -61,7 +67,7 @@ BEGIN
     (
         ' ',
         'CREATE PROCEDURE',
-        @ProcedureName,
+        CONCAT(QUOTENAME(PARSENAME(@ProcedureName, 2)), '.', QUOTENAME(PARSENAME(@ProcedureName, 1))),
         @ParametersWithTypesDefaultNulls,
         'AS BEGIN',
         @InsertIntoLogTableCommand,
@@ -70,6 +76,15 @@ BEGIN
         CASE WHEN @CallOriginal = 1 THEN @CallOriginalCommand END,
         'RETURN; END;'
     );
+
+	IF PARSENAME(@ProcedureName, 3) IS NOT NULL
+	BEGIN
+		SET @CreateProcedureCommand = CONCAT
+		(
+			'EXEC(''USE ', QUOTENAME(PARSENAME(@ProcedureName, 3)), '; ',
+			'EXEC(''''', REPLACE(@CreateProcedureCommand, '''', ''''''''''), ''''')'')'
+		)
+	END
 
     EXEC tSQLt.Internal_RemoveObject @LogTableName, @IfExists = 1;
     EXEC tSQLt.Internal_RemoveObject @ProcedureName, @NewName OUTPUT;

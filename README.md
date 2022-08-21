@@ -93,3 +93,4 @@ tSQLt-edge can operate on different database, same server:
 |FakeTable|
 |RemoveObject|
 |RemoveObjectIfExists|
+|SpyProcedure|
