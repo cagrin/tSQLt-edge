@@ -36,20 +36,6 @@ BEGIN
 	FROM sys.sql_modules
 	WHERE object_id = OBJECT_ID(@ObjectName)'
 
-	DECLARE @DatabaseName NVARCHAR(MAX) = QUOTENAME(PARSENAME(@ObjectName, 3))
-	IF @DatabaseName IS NOT NULL
-	BEGIN
-		DECLARE @Execute NVARCHAR(MAX) = CONCAT
-		(
-			'USE ', @DatabaseName, '; ',
-			'EXEC sys.sp_executesql @Command, N''@ObjectName NVARCHAR(MAX)'', @ObjectName;'
-		)
-
-		EXEC sys.sp_executesql @Execute, N'@Command NVARCHAR(MAX), @ObjectName NVARCHAR(MAX)', @Command, @ObjectName;
-	END
-	ELSE
-	BEGIN
-		EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX)', @ObjectName;
-	END
+	EXEC tSQLt.System_ExecuteCommand @Command, @ObjectName;
 END;
 GO

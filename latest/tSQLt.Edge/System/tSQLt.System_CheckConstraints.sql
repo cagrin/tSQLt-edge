@@ -51,20 +51,6 @@ BEGIN
 	FROM sys.check_constraints
 	WHERE object_id = @ConstraintId'
 
-	DECLARE @DatabaseName NVARCHAR(MAX) = QUOTENAME(PARSENAME(@ObjectName, 3))
-	IF @DatabaseName IS NOT NULL
-	BEGIN
-		DECLARE @Execute NVARCHAR(MAX) = CONCAT
-		(
-			'USE ', @DatabaseName, '; ',
-			'EXEC sys.sp_executesql @Command, N''@ConstraintId INT'', @ConstraintId;'
-		)
-
-		EXEC sys.sp_executesql @Execute, N'@Command NVARCHAR(MAX), @ConstraintId INT', @Command, @ConstraintId;
-	END
-	ELSE
-	BEGIN
-		EXEC sys.sp_executesql @Command, N'@ConstraintId INT', @ConstraintId;
-	END
+	EXEC tSQLt.System_ExecuteCommand_ConstraintId @Command, @ObjectName, @ConstraintId;
 END;
 GO

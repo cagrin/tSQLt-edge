@@ -49,20 +49,6 @@ BEGIN
 		SET @Command = REPLACE(@Command, '@ObjectName', 'CONCAT(''tempdb..'', @ObjectName)')
 	END
 
-	DECLARE @DatabaseName NVARCHAR(MAX) = QUOTENAME(PARSENAME(@ObjectName, 3))
-	IF @DatabaseName IS NOT NULL
-	BEGIN
-		DECLARE @Execute NVARCHAR(MAX) = CONCAT
-		(
-			'USE ', @DatabaseName, '; ',
-			'EXEC sys.sp_executesql @Command, N''@ObjectName NVARCHAR(MAX), @ColumnId INT'', @ObjectName, @ColumnId;'
-		)
-
-		EXEC sys.sp_executesql @Execute, N'@Command NVARCHAR(MAX), @ObjectName NVARCHAR(MAX), @ColumnId INT', @Command, @ObjectName, @ColumnId;
-	END
-	ELSE
-	BEGIN
-		EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX), @ColumnId INT', @ObjectName, @ColumnId;
-	END
+	EXEC tSQLt.System_ExecuteCommand_ColumnId @Command, @ObjectName, @ColumnId;
 END;
 GO

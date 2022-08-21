@@ -43,20 +43,6 @@ BEGIN
 	FROM sys.types
 	WHERE user_type_id = @TypeId'
 
-	DECLARE @DatabaseName NVARCHAR(MAX) = QUOTENAME(PARSENAME(@ObjectName, 3))
-	IF @DatabaseName IS NOT NULL
-	BEGIN
-		DECLARE @Execute NVARCHAR(MAX) = CONCAT
-		(
-			'USE ', @DatabaseName, '; ',
-			'EXEC sys.sp_executesql @Command, N''@TypeId INT'', @TypeId;'
-		)
-
-		EXEC sys.sp_executesql @Execute, N'@Command NVARCHAR(MAX), @TypeId INT', @Command, @TypeId;
-	END
-	ELSE
-	BEGIN
-		EXEC sys.sp_executesql @Command, N'@TypeId INT', @TypeId;
-	END
+	EXEC tSQLt.System_ExecuteCommand_TypeId @Command, @ObjectName, @TypeId;
 END;
 GO
