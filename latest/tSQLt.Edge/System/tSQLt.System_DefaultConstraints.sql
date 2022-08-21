@@ -42,13 +42,13 @@ BEGIN
 		[is_system_named]
 	FROM sys.default_constraints
 	WHERE parent_object_id = OBJECT_ID(@ObjectName) AND parent_column_id = @ColumnId'
-
+/*
 	IF OBJECT_ID(CONCAT('tempdb..', @ObjectName)) IS NOT NULL
 	BEGIN
 		SET @Command = REPLACE(@Command, 'FROM sys.', 'FROM tempdb.sys.')
 		SET @Command = REPLACE(@Command, '@ObjectName', 'CONCAT(''tempdb..'', @ObjectName)')
 	END
-
+*/
 	EXEC tSQLt.System_ExecuteCommand_ColumnId @Command, @ObjectName, @ColumnId;
 END;
 GO
