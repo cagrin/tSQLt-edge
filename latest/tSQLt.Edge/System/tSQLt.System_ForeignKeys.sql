@@ -19,48 +19,40 @@ CREATE PROCEDURE tSQLt.System_ForeignKeys
 	@ConstraintId INT
 AS
 BEGIN
-	DECLARE @DatabaseName NVARCHAR(MAX)
-	IF PARSENAME(@ObjectName, 3) IS NOT NULL
-	BEGIN
-		SET @DatabaseName = QUOTENAME(PARSENAME(@ObjectName, 3))
-	END
+	DECLARE @Command NVARCHAR(MAX) =
+	'SELECT
+		fk.object_id,
+		schema_name = SCHEMA_NAME(fk.schema_id),
+		fk.parent_object_id,
+		fk.name,
+		fk.update_referential_action_desc,
+		fk.delete_referential_action_desc,
+		foreign_key_columns =
+		(
+			SELECT STRING_AGG(QUOTENAME(pci.name), '', '')
+			FROM sys.foreign_key_columns c
+			INNER JOIN sys.columns pci
+			ON pci.object_id = c.parent_object_id
+			AND pci.column_id = c.parent_column_id
+			WHERE fk.object_id = c.constraint_object_id
+		),
+		referenced_object_id = t.object_id,
+		referenced_schema_name = SCHEMA_NAME(t.schema_id),
+		referenced_name = t.name,
+		referenced_columns =
+		(
+			SELECT STRING_AGG(QUOTENAME(rci.name), '', '')
+			FROM sys.foreign_key_columns c
+			INNER JOIN sys.columns rci
+			ON rci.object_id = c.referenced_object_id
+			AND rci.column_id = c.referenced_column_id
+			WHERE fk.object_id = c.constraint_object_id
+		)
+	FROM sys.foreign_keys fk
+	INNER JOIN sys.tables t ON fk.referenced_object_id = t.object_id
+	WHERE fk.object_id = @ConstraintId'
 
-	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
-	(
-		' ',
-		'SELECT
-			fk.object_id,
-			schema_name = SCHEMA_NAME(fk.schema_id),
-			fk.parent_object_id,
-			fk.name,
-			fk.update_referential_action_desc,
-			fk.delete_referential_action_desc,
-			foreign_key_columns =
-			(
-				SELECT STRING_AGG(QUOTENAME(pci.name), '', '')
-				FROM sys.foreign_key_columns c
-				INNER JOIN sys.columns pci
-				ON pci.object_id = c.parent_object_id
-				AND pci.column_id = c.parent_column_id
-				WHERE fk.object_id = c.constraint_object_id
-			),
-			referenced_object_id = t.object_id,
-			referenced_schema_name = SCHEMA_NAME(t.schema_id),
-			referenced_name = t.name,
-			referenced_columns =
-			(
-				SELECT STRING_AGG(QUOTENAME(rci.name), '', '')
-				FROM sys.foreign_key_columns c
-				INNER JOIN sys.columns rci
-				ON rci.object_id = c.referenced_object_id
-				AND rci.column_id = c.referenced_column_id
-				WHERE fk.object_id = c.constraint_object_id
-			)
-		FROM sys.foreign_keys fk
-		INNER JOIN sys.tables t ON fk.referenced_object_id = t.object_id',
-		'WHERE fk.object_id = @ConstraintId'
-	);
-
+	DECLARE @DatabaseName NVARCHAR(MAX) = QUOTENAME(PARSENAME(@ObjectName, 3))
 	IF @DatabaseName IS NOT NULL
 	BEGIN
 		SET @Command = CONCAT

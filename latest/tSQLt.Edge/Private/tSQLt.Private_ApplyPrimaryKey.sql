@@ -15,7 +15,7 @@ BEGIN
         [_id_] INT IDENTITY(1,1),
         [definition] NVARCHAR(MAX),
         [object_id] [int] NOT NULL,
-        [schema_id] [int] NOT NULL,
+        [schema_name] [sysname] NOT NULL,
         [table_name] [sysname] NOT NULL,
         [index_name] [sysname] NULL,
         [column_name] [sysname] NULL,
@@ -33,7 +33,7 @@ BEGIN
     INSERT INTO @Result
     (
         [object_id],
-        [schema_id],
+        [schema_name],
         [table_name],
         [index_name],
         [column_name],
@@ -49,7 +49,7 @@ BEGIN
     )
     SELECT
         [object_id],
-        [schema_id],
+        [schema_name],
         [table_name],
         [index_name],
         [column_name],
@@ -130,7 +130,7 @@ BEGIN
             ')'
         )
     FROM @Result
-    GROUP BY [schema_id], [table_name], [index_name], [type_desc]
+    GROUP BY [schema_name], [table_name], [index_name], [type_desc]
 
     DECLARE @CreatePrimaryKey NVARCHAR(MAX) = CONCAT_WS
     (

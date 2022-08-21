@@ -1,7 +1,7 @@
 CREATE TYPE tSQLt.System_IndexColumnsType AS TABLE
 (
 	[object_id] [int] NOT NULL,
-	[schema_id] [int] NOT NULL,
+	[schema_name] [sysname] NOT NULL,
 	[table_name] [sysname] NOT NULL,
 	[index_name] [sysname] NULL,
 	[column_name] [sysname] NULL,
@@ -28,43 +28,45 @@ CREATE PROCEDURE tSQLt.System_IndexColumns
 	@ObjectName NVARCHAR(MAX)
 AS
 BEGIN
-	DECLARE @DatabaseName NVARCHAR(MAX)
-	IF PARSENAME(@ObjectName, 3) IS NOT NULL
-	BEGIN
-		SET @DatabaseName = CONCAT(QUOTENAME(PARSENAME(@ObjectName, 3)), '.')
-	END
+	DECLARE @Command NVARCHAR(MAX) =
+	'SELECT
+		t.[object_id],
+		[schema_name] = SCHEMA_NAME(t.[schema_id]),
+		[table_name] = t.[name],
+		[index_name] = i.[name],
+		[column_name] = c.[name],
+		ic.[key_ordinal],
+		ic.[is_descending_key],
+		i.[type_desc],
+		i.[is_primary_key],
+		i.[is_unique],
+		i.[is_unique_constraint],
+		i.[has_filter],
+		i.[filter_definition],
+		c.[column_id],
+		c.[is_computed],
+		c.[is_nullable],
+		c.[user_type_id],
+		c.[max_length],
+		c.[precision],
+		c.[scale],
+		c.[collation_name]
+	FROM sys.tables t
+	INNER JOIN sys.indexes i ON i.[object_id] = t.[object_id]
+	INNER JOIN sys.index_columns ic ON ic.[object_id] = t.[object_id] AND ic.[index_id] = i.[index_id]
+	INNER JOIN sys.columns c ON c.[object_id] = t.[object_id] AND c.[column_id] = ic.[column_id]
+	WHERE t.object_id = OBJECT_ID(@ObjectName)'
 
-	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
-	(
-		' ',
-		'SELECT
-			t.[object_id],
-			t.[schema_id],
-			[table_name] = t.[name],
-			[index_name] = i.[name],
-			[column_name] = c.[name],
-			ic.[key_ordinal],
-			ic.[is_descending_key],
-			i.[type_desc],
-			i.[is_primary_key],
-			i.[is_unique],
-			i.[is_unique_constraint],
-			i.[has_filter],
-			i.[filter_definition],
-			c.[column_id],
-			c.[is_computed],
-			c.[is_nullable],
-			c.[user_type_id],
-			c.[max_length],
-			c.[precision],
-			c.[scale],
-			c.[collation_name]
-		FROM', @DatabaseName, 'sys.tables t',
-		'INNER JOIN ', @DatabaseName, 'sys.indexes i ON i.[object_id] = t.[object_id]',
-		'INNER JOIN ', @DatabaseName, 'sys.index_columns ic ON ic.[object_id] = t.[object_id] AND ic.[index_id] = i.[index_id]',
-		'INNER JOIN ', @DatabaseName, 'sys.columns c ON c.[object_id] = t.[object_id] AND c.[column_id] = ic.[column_id]',
-		'WHERE t.object_id = OBJECT_ID(@ObjectName)'
-	);
+	DECLARE @DatabaseName NVARCHAR(MAX) = QUOTENAME(PARSENAME(@ObjectName, 3))
+	IF @DatabaseName IS NOT NULL
+	BEGIN
+		SET @Command = CONCAT
+		(
+			'EXEC(''USE ', @DatabaseName, '; ',
+            'DECLARE @ObjectName NVARCHAR(MAX) = ''''', @ObjectName, '''''; ',
+			'EXEC sys.sp_executesql N''''', REPLACE(@Command, '''', ''''''''''), ''''', N''''@ObjectName NVARCHAR(MAX)'''', @ObjectName;'')'
+		)
+	END
 
 	EXEC sys.sp_executesql @Command, N'@ObjectName NVARCHAR(MAX)', @ObjectName;
 END;
