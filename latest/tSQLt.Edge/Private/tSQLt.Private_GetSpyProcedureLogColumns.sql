@@ -58,12 +58,12 @@ BEGIN
         WHERE _id_ = @_i_
 
         DECLARE @Type NVARCHAR(MAX)
-        EXEC tSQLt.Private_GetType @Type OUTPUT, @user_type_id, @max_length, @precision, @scale
+        EXEC tSQLt.Private_GetType @ObjectName, @Type OUTPUT, @user_type_id, @max_length, @precision, @scale
 
         DECLARE @IsTableType NVARCHAR(MAX)
         DECLARE @Types tSQLt.System_TypesType
         INSERT INTO @Types
-        EXEC tSQLt.System_Types @user_type_id
+        EXEC tSQLt.System_Types @ObjectName, @user_type_id
         SELECT @IsTableType = is_table_type FROM @Types
 
         UPDATE @Result

@@ -1,4 +1,5 @@
 CREATE PROCEDURE tSQLt.Private_GetType
+    @ObjectName NVARCHAR(MAX),
     @Type NVARCHAR(MAX) OUTPUT,
     @TypeId INT,
     @Length INT,
@@ -10,7 +11,7 @@ BEGIN
     DECLARE @TypeName NVARCHAR(MAX) = TYPE_NAME(@TypeId)
     IF @TypeId > 256
     BEGIN
-        EXEC tSQLt.Private_GetTypeName @TypeName OUTPUT, @TypeId
+        EXEC tSQLt.Private_GetTypeName @ObjectName, @TypeName OUTPUT, @TypeId
     END
 
     SELECT

@@ -3,7 +3,7 @@ CREATE TYPE tSQLt.System_TypesType AS TABLE
 	[name] [sysname] NOT NULL,
 	[system_type_id] [tinyint] NOT NULL,
 	[user_type_id] [int] NOT NULL,
-	[schema_id] [int] NOT NULL,
+	[schema_name] [sysname] NOT NULL,
 	[principal_id] [int] NULL,
 	[max_length] [smallint] NOT NULL,
 	[precision] [tinyint] NOT NULL,
@@ -19,26 +19,40 @@ CREATE TYPE tSQLt.System_TypesType AS TABLE
 GO
 
 CREATE PROCEDURE tSQLt.System_Types
-	@TypeId INT,
-	@ObjectName NVARCHAR(MAX) = NULL
+	@ObjectName NVARCHAR(MAX),
+	@TypeId INT
 AS
 BEGIN
-	DECLARE @SourceTable NVARCHAR(MAX) = 'sys.types'
-	IF PARSENAME(@ObjectName, 3) IS NOT NULL
+	DECLARE @Command NVARCHAR(MAX) =
+	'SELECT
+		[name],
+		[system_type_id],
+		[user_type_id],
+		[schema_name] = SCHEMA_NAME(schema_id),
+		[principal_id],
+		[max_length],
+		[precision],
+		[scale],
+		[collation_name],
+		[is_nullable],
+		[is_user_defined],
+		[is_assembly_type],
+		[default_object_id],
+		[rule_object_id],
+		[is_table_type]
+	FROM sys.types
+	WHERE user_type_id = @TypeId'
+
+	DECLARE @DatabaseName NVARCHAR(MAX) = QUOTENAME(PARSENAME(@ObjectName, 3))
+	IF @DatabaseName IS NOT NULL
 	BEGIN
-		SET @SourceTable = CONCAT(QUOTENAME(PARSENAME(@ObjectName, 3)), '.', @SourceTable)
+		SET @Command = CONCAT
+		(
+			'EXEC(''USE ', @DatabaseName, '; ',
+            'DECLARE @TypeId INT = ', @TypeId, '; ',
+			'EXEC sys.sp_executesql N''''', REPLACE(@Command, '''', ''''''''''), ''''', N''''@TypeId INT'''', @TypeId;'')'
+		)
 	END
-
-	DECLARE @TableTypeColumns NVARCHAR(MAX)
-	EXEC tSQLt.System_GetTableTypeColumns @TableTypeColumns OUTPUT, @TableTypeName = 'System_TypesType'
-
-	DECLARE @Command NVARCHAR(MAX) = CONCAT_WS
-	(
-		' ',
-		'SELECT', @TableTypeColumns,
-		'FROM', @SourceTable,
-		'WHERE user_type_id = @TypeId'
-	);
 
 	EXEC sys.sp_executesql @Command, N'@TypeId INT', @TypeId;
 END;

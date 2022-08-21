@@ -21,6 +21,6 @@ BEGIN
     FROM @System_Parameters
     WHERE parameter_id = 0
 
-    EXEC tSQLt.Private_GetType @ScalarReturnType OUTPUT, @user_type_id, @max_length, @precision, @scale
+    EXEC tSQLt.Private_GetType @ObjectName, @ScalarReturnType OUTPUT, @user_type_id, @max_length, @precision, @scale
 END;
 GO

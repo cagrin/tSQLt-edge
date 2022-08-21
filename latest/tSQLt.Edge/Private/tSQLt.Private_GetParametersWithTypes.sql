@@ -65,7 +65,7 @@ BEGIN
         WHERE _id_ = @_i_
 
         DECLARE @Type NVARCHAR(MAX)
-        EXEC tSQLt.Private_GetType @Type OUTPUT, @user_type_id, @max_length, @precision, @scale
+        EXEC tSQLt.Private_GetType @ObjectName, @Type OUTPUT, @user_type_id, @max_length, @precision, @scale
 
         UPDATE @Result
         SET definition = @Type

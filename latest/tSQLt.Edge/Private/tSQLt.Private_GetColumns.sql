@@ -62,7 +62,7 @@ BEGIN
             @IdentityColumn NVARCHAR(MAX),
             @DefaultConstraints NVARCHAR(MAX)
 
-        EXEC tSQLt.Private_GetType @Type OUTPUT, @user_type_id, @max_length, @precision, @scale, @collation_name
+        EXEC tSQLt.Private_GetType @ObjectName, @Type OUTPUT, @user_type_id, @max_length, @precision, @scale, @collation_name
         IF @is_computed = 1
         BEGIN
             EXEC tSQLt.Private_GetComputedColumn @ComputedColumn OUTPUT, @ObjectName, @column_id
