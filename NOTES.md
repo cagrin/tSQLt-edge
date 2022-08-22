@@ -18,7 +18,7 @@ Install-Module -Name SqlServer
 ## Run unit tests in Powershell
 ```
 pwsh
-Invoke-Sqlcmd -Query "EXEC tSQLt.RunAll" -ServerInstance localhost,51433 -Database tSQLt.Edge.Tests -Username sa -Password A.794613 -Verbose
+Invoke-Sqlcmd -Query "EXEC tSQLt.RunAll" -ServerInstance "localhost,51433" -Database "tSQLt.Edge.Tests" -Username "sa" -Password "A.794613"
 ```
 
 ## Run unit tests on Apple Silicon using dotnet-sqltest

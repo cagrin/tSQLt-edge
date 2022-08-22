@@ -25,12 +25,14 @@ BEGIN
 
     EXEC tSQLt.SpyProcedure '[O''clock.Schema].[O''clock.Procedure]';
 
-    EXEC [O'clock.Schema].[O'clock.Procedure];
+    EXEC ('EXEC [O''clock.Schema].[O''clock.Procedure];');
 
-    IF NOT EXISTS (SELECT 1 FROM [O'clock.Schema].[O'clock.Procedure_SpyProcedureLog] WHERE _id_ = 1)
+    EXEC ('
+    IF NOT EXISTS (SELECT 1 FROM [O''clock.Schema].[O''clock.Procedure_SpyProcedureLog] WHERE _id_ = 1)
     BEGIN
-        EXEC tSQLt.Fail '[O''clock.Schema].[O''clock.Procedure_SpyProcedureLog] should exists.';
+        EXEC tSQLt.Fail ''[O''''clock.Schema].[O''''clock.Procedure_SpyProcedureLog] should exists.'';
     END
+    ');
 END;
 GO
 

@@ -90,6 +90,7 @@ tSQLt-edge can operate on different database, same server:
 |AssertEqualsTableSchema|
 |AssertObjectDoesNotExists|
 |AssertObjectExists|
+|FakeFunction|
 |FakeTable|
 |RemoveObject|
 |RemoveObjectIfExists|
