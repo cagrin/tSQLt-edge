@@ -1,6 +1,0 @@
-CREATE PROCEDURE dbo.TestProcedure
-AS
-BEGIN
-    RETURN;
-END;
-GO

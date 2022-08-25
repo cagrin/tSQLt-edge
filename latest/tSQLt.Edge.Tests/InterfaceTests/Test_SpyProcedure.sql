@@ -4,11 +4,11 @@ GO
 CREATE PROCEDURE Test_SpyProcedure.Test_Procedure
 AS
 BEGIN
-    EXEC ('CREATE OR ALTER PROCEDURE dbo.TestProcedure AS BEGIN RETURN; END;');
+    EXEC ('CREATE PROCEDURE dbo.TestProcedure AS BEGIN RETURN; END;');
 
     EXEC tSQLt.SpyProcedure 'dbo.TestProcedure';
 
-    EXEC dbo.TestProcedure;
+    EXEC ('EXEC dbo.TestProcedure;');
 
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1)
     BEGIN
@@ -39,11 +39,11 @@ GO
 CREATE PROCEDURE Test_SpyProcedure.Test_ProcedureWithP1
 AS
 BEGIN
-    EXEC ('CREATE OR ALTER PROCEDURE dbo.TestProcedure @P1 int AS BEGIN RETURN; END;');
+    EXEC ('CREATE PROCEDURE dbo.TestProcedure @P1 int AS BEGIN RETURN; END;');
 
     EXEC tSQLt.SpyProcedure 'dbo.TestProcedure';
 
-    EXEC dbo.TestProcedure @P1 = 1;
+    EXEC ('EXEC dbo.TestProcedure @P1 = 1;');
 
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = 1)
     BEGIN
@@ -55,11 +55,11 @@ GO
 CREATE PROCEDURE Test_SpyProcedure.Test_ProcedureWithP1_DefaultValue
 AS
 BEGIN
-    EXEC ('CREATE OR ALTER PROCEDURE dbo.TestProcedure @P1 int = 1 AS BEGIN RETURN; END;');
+    EXEC ('CREATE PROCEDURE dbo.TestProcedure @P1 int = 1 AS BEGIN RETURN; END;');
 
     EXEC tSQLt.SpyProcedure 'dbo.TestProcedure';
 
-    EXEC dbo.TestProcedure;
+    EXEC ('EXEC dbo.TestProcedure;');
 
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 IS NULL)
     BEGIN
@@ -71,12 +71,12 @@ GO
 CREATE PROCEDURE Test_SpyProcedure.Test_ProcedureWithP1_Output
 AS
 BEGIN
-    EXEC ('CREATE OR ALTER PROCEDURE dbo.TestProcedure @P1 int OUTPUT AS BEGIN RETURN; END;');
+    EXEC ('CREATE PROCEDURE dbo.TestProcedure @P1 int OUTPUT AS BEGIN RETURN; END;');
 
     EXEC tSQLt.SpyProcedure 'dbo.TestProcedure';
 
     DECLARE @P1 int = 1;
-    EXEC dbo.TestProcedure @P1 = @P1 OUTPUT;
+    EXEC sys.sp_executesql N'EXEC dbo.TestProcedure @P1 = @P1 OUTPUT;', N'@P1 int OUTPUT', @P1 OUTPUT;
 
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = 1)
     BEGIN
@@ -88,12 +88,12 @@ GO
 CREATE PROCEDURE Test_SpyProcedure.Test_ProcedureWithP1_CommandToExecute
 AS
 BEGIN
-    EXEC ('CREATE OR ALTER PROCEDURE dbo.TestProcedure @P1 int OUTPUT AS BEGIN RETURN; END;');
+    EXEC ('CREATE PROCEDURE dbo.TestProcedure @P1 int OUTPUT AS BEGIN RETURN; END;');
 
     EXEC tSQLt.SpyProcedure 'dbo.TestProcedure', 'SET @P1 = 2;';
 
     DECLARE @P1 int = 1;
-    EXEC dbo.TestProcedure @P1 = @P1 OUTPUT;
+    EXEC sys.sp_executesql N'EXEC dbo.TestProcedure @P1 = @P1 OUTPUT;', N'@P1 int OUTPUT', @P1 OUTPUT;
 
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = 1)
     BEGIN
@@ -107,12 +107,12 @@ GO
 CREATE PROCEDURE Test_SpyProcedure.Test_ProcedureWithP1_CommandToExecuteInlineComment
 AS
 BEGIN
-    EXEC ('CREATE OR ALTER PROCEDURE dbo.TestProcedure @P1 int OUTPUT AS BEGIN RETURN; END;');
+    EXEC ('CREATE PROCEDURE dbo.TestProcedure @P1 int OUTPUT AS BEGIN RETURN; END;');
 
     EXEC tSQLt.SpyProcedure 'dbo.TestProcedure', 'SET @P1 = 2; --inline comment';
 
     DECLARE @P1 int = 1;
-    EXEC dbo.TestProcedure @P1 = @P1 OUTPUT;
+    EXEC sys.sp_executesql N'EXEC dbo.TestProcedure @P1 = @P1 OUTPUT;', N'@P1 int OUTPUT', @P1 OUTPUT;
 
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = 1)
     BEGIN
@@ -126,12 +126,12 @@ GO
 CREATE PROCEDURE Test_SpyProcedure.Test_ProcedureWithP1_CallOriginal
 AS
 BEGIN
-    EXEC ('CREATE OR ALTER PROCEDURE dbo.TestProcedure @P1 int OUTPUT AS BEGIN SET @P1 = 3; RETURN; END;');
+    EXEC ('CREATE PROCEDURE dbo.TestProcedure @P1 int OUTPUT AS BEGIN SET @P1 = 3; RETURN; END;');
 
     EXEC tSQLt.SpyProcedure 'dbo.TestProcedure', 'SET @P1 = 2;', @CallOriginal = 1;
 
     DECLARE @P1 int = 1;
-    EXEC dbo.TestProcedure @P1 = @P1 OUTPUT;
+    EXEC sys.sp_executesql N'EXEC dbo.TestProcedure @P1 = @P1 OUTPUT;', N'@P1 int OUTPUT', @P1 OUTPUT;
 
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = 1)
     BEGIN
@@ -145,14 +145,14 @@ GO
 CREATE PROCEDURE Test_SpyProcedure.Test_ProcedureWithP1_TableType
 AS
 BEGIN
-    EXEC ('CREATE OR ALTER PROCEDURE dbo.TestProcedure @P1 int OUTPUT, @P2 dbo.TestType READONLY AS BEGIN SET @P1 = 4 * (SELECT SUM(Column1) FROM @P2); RETURN; END;');
+    EXEC ('CREATE PROCEDURE dbo.TestProcedure @P1 int OUTPUT, @P2 dbo.TestType READONLY AS BEGIN SET @P1 = 4 * (SELECT SUM(Column1) FROM @P2); RETURN; END;');
 
     EXEC tSQLt.SpyProcedure 'dbo.TestProcedure', 'SET @P1 = 3;', @CallOriginal = 1;
 
     DECLARE @P1 int = 1;
     DECLARE @P2 dbo.TestType;
     INSERT INTO @P2 (Column1) VALUES (2);
-    EXEC dbo.TestProcedure @P1 OUTPUT, @P2;
+    EXEC sys.sp_executesql N'EXEC dbo.TestProcedure @P1 OUTPUT, @P2;', N'@P1 int OUTPUT, @P2 dbo.TestType READONLY', @P1 OUTPUT, @P2;
 
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = 1 AND CONVERT(NVARCHAR(MAX), P2) = '<P2><row><Column1>2</Column1></row></P2>')
     BEGIN
@@ -168,11 +168,11 @@ AS
 BEGIN
     CREATE TABLE dbo.TestProcedure_SpyProcedureLog (Column1 int);
 
-    EXEC ('CREATE OR ALTER PROCEDURE dbo.TestProcedure AS BEGIN RETURN; END;');
+    EXEC ('CREATE PROCEDURE dbo.TestProcedure AS BEGIN RETURN; END;');
 
     EXEC tSQLt.SpyProcedure 'dbo.TestProcedure';
 
-    EXEC dbo.TestProcedure;
+    EXEC ('EXEC dbo.TestProcedure;');
 
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1)
     BEGIN
@@ -184,11 +184,11 @@ GO
 CREATE PROCEDURE Test_SpyProcedure.Test_ProcedureWithP1_SysNameIsNull
 AS
 BEGIN
-    EXEC ('CREATE OR ALTER PROCEDURE dbo.TestProcedure @P1 sysname AS BEGIN RETURN; END;');
+    EXEC ('CREATE PROCEDURE dbo.TestProcedure @P1 sysname AS BEGIN RETURN; END;');
 
     EXEC tSQLt.SpyProcedure 'dbo.TestProcedure';
 
-    EXEC dbo.TestProcedure @P1 = NULL;
+    EXEC ('EXEC dbo.TestProcedure @P1 = NULL;');
 
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 IS NULL)
     BEGIN
@@ -200,13 +200,13 @@ GO
 CREATE PROCEDURE Test_SpyProcedure.Test_ProcedureWithP1_TableTypeNotNull
 AS
 BEGIN
-    EXEC ('CREATE OR ALTER PROCEDURE dbo.TestProcedure @P1 dbo.TestTypeNotNull READONLY AS BEGIN RETURN; END;');
+    EXEC ('CREATE PROCEDURE dbo.TestProcedure @P1 dbo.TestTypeNotNull READONLY AS BEGIN RETURN; END;');
 
     EXEC tSQLt.SpyProcedure 'dbo.TestProcedure';
 
     DECLARE @P1 dbo.TestTypeNotNull;
     INSERT INTO @P1 (Column1) VALUES (NULL);
-    EXEC dbo.TestProcedure @P1;
+    EXEC sys.sp_executesql N'EXEC dbo.TestProcedure @P1;', N'@P1 dbo.TestTypeNotNull READONLY', @P1;
 
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND CONVERT(NVARCHAR(MAX), P1) = '<P1><row/></P1>')
     BEGIN
