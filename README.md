@@ -7,9 +7,8 @@ tSQLt-compatible unit testing framework for Azure SQL Edge, SQL Server 2019 and 
 ## Description
 This project was created in order to practice code writing in TDD. Here are some detailed principles I was followed:
 - Use modern Sql150 syntax
-- Include nuget package
-- No CLR code
-- Use CONCAT, CONCAT_WS instead of adding strings (+)
+- Do not use CLR code
+- Use CONCAT or CONCAT_WS instead of adding strings (+)
 - Use STRING_AGG instead of concatenate strings with FOR XML PATH
 - Use tSQLt assertions in internal tests
 
