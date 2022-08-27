@@ -109,7 +109,7 @@ BEGIN
         BEGIN
             EXEC tSQLt.Private_GetIdentityColumn @IdentityColumn OUTPUT, @ObjectName, @column_id
         END
-        IF @Defaults = 1 AND @default_object_id > 0
+        IF @Defaults = 1 AND @default_object_id <> 0
         BEGIN
             EXEC tSQLt.Private_GetDefaultConstraints @DefaultConstraints OUTPUT, @ObjectName, @column_id
         END
@@ -122,7 +122,7 @@ BEGIN
                 (
                     ' ', @Type,
                     CASE WHEN @Identity = 1 AND @is_identity = 1 THEN @IdentityColumn END,
-                    CASE WHEN @Defaults = 1 AND @default_object_id > 0 THEN @DefaultConstraints ELSE
+                    CASE WHEN @Defaults = 1 AND @default_object_id <> 0 THEN @DefaultConstraints ELSE
                     CASE WHEN @NotNulls = 1 AND @is_nullable = 0 THEN 'NOT NULL' END END
                 )
             END
