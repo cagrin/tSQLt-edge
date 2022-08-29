@@ -28,3 +28,8 @@ sqltest runall --image cagrin/azure-sql-edge-arm64 --project ./latest/tSQLt.Edge
 sqltest runall --image cagrin/azure-sql-edge-arm64 --project ./latest/tSQLt.Original.Tests --cc-disable
 sqltest runall --image cagrin/azure-sql-edge-arm64 --project ./current/Example.Tests
 ```
+
+## Run XmlResult tests using dotnet
+```
+dotnet test ./latest/tSQLt.XmlResult.Tests -l "console;verbosity=normal"
+```
