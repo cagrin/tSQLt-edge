@@ -1,7 +1,8 @@
 CREATE PROCEDURE tSQLt.Internal_SpyProcedure
     @ProcedureName NVARCHAR(MAX),
     @CommandToExecute NVARCHAR(MAX) = NULL,
-    @CallOriginal BIT = 0
+    @CallOriginal BIT = 0,
+    @CatchExecutionTimes BIT = 0
 AS
 BEGIN
     DECLARE @NewName NVARCHAR(MAX) = NEWID();
@@ -29,6 +30,7 @@ BEGIN
         'INSERT INTO ',
         @LogTableName,
         CASE WHEN @ParametersNames IS NULL THEN ' DEFAULT VALUES' ELSE CONCAT(' (', @ParametersNames, ') SELECT ', @SpyProcedureLogSelect) END,
+        CASE WHEN @CatchExecutionTimes = 1 THEN '; DECLARE @_id_ int = SCOPE_IDENTITY()' END,
         ';'
     );
 
@@ -60,6 +62,7 @@ BEGIN
         @LogTableName,
         '(_id_ int IDENTITY(1, 1) PRIMARY KEY CLUSTERED',
         CASE WHEN @SpyProcedureLogColumns IS NULL THEN '' ELSE CONCAT(', ', @SpyProcedureLogColumns) END,
+        CASE WHEN @CatchExecutionTimes = 1 THEN ', _start_ DATETIME2 NOT NULL DEFAULT SYSDATETIME(), _end_ DATETIME2 NULL' END,
         ');'
     );
 
@@ -74,6 +77,7 @@ BEGIN
         @SpyProcedureOriginalObjectNameVariable,
         @CommandToExecute, NCHAR(10),
         CASE WHEN @CallOriginal = 1 THEN @CallOriginalCommand END,
+        CASE WHEN @CatchExecutionTimes = 1 THEN CONCAT_WS(' ', 'UPDATE', @LogTableName, 'SET _end_ = SYSDATETIME() WHERE _id_ = @_id_;') END,
         'RETURN; END;'
     );
 

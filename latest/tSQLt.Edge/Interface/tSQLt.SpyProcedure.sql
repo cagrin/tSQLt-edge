@@ -1,7 +1,8 @@
 CREATE PROCEDURE tSQLt.SpyProcedure
     @ProcedureName NVARCHAR(MAX),
     @CommandToExecute NVARCHAR(MAX) = NULL,
-    @CallOriginal BIT = 0
+    @CallOriginal BIT = 0,
+    @CatchExecutionTimes BIT = 0
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -9,6 +10,7 @@ BEGIN
     EXEC @Command
     @ProcedureName = @ProcedureName,
     @CommandToExecute = @CommandToExecute,
-    @CallOriginal = @CallOriginal;
+    @CallOriginal = @CallOriginal,
+    @CatchExecutionTimes = @CatchExecutionTimes;
 END;
 GO

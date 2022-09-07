@@ -232,3 +232,19 @@ BEGIN
     END');
 END;
 GO
+
+CREATE PROCEDURE Test_SpyProcedure.Test_Procedure_Start_End_
+AS
+BEGIN
+    EXEC ('CREATE PROCEDURE dbo.TestProcedure AS BEGIN WAITFOR DELAY ''00:00:00.016''; RETURN; END;');
+
+    EXEC tSQLt.SpyProcedure 'dbo.TestProcedure', @CallOriginal = 1, @CatchExecutionTimes = 1;
+
+    EXEC ('EXEC dbo.TestProcedure;');
+
+    IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND DATEDIFF(ms, _start_, _end_) BETWEEN 16 AND 32)
+    BEGIN
+        EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should has _start_ and _end_.';
+    END
+END;
+GO
