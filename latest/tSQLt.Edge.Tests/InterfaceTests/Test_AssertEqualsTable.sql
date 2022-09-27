@@ -289,3 +289,18 @@ BEGIN
     EXEC tSQLt.AssertEqualsTable 'master.dbo.TestTable1', 'master.dbo.TestTable2';
 END;
 GO
+
+CREATE PROCEDURE Test_AssertEqualsTable.Test_FloatLossOfPrecision
+AS
+BEGIN
+    CREATE TABLE dbo.TestTable1 (Column1 FLOAT);
+    CREATE TABLE dbo.TestTable2 (Column1 FLOAT);
+    INSERT INTO dbo.TestTable1 (Column1) VALUES (0.1);
+    UPDATE dbo.TestTable1 SET Column1 = Column1+(0.2);
+    INSERT INTO dbo.TestTable2 (Column1) VALUES (0.3);
+
+    EXEC tSQLt.ExpectException 'tSQLt.AssertEqualsTable failed. Expected:<dbo.TestTable1> has different rowset than Actual:<dbo.TestTable2>.';
+
+    EXEC tSQLt.AssertEqualsTable 'dbo.TestTable1', 'dbo.TestTable2';
+END;
+GO
