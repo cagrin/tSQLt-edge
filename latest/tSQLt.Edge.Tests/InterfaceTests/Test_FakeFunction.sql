@@ -330,3 +330,16 @@ BEGIN
     EXEC tSQLt.AssertEquals 43, @Actual;
 END;
 GO
+
+CREATE PROCEDURE Test_FakeFunction.Test_ComputedColumnWithScalarFunctionFailed
+AS
+BEGIN
+    EXEC ('CREATE FUNCTION dbo.TestFunction1(@Column1 INT) RETURNS INT AS BEGIN RETURN (SELECT 2*@Column1); END;');
+    EXEC ('CREATE FUNCTION dbo.FakeFunction1(@Column1 INT) RETURNS INT AS BEGIN RETURN (SELECT 2*@Column1); END;');
+    EXEC ('CREATE TABLE dbo.TestTable1 (Column1 INT NOT NULL, Column2 AS dbo.TestFunction1(Column1))');
+
+    EXEC tSQLt.ExpectException 'Object ''[dbo].[TestFunction1]'' cannot be renamed because the object participates in enforced dependencies.';
+
+    EXEC tSQLt.FakeFunction 'dbo.TestFunction1', 'dbo.FakeFunction1';
+END;
+GO
