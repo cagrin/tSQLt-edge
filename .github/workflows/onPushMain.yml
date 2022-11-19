@@ -20,7 +20,7 @@ jobs:
             image: cagrin/mssql-server-ltsc2022:2019-latest
             windows: --windows-container
           - os: windows-latest
-            image: cagrin/mssql-server-ltsc2022:2022-preview
+            image: cagrin/mssql-server-ltsc2022:2022-latest
             windows: --windows-container
     runs-on: ${{ matrix.os }}
     steps:
@@ -44,9 +44,5 @@ jobs:
       - uses: actions/checkout@v3
       - name: Checkout submodules
         run: git submodule update --init
-      - name: Setup dotnet
-        uses: actions/setup-dotnet@master
-        with:
-          dotnet-version: '6.0'
       - name: XmlResult tests
         run: dotnet test -c Release ./latest/tSQLt.XmlResult.Tests
