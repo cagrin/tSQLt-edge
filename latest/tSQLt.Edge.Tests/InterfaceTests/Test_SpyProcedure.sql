@@ -1,6 +1,17 @@
 CREATE SCHEMA Test_SpyProcedure;
 GO
 
+CREATE PROCEDURE Test_SpyProcedure.Test_SpyProcedureLogExists
+AS
+BEGIN
+    EXEC ('CREATE PROCEDURE dbo.TestProcedure AS BEGIN RETURN; END;');
+
+    EXEC tSQLt.SpyProcedure 'dbo.TestProcedure';
+
+    EXEC tSQLt.AssertObjectExists 'dbo.TestProcedure_SpyProcedureLog';
+END;
+GO
+
 CREATE PROCEDURE Test_SpyProcedure.Test_Procedure
 AS
 BEGIN
