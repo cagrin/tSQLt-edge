@@ -1,7 +1,7 @@
 CREATE SCHEMA Test_SpyProcedure;
 GO
 
-CREATE PROCEDURE Test_SpyProcedure.Test_SpyProcedureLogExists
+CREATE PROCEDURE Test_SpyProcedure.Test_ProcedureLog
 AS
 BEGIN
     EXEC ('CREATE PROCEDURE dbo.TestProcedure AS BEGIN RETURN; END;');
