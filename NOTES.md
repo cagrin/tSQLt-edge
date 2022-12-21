@@ -31,5 +31,5 @@ sqltest runall --image cagrin/azure-sql-edge-arm64 --project ./current/Example.T
 
 ## Run XmlResult tests using dotnet
 ```
-dotnet test ./latest/tSQLt.XmlResult.Tests -l "console;verbosity=normal"
+cd latest/tSQLt.XmlResult.Tests && dotnet test -l "console;verbosity=normal" && cd ../..
 ```
