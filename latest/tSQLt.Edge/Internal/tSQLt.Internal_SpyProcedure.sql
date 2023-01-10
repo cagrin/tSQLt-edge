@@ -5,6 +5,14 @@ CREATE PROCEDURE tSQLt.Internal_SpyProcedure
     @CatchExecutionTimes BIT = 0
 AS
 BEGIN
+    DECLARE @ObjectType CHAR(2);
+    EXEC tSQLt.Private_GetObjectType @ObjectType OUTPUT, @ProcedureName;
+
+    IF @ObjectType IS NULL OR @ObjectType NOT IN ('P')
+    BEGIN
+        EXEC tSQLt.Fail 'Cannot use SpyProcedure on', @ProcedureName, 'because the procedure does not exist.';
+    END
+
     DECLARE @NewName NVARCHAR(MAX) = NEWID();
     DECLARE @ObjectId INT = OBJECT_ID(@ProcedureName);
     DECLARE @Parameters NVARCHAR(MAX);

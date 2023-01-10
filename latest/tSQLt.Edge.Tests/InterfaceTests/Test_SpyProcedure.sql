@@ -259,3 +259,12 @@ BEGIN
     END
 END;
 GO
+
+CREATE PROCEDURE Test_SpyProcedure.Test_ProcedureDoesNotExist
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'Cannot use SpyProcedure on dbo.TestProcedure because the procedure does not exist.';
+
+    EXEC tSQLt.SpyProcedure 'dbo.TestProcedure';
+END;
+GO
