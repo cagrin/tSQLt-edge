@@ -5,26 +5,21 @@ CREATE PROCEDURE tSQLt.Internal_SpyProcedure
     @CatchExecutionTimes BIT = 0
 AS
 BEGIN
-    DECLARE @ObjectType CHAR(2);
-    EXEC tSQLt.Private_GetObjectType @ObjectType OUTPUT, @ProcedureName;
-
-    IF @ObjectType IS NULL OR @ObjectType NOT IN ('P')
-    BEGIN
-        EXEC tSQLt.Fail 'Cannot use SpyProcedure on', @ProcedureName, 'because the procedure does not exist.';
-    END
-
-    DECLARE @NewName NVARCHAR(MAX) = NEWID();
-    DECLARE @ObjectId INT = OBJECT_ID(@ProcedureName);
-    DECLARE @Parameters NVARCHAR(MAX);
-    EXEC tSQLt.Private_GetParameters @Parameters OUTPUT, @ProcedureName;
-    DECLARE @ParametersNames NVARCHAR(MAX);
-    EXEC tSQLt.Private_GetParametersNames @ParametersNames OUTPUT, @ProcedureName;
-    DECLARE @SpyProcedureLogSelect NVARCHAR(MAX);
-    EXEC tSQLt.Private_GetSpyProcedureLogSelect @SpyProcedureLogSelect OUTPUT, @ProcedureName;
-    DECLARE @SpyProcedureLogColumns NVARCHAR(MAX);
-    EXEC tSQLt.Private_GetSpyProcedureLogColumns @SpyProcedureLogColumns OUTPUT, @ProcedureName;
-    DECLARE @ParametersWithTypesDefaultNulls NVARCHAR(MAX);
-    EXEC tSQLt.Private_GetParametersWithTypes @ParametersWithTypesDefaultNulls OUTPUT, @ProcedureName, @DefaultNulls = 1;
+    DECLARE
+        @NewName NVARCHAR(MAX) = NEWID(),
+        @Parameters NVARCHAR(MAX),
+        @ParametersNames NVARCHAR(MAX),
+        @SpyProcedureLogSelect NVARCHAR(MAX),
+        @SpyProcedureLogColumns NVARCHAR(MAX),
+        @ParametersWithTypesDefaultNulls NVARCHAR(MAX);
+    
+    EXEC tSQLt.Private_ProcessProcedureName
+        @ProcedureName,
+        @Parameters OUTPUT,
+        @ParametersNames OUTPUT,
+        @SpyProcedureLogSelect OUTPUT,
+        @SpyProcedureLogColumns OUTPUT,
+        @ParametersWithTypesDefaultNulls OUTPUT;
 
 	DECLARE @LogTableName NVARCHAR(MAX) = CONCAT
 	(
