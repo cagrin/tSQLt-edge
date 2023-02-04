@@ -33,3 +33,9 @@ sqltest runall --image cagrin/azure-sql-edge-arm64 --project ./current/Example.T
 ```
 cd latest/tSQLt.XmlResult.Tests && dotnet test -l "console;verbosity=normal" && cd ../..
 ```
+
+## Setup unit tests on Dev Container using dotnet-sqltest
+```
+export PATH="$PATH:/home/vscode/.dotnet/tools"
+dotnet tool install -g dotnet-sqltest
+```
