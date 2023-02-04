@@ -39,3 +39,12 @@ cd latest/tSQLt.XmlResult.Tests && dotnet test -l "console;verbosity=normal" && 
 export PATH="$PATH:/home/vscode/.dotnet/tools"
 dotnet tool install -g dotnet-sqltest
 ```
+
+## Run unit tests on Codespaces
+```
+git submodule update --init
+sqltest runall --image mcr.microsoft.com/azure-sql-edge --project ./latest/tSQLt.Edge.Tests --cc-include-tsqlt
+sqltest runall --image mcr.microsoft.com/azure-sql-edge --project ./latest/tSQLt.Original.Tests --cc-disable
+sqltest runall --image mcr.microsoft.com/azure-sql-edge --project ./current/Example.Tests
+dotnet test --configuration Release ./latest/tSQLt.XmlResult.Tests --logger "console;verbosity=normal"
+```
