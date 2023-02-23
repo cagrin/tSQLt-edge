@@ -1,0 +1,9 @@
+{
+    "id": "dotnet-sqltest",
+    "version": "1",
+    "name": "dotnet-sqltest",
+    "description": "Installs dotnet-sqltest tool",
+    "installsAfter": [
+        "ghcr.io/devcontainers/features/dotnet"
+    ]
+}

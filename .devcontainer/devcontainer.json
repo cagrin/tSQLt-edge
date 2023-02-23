@@ -2,6 +2,7 @@
     "image": "mcr.microsoft.com/devcontainers/dotnet:0-6.0",
     "features":
     {
+        "./dotnet-sqltest": { },
         "ghcr.io/devcontainers/features/docker-in-docker":
         {
             "version": "latest"
