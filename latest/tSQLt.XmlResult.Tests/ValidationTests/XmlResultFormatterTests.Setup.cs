@@ -6,15 +6,6 @@ namespace ValidationTests
 
     public partial class XmlResultFormatterTests
     {
-        private const string Image =
-#if DEBUG
-        "cagrin/azure-sql-edge-arm64";
-#else
-        "mcr.microsoft.com/azure-sql-edge";
-#endif
-
-        private const string Password = "A.794613";
-
         private static MsSqlTestcontainer? testcontainer;
 
         [ClassInitialize]
@@ -22,9 +13,9 @@ namespace ValidationTests
         {
             _ = context;
 
-            using var config = new MsSqlTestcontainerConfiguration(Image)
+            using var config = new MsSqlTestcontainerConfiguration("mcr.microsoft.com/mssql/server")
             {
-                Password = Password,
+                Password = "A.794613",
             };
 
             testcontainer = new TestcontainersBuilder<MsSqlTestcontainer>()

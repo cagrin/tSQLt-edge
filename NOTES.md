@@ -48,3 +48,8 @@ sqltest runall --image mcr.microsoft.com/azure-sql-edge --project ./latest/tSQLt
 sqltest runall --image mcr.microsoft.com/azure-sql-edge --project ./current/Example.Tests
 dotnet test --configuration Release ./latest/tSQLt.XmlResult.Tests --logger "console;verbosity=normal"
 ```
+
+## Set docker --platform flag in TestcontainersBuilder
+```
+.WithEnvironment("DOCKER_DEFAULT_PLATFORM", "linux/amd64")
+```
