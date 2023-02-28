@@ -4,4 +4,7 @@
         <SqlServerVersion>Sql150</SqlServerVersion>
         <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
     </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SqlServer.Dacpacs" Version="150.0.0" DacpacName="master" />
+    </ItemGroup>
 </Project>

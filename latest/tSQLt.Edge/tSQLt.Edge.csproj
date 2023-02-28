@@ -1,5 +1,5 @@
-<Project Sdk="MSBuild.Sdk.SqlProj/2.4.0">
-    <PropertyGroup>
-        <SuppressTSqlWarnings>71502,71562</SuppressTSqlWarnings>
-    </PropertyGroup>
+<Project Sdk="MSBuild.Sdk.SqlProj/2.5.0">
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SqlServer.Dacpacs" DacpacName="master" />
+    </ItemGroup>
 </Project>
