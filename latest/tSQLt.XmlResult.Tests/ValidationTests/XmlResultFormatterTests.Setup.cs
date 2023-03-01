@@ -18,7 +18,9 @@ namespace ValidationTests
                 Password = "A.794613",
             };
 
+#pragma warning disable 618
             testcontainer = new TestcontainersBuilder<MsSqlTestcontainer>()
+#pragma warning restore 618
                 .WithDatabase(config)
                 .Build();
 
