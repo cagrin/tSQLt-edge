@@ -45,4 +45,4 @@ jobs:
       - name: Checkout submodules
         run: git submodule update --init
       - name: XmlResult tests
-        run: cd latest/tSQLt.XmlResult.Tests && dotnet test -c Release && cd ../..
+        run: dotnet test --configuration Release ./latest/tSQLt.XmlResult.Tests --logger "console;verbosity=normal"
