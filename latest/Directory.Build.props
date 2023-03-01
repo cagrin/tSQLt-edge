@@ -5,6 +5,7 @@
         <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
     </PropertyGroup>
     <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AnalysisMode>All</AnalysisMode>
         <CodeAnalysisRuleSet>../StyleCop.ruleset</CodeAnalysisRuleSet>

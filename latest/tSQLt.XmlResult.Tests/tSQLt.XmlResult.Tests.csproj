@@ -1,10 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
-        <IsPackable>false</IsPackable>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <LangVersion>Preview</LangVersion>
-    </PropertyGroup>
     <ItemGroup>
         <EmbeddedResource Include="../tSQLt.Edge/Interface/tSQLt.sql" />
         <EmbeddedResource Include="../tSQLt.Edge/Interface/tSQLt.TestResult.sql" />
