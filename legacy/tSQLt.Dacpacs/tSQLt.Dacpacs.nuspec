@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>tSQLt.Dacpacs</id>
+    <title></title>
+    <authors>tSQLt-org</authors>
+		<description>tSQLt is a unit testing framework for Microsoft SQL Server.</description>
+    <owners></owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="file">License.txt</license>
+    <readme>README.md</readme>
+    <version>0</version>
+  </metadata>
+  <files>
+		<file src="./License.txt" target=""/>
+		<file src="./README.md" target=""/>
+    <file src="./bin/tSQLt.2008R2.dacpac" target="tools/" />
+    <file src="./bin/tSQLt.2012.dacpac" target="tools/" />
+    <file src="./bin/tSQLt.2014.dacpac" target="tools/" />
+    <file src="./bin/tSQLt.2016.dacpac" target="tools/" />
+    <file src="./bin/tSQLt.2017.dacpac" target="tools/" />
+    <file src="./bin/tSQLt.2019.dacpac" target="tools/" />
+  </files>
+</package>

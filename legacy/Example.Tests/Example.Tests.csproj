@@ -1,0 +1,14 @@
+<Project Sdk="MSBuild.Sdk.SqlProj/2.5.0">
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <SqlServerVersion>Sql150</SqlServerVersion>
+        <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Example\Example.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="tSQLt.Dacpacs" Version="1.0.8083.3529-preview1" DacpacName="tSQLt.2019" />
+        <PreDeploy Include="Pre-Deployment\Script.PreDeployment.sql" />
+    </ItemGroup>
+</Project>

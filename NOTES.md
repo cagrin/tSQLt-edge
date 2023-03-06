@@ -53,3 +53,6 @@ dotnet test --configuration Release ./latest/tSQLt.XmlResult.Tests --logger "con
 ```
 .WithEnvironment("DOCKER_DEFAULT_PLATFORM", "linux/amd64")
 ```
+
+
+sqltest runall --image mcr.microsoft.com/mssql/server --project ./current/Example.Tests
