@@ -5,8 +5,8 @@ namespace ValidationTests
     using System.Xml;
     using System.Xml.Schema;
     using Dapper;
-    using DotNet.Testcontainers.Containers;
     using Microsoft.Data.SqlClient;
+    using Testcontainers.MsSql;
 
     [TestClass]
     public partial class XmlResultFormatterTests
@@ -14,7 +14,7 @@ namespace ValidationTests
         [TestMethod]
         public void ShouldPassSchemaValidation()
         {
-            using var con = new SqlConnection($"{testcontainer?.ConnectionString}TrustServerCertificate=True;");
+            using var con = new SqlConnection(testcontainer?.GetConnectionString());
 
             con.Execute(GetSql("tSQLt.sql"));
             con.Execute(GetSql("tSQLt.TestResult.sql"));

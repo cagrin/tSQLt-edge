@@ -1,27 +1,18 @@
 namespace ValidationTests
 {
-    using DotNet.Testcontainers.Builders;
-    using DotNet.Testcontainers.Configurations;
-    using DotNet.Testcontainers.Containers;
+    using Testcontainers.MsSql;
 
     public partial class XmlResultFormatterTests
     {
-        private static MsSqlTestcontainer? testcontainer;
+        private static MsSqlContainer? testcontainer;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
             _ = context;
 
-            using var config = new MsSqlTestcontainerConfiguration("mcr.microsoft.com/mssql/server")
-            {
-                Password = "A.794613",
-            };
-
-#pragma warning disable 618
-            testcontainer = new TestcontainersBuilder<MsSqlTestcontainer>()
-#pragma warning restore 618
-                .WithDatabase(config)
+            testcontainer = new MsSqlBuilder()
+                .WithImage("mcr.microsoft.com/mssql/server")
                 .Build();
 
             testcontainer.StartAsync().Wait();

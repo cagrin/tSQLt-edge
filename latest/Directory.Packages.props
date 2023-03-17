@@ -11,6 +11,6 @@
         <PackageVersion Include="MSTest.TestAdapter" Version="3.0.2"/>
         <PackageVersion Include="MSTest.TestFramework" Version="3.0.2"/>
         <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.435"/>
-        <PackageVersion Include="Testcontainers" Version="2.4.0"/>
+        <PackageVersion Include="Testcontainers.MsSql" Version="3.0.0"/>
     </ItemGroup>
 </Project>
