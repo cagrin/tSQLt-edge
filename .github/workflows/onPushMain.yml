@@ -28,11 +28,10 @@ jobs:
       - name: Checkout submodules
         run: git submodule update --init
       - name: Setup sqltest tool
-        shell: pwsh
-        run: |
-          dotnet tool update -g dotnet-sqltest
-          docker pull ${{matrix.image}}
-      - name: Unit tests
+        run: dotnet tool update -g dotnet-sqltest
+      - name: Pull image
+        run: docker pull ${{matrix.image}}
+      - name: Run unit tests
         shell: pwsh
         run: |
           sqltest runall --image ${{matrix.image}} ${{matrix.windows}} --project ./latest/tSQLt.Edge.Tests --cc-include-tsqlt
@@ -44,5 +43,5 @@ jobs:
       - uses: actions/checkout@v3
       - name: Checkout submodules
         run: git submodule update --init
-      - name: XmlResult tests
+      - name: Run XmlResult tests
         run: dotnet test --configuration Release ./latest/tSQLt.XmlResult.Tests --logger "console;verbosity=normal"
