@@ -7,16 +7,18 @@
         <EmbeddedResource Include="../../submodules/JUnit-Schema/JUnit.xsd" />
     </ItemGroup>
     <ItemGroup>
-        <Using Include="LikeComparison.TransactSql"/>
         <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting"/>
+        <PackageReference Include="MSTest.TestAdapter"/>
+        <PackageReference Include="MSTest.TestFramework"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Using Include="LikeComparison.TransactSql"/>
+        <PackageReference Include="LikeComparison.MSTest"/>
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Dapper"/>
-        <PackageReference Include="LikeComparison"/>
         <PackageReference Include="Microsoft.Data.SqlClient"/>
         <PackageReference Include="Microsoft.NET.Test.Sdk"/>
-        <PackageReference Include="MSTest.TestAdapter"/>
-        <PackageReference Include="MSTest.TestFramework"/>
         <PackageReference Include="Testcontainers.MsSql"/>
     </ItemGroup>
 </Project>
