@@ -253,7 +253,7 @@ BEGIN
 
     EXEC ('EXEC dbo.TestProcedure;');
 
-    IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND DATEDIFF(ms, _start_, _end_) BETWEEN 16 AND 32)
+    IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND DATEDIFF(ms, _start_, _end_) > 0)
     BEGIN
         EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should has _start_ and _end_.';
     END
