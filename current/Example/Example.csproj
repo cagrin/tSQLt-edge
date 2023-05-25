@@ -1,6 +1,6 @@
 <Project Sdk="MSBuild.Sdk.SqlProj/2.6.0">
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <SqlServerVersion>SqlAzure</SqlServerVersion>
         <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
     </PropertyGroup>
