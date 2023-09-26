@@ -5,10 +5,6 @@ updates:
     schedule:
       interval: "weekly"
   - package-ecosystem: "nuget"
-    directory: "/current/Example.Tests"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "nuget"
-    directory: "/latest/tSQLt.XmlResult.Tests"
+    directory: "/"
     schedule:
       interval: "daily"
