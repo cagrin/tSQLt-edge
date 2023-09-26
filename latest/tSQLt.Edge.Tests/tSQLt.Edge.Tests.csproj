@@ -1,4 +1,4 @@
-<Project Sdk="MSBuild.Sdk.SqlProj/2.6.0">
+<Project Sdk="MSBuild.Sdk.SqlProj/2.6.1">
     <PropertyGroup>
         <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
         <DropObjectsNotInSource>True</DropObjectsNotInSource>
