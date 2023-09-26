@@ -7,7 +7,7 @@
         <PackageVersion Include="LikeComparison.MSTest" Version="2.0.1"/>
         <PackageVersion Include="Microsoft.Data.SqlClient" Version="5.1.1"/>
         <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.2"/>
-        <PackageVersion Include="Microsoft.SqlServer.Dacpacs" DacpacName="master" Version="150.0.0"/>
+        <PackageVersion Include="Microsoft.SqlServer.Dacpacs.Master" Version="150.0.0"/>
         <PackageVersion Include="MSTest.TestAdapter" Version="3.1.1"/>
         <PackageVersion Include="MSTest.TestFramework" Version="3.1.1"/>
         <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.507"/>
