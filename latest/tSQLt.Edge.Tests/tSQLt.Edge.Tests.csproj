@@ -5,6 +5,6 @@
         <DoNotDropObjectTypes>Files</DoNotDropObjectTypes>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="../tSQLt.Edge/tSQLt.Edge.csproj" />
+        <ProjectReference Include="../tSQLt.Edge/tSQLt.Edge.csproj" SuppressMissingDependenciesErrors="True"/>
     </ItemGroup>
 </Project>

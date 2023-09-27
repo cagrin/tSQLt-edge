@@ -5,7 +5,7 @@
         <DoNotDropObjectTypes>Files</DoNotDropObjectTypes>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="../tSQLt.Edge/tSQLt.Edge.csproj" />
+        <ProjectReference Include="../tSQLt.Edge/tSQLt.Edge.csproj" SuppressMissingDependenciesErrors="True"/>
         <PostDeploy Include="Post-Deployment\Debug.sql" />
         <Content Include="../../submodules/tSQLt/Tests/ApplyConstraintTests.class.sql" />
         <Content Include="../../submodules/tSQLt/Tests/ApplyTriggerTests.class.sql" />
