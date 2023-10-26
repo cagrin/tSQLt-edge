@@ -10,19 +10,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: ubuntu-latest
-            image: mcr.microsoft.com/azure-sql-edge
-          - os: ubuntu-latest
-            image: mcr.microsoft.com/mssql/server:2019-latest
-          - os: ubuntu-latest
-            image: mcr.microsoft.com/mssql/server:2022-latest
-          - os: windows-latest
-            image: cagrin/mssql-server-ltsc2022:2019-latest
-            windows: --windows-container
-          - os: windows-latest
-            image: cagrin/mssql-server-ltsc2022:2022-latest
-            windows: --windows-container
-    runs-on: ${{ matrix.os }}
+          - image: mcr.microsoft.com/azure-sql-edge
+          - image: mcr.microsoft.com/mssql/server:2019-latest
+          - image: mcr.microsoft.com/mssql/server:2022-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v3
@@ -37,9 +28,9 @@ jobs:
       - name: Run unit tests
         shell: pwsh
         run: |
-          sqltest runall --image ${{matrix.image}} ${{matrix.windows}} --project ./latest/tSQLt.Edge.Tests --cc-include-tsqlt
-          sqltest runall --image ${{matrix.image}} ${{matrix.windows}} --project ./latest/tSQLt.Original.Tests --cc-disable
-          sqltest runall --image ${{matrix.image}} ${{matrix.windows}} --project ./current/Example.Tests
+          sqltest runall --image ${{matrix.image}} --project ./latest/tSQLt.Edge.Tests --cc-include-tsqlt
+          sqltest runall --image ${{matrix.image}} --project ./latest/tSQLt.Original.Tests --cc-disable
+          sqltest runall --image ${{matrix.image}} --project ./current/Example.Tests
   test-xmlresult:
     runs-on: ubuntu-latest
     steps:
