@@ -35,10 +35,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.0.x'
       - name: Checkout submodules
         run: git submodule update --init
-      - name: Run XmlResult tests
-        run: dotnet test --configuration Release ./latest/tSQLt.XmlResult.Tests --logger "console;verbosity=normal"
+      - uses: devcontainers/ci@v0.3
+        with:
+          runCmd: dotnet test ./latest/tSQLt.XmlResult.Tests
