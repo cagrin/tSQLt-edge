@@ -7,30 +7,24 @@ on:
 
 jobs:
   test-edge:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
           - image: mcr.microsoft.com/azure-sql-edge
           - image: mcr.microsoft.com/mssql/server:2019-latest
           - image: mcr.microsoft.com/mssql/server:2022-latest
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.0.x'
       - name: Checkout submodules
         run: git submodule update --init
-      - name: Setup sqltest tool
-        run: dotnet tool update -g dotnet-sqltest
-      - name: Pull image
-        run: docker pull ${{matrix.image}}
-      - name: Run unit tests
-        shell: pwsh
-        run: |
-          sqltest runall --image ${{matrix.image}} --project ./latest/tSQLt.Edge.Tests --cc-include-tsqlt
-          sqltest runall --image ${{matrix.image}} --project ./latest/tSQLt.Original.Tests --cc-disable
-          sqltest runall --image ${{matrix.image}} --project ./current/Example.Tests
+      - uses: devcontainers/ci@v0.3
+        with:
+          runCmd: |
+            docker pull ${{matrix.image}}
+            sqltest runall --image ${{matrix.image}} --project ./latest/tSQLt.Edge.Tests --cc-include-tsqlt
+            sqltest runall --image ${{matrix.image}} --project ./latest/tSQLt.Original.Tests --cc-disable
+            sqltest runall --image mcr.microsoft.com/mssql/server:2019-latest --project ./current/Example.Tests
   test-xmlresult:
     runs-on: ubuntu-latest
     steps:
