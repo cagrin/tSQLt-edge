@@ -1,5 +1,5 @@
 <Project Sdk="MSBuild.Sdk.SqlProj/2.6.1">
     <ItemGroup>
-        <PackageReference Include="Microsoft.SqlServer.Dacpacs.Master" DacpacName="master"/>
+        <PackageReference Include="Microsoft.SqlServer.Dacpacs.Master" DacpacName="master" DatabaseVariableLiteralValue="master"/>
     </ItemGroup>
 </Project>

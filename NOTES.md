@@ -21,35 +21,12 @@ pwsh
 Invoke-Sqlcmd -Query "EXEC tSQLt.RunAll" -ServerInstance "localhost,51433" -Database "tSQLt.Edge.Tests" -Username "sa" -Password "A.794613"
 ```
 
-## Run unit tests on Apple Silicon using dotnet-sqltest
-```
-pwsh
-sqltest runall --image cagrin/azure-sql-edge-arm64 --project ./latest/tSQLt.Edge.Tests --cc-include-tsqlt
-sqltest runall --image cagrin/azure-sql-edge-arm64 --project ./latest/tSQLt.Original.Tests --cc-disable
-sqltest runall --image cagrin/azure-sql-edge-arm64 --project ./current/Example.Tests
-```
-
-## Run XmlResult tests using dotnet
-```
-cd latest/tSQLt.XmlResult.Tests && dotnet test -l "console;verbosity=normal" && cd ../..
-```
-
-## Setup unit tests on Dev Container using dotnet-sqltest
-```
-export PATH="$PATH:/home/vscode/.dotnet/tools"
-dotnet tool install -g dotnet-sqltest
-```
-
 ## Run unit tests on Codespaces
 ```
 git submodule update --init
 sqltest runall --image mcr.microsoft.com/azure-sql-edge --project ./latest/tSQLt.Edge.Tests --cc-include-tsqlt
+sqltest runall --image mcr.microsoft.com/azure-sql-edge --project ./latest/tSQLt.Edge.Tests.CaseSensitive --cc-include-tsqlt
 sqltest runall --image mcr.microsoft.com/azure-sql-edge --project ./latest/tSQLt.Original.Tests --cc-disable
 sqltest runall --image mcr.microsoft.com/azure-sql-edge --project ./current/Example.Tests
 dotnet test --configuration Release ./latest/tSQLt.XmlResult.Tests --logger "console;verbosity=normal"
-```
-
-## Set docker --platform flag in TestcontainersBuilder
-```
-.WithEnvironment("DOCKER_DEFAULT_PLATFORM", "linux/amd64")
 ```

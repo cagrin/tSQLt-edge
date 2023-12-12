@@ -38,7 +38,7 @@ BEGIN
 		[is_repl_serializable_only],
 		[skips_repl_constraints]
 	FROM sys.procedures r
-	WHERE r.name LIKE 'test%'
+	WHERE LOWER(r.name) LIKE 'test%'
 	AND SCHEMA_NAME(r.schema_id) <> 'tSQLt'
 	AND NOT EXISTS (SELECT 1 FROM sys.parameters p WHERE p.object_id = r.object_id)
 	AND

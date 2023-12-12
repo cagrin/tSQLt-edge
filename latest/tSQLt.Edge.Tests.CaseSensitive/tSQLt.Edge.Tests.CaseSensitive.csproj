@@ -1,13 +1,11 @@
 <Project Sdk="MSBuild.Sdk.SqlProj/2.6.1">
     <PropertyGroup>
-        <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
-        <DropObjectsNotInSource>True</DropObjectsNotInSource>
-        <DoNotDropObjectTypes>Files</DoNotDropObjectTypes>
+        <Collation>SQL_Latin1_General_CP1_CS_AS</Collation>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.SqlServer.Dacpacs.Master" DacpacName="master" DatabaseVariableLiteralValue="master"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="../tSQLt.Edge/tSQLt.Edge.csproj"/>
+        <ProjectReference Include="../tSQLt.Edge.Tests/tSQLt.Edge.Tests.csproj"/>
     </ItemGroup>
 </Project>

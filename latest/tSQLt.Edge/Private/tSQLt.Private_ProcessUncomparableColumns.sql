@@ -25,7 +25,7 @@ BEGIN
                 '; '
             ) WITHIN GROUP (ORDER BY column_id)
         FROM @System_Columns
-        WHERE TYPE_NAME(user_type_id) IN ('XML')
+        WHERE TYPE_NAME(user_type_id) IN ('xml')
     );
 
     IF @Command IS NOT NULL

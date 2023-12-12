@@ -6,7 +6,7 @@ BEGIN
     SET NOCOUNT ON;
     DECLARE @Command NVARCHAR(MAX) = 'tSQLt.Internal_AssertResultSetsHaveSameMetaData';
     EXEC @Command
-    @expectedCommand = @expectedCommand,
-    @actualCommand = @actualCommand;
+    @ExpectedCommand = @expectedCommand,
+    @ActualCommand = @actualCommand;
 END;
 GO
