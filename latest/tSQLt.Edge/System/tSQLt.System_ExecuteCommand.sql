@@ -24,7 +24,7 @@ GO
 CREATE PROCEDURE tSQLt.System_ExecuteCommand_ColumnId
 	@Command NVARCHAR(MAX),
 	@ObjectName NVARCHAR(MAX),
-	@Columnid INT
+	@ColumnId INT
 AS
 BEGIN
 	DECLARE @DatabaseName NVARCHAR(MAX) = QUOTENAME(PARSENAME(@ObjectName, 3))

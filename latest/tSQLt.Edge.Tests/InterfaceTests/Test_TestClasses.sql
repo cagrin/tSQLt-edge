@@ -6,7 +6,7 @@ AS
 BEGIN
     CREATE TABLE #Expected
     (
-       	[Name] SYSNAME NOT NULL,
+       	[Name] SYSNAME COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	    [SchemaId] INT NOT NULL
     )
 

@@ -23,8 +23,9 @@ jobs:
           runCmd: |
             docker pull ${{matrix.image}}
             sqltest runall --image ${{matrix.image}} --project ./latest/tSQLt.Edge.Tests --cc-include-tsqlt
+            sqltest runall --image ${{matrix.image}} --project ./latest/tSQLt.Edge.Tests --cc-include-tsqlt --collation SQL_Latin1_General_CP1_CS_AS
             sqltest runall --image ${{matrix.image}} --project ./latest/tSQLt.Original.Tests --cc-disable
-            sqltest runall --image mcr.microsoft.com/mssql/server:2019-latest --project ./current/Example.Tests
+            sqltest runall --image ${{matrix.image}} --project ./current/Example.Tests
   test-xmlresult:
     runs-on: ubuntu-latest
     steps:

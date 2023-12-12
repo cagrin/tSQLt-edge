@@ -7,7 +7,7 @@ AS
 BEGIN
     DECLARE @System_ForeignKeys tSQLt.System_ForeignKeysType
     INSERT INTO @System_ForeignKeys
-    EXEC tSQLt.System_ForeignKeys @Objectname, @ConstraintId
+    EXEC tSQLt.System_ForeignKeys @ObjectName, @ConstraintId
 
     DECLARE @ConstraintName NVARCHAR(MAX), @ConstraintDefinition NVARCHAR(MAX), @CreateUniqueIndex NVARCHAR(MAX);
     SELECT

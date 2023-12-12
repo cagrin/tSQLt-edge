@@ -10,11 +10,11 @@ BEGIN
 
     IF @ConstraintType = 'C'
     BEGIN
-        EXEC tSQLt.Private_ApplyCheckConstraint @ParentName, @Objectname, @ConstraintId;
+        EXEC tSQLt.Private_ApplyCheckConstraint @ParentName, @ObjectName, @ConstraintId;
     END
     ELSE IF @ConstraintType = 'F'
     BEGIN
-        EXEC tSQLt.Private_ApplyForeignKey @ParentName, @Objectname, @ConstraintId, @NoCascade;
+        EXEC tSQLt.Private_ApplyForeignKey @ParentName, @ObjectName, @ConstraintId, @NoCascade;
     END
     ELSE IF @ConstraintType = 'PK'
     BEGIN
@@ -22,7 +22,7 @@ BEGIN
     END
     ELSE IF @ConstraintType = 'UQ'
     BEGIN
-        EXEC tSQLt.Private_ApplyUniqueConstraint @ParentName, @Objectname, @ConstraintName;
+        EXEC tSQLt.Private_ApplyUniqueConstraint @ParentName, @ObjectName, @ConstraintName;
     END
     ELSE
     BEGIN

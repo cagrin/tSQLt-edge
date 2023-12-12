@@ -6,7 +6,7 @@ AS
 BEGIN
     CREATE TABLE #Expected
     (
-        Msg NVARCHAR(MAX),
+        Msg NVARCHAR(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS,
         Cnt INT NOT NULL,
         SuccessCnt INT NOT NULL,
         SkippedCnt INT NOT NULL,
