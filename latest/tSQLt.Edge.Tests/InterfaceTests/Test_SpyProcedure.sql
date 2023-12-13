@@ -21,10 +21,12 @@ BEGIN
 
     EXEC ('EXEC dbo.TestProcedure;');
 
+    EXEC ('
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1)
     BEGIN
-        EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should exists.';
+        EXEC tSQLt.Fail ''dbo.TestProcedure_SpyProcedureLog should exists.'';
     END
+    ');
 END;
 GO
 
@@ -56,10 +58,12 @@ BEGIN
 
     EXEC ('EXEC dbo.TestProcedure @P1 = 1;');
 
+    EXEC ('
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = 1)
     BEGIN
-        EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should exists.';
+        EXEC tSQLt.Fail ''dbo.TestProcedure_SpyProcedureLog should exists.'';
     END
+    ');
 END;
 GO
 
@@ -72,10 +76,12 @@ BEGIN
 
     EXEC ('EXEC dbo.TestProcedure;');
 
+    EXEC ('
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 IS NULL)
     BEGIN
-        EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should exists.';
+        EXEC tSQLt.Fail ''dbo.TestProcedure_SpyProcedureLog should exists.'';
     END
+    ');
 END;
 GO
 
@@ -89,10 +95,12 @@ BEGIN
     DECLARE @P1 int = 1;
     EXEC sys.sp_executesql N'EXEC dbo.TestProcedure @P1 = @P1 OUTPUT;', N'@P1 int OUTPUT', @P1 OUTPUT;
 
+    EXEC ('
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = 1)
     BEGIN
-        EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should exists.';
+        EXEC tSQLt.Fail ''dbo.TestProcedure_SpyProcedureLog should exists.'';
     END
+    ');
 END;
 GO
 
@@ -106,10 +114,12 @@ BEGIN
     DECLARE @P1 int = 1;
     EXEC sys.sp_executesql N'EXEC dbo.TestProcedure @P1 = @P1 OUTPUT;', N'@P1 int OUTPUT', @P1 OUTPUT;
 
+    EXEC ('
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = 1)
     BEGIN
-        EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should exists.';
+        EXEC tSQLt.Fail ''dbo.TestProcedure_SpyProcedureLog should exists.'';
     END
+    ');
 
     EXEC tSQLt.AssertEquals 2, @P1, '@P1 should equals 2.';
 END;
@@ -125,10 +135,12 @@ BEGIN
     DECLARE @P1 int = 1;
     EXEC sys.sp_executesql N'EXEC dbo.TestProcedure @P1 = @P1 OUTPUT;', N'@P1 int OUTPUT', @P1 OUTPUT;
 
+    EXEC ('
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = 1)
     BEGIN
-        EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should exists.';
+        EXEC tSQLt.Fail ''dbo.TestProcedure_SpyProcedureLog should exists.'';
     END
+    ');
 
     EXEC tSQLt.AssertEquals 2, @P1, '@P1 should equals 2.';
 END;
@@ -144,10 +156,12 @@ BEGIN
     DECLARE @P1 int = 1;
     EXEC sys.sp_executesql N'EXEC dbo.TestProcedure @P1 = @P1 OUTPUT;', N'@P1 int OUTPUT', @P1 OUTPUT;
 
+    EXEC ('
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = 1)
     BEGIN
-        EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should exists.';
+        EXEC tSQLt.Fail ''dbo.TestProcedure_SpyProcedureLog should exists.'';
     END
+    ');
 
     EXEC tSQLt.AssertEquals 3, @P1, '@P1 should equals 3.';
 END;
@@ -165,10 +179,12 @@ BEGIN
     INSERT INTO @P2 (Column1) VALUES (2);
     EXEC sys.sp_executesql N'EXEC dbo.TestProcedure @P1 OUTPUT, @P2;', N'@P1 int OUTPUT, @P2 dbo.TestType READONLY', @P1 OUTPUT, @P2;
 
-    IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = 1 AND CONVERT(NVARCHAR(MAX), P2) = '<P2><row><Column1>2</Column1></row></P2>')
+    EXEC ('
+    IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 = 1 AND CONVERT(NVARCHAR(MAX), P2) = ''<P2><row><Column1>2</Column1></row></P2>'')
     BEGIN
-        EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should exists.';
+        EXEC tSQLt.Fail ''dbo.TestProcedure_SpyProcedureLog should exists.'';
     END
+    ');
 
     EXEC tSQLt.AssertEquals 8, @P1, '@P1 should equals 8.';
 END;
@@ -185,10 +201,12 @@ BEGIN
 
     EXEC ('EXEC dbo.TestProcedure;');
 
+    EXEC ('
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1)
     BEGIN
-        EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should exists.';
+        EXEC tSQLt.Fail ''dbo.TestProcedure_SpyProcedureLog should exists.'';
     END
+    ');
 END;
 GO
 
@@ -201,10 +219,12 @@ BEGIN
 
     EXEC ('EXEC dbo.TestProcedure @P1 = NULL;');
 
+    EXEC ('
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND P1 IS NULL)
     BEGIN
-        EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should exists.';
+        EXEC tSQLt.Fail ''dbo.TestProcedure_SpyProcedureLog should exists.'';
     END
+    ');
 END;
 GO
 
@@ -219,10 +239,12 @@ BEGIN
     INSERT INTO @P1 (Column1) VALUES (NULL);
     EXEC sys.sp_executesql N'EXEC dbo.TestProcedure @P1;', N'@P1 dbo.TestTypeNotNull READONLY', @P1;
 
-    IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND CONVERT(NVARCHAR(MAX), P1) = '<P1><row/></P1>')
+    EXEC ('
+    IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND CONVERT(NVARCHAR(MAX), P1) = ''<P1><row/></P1>'')
     BEGIN
-        EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should exists.';
+        EXEC tSQLt.Fail ''dbo.TestProcedure_SpyProcedureLog should exists.'';
     END
+    ');
 END;
 GO
 
@@ -253,10 +275,12 @@ BEGIN
 
     EXEC ('EXEC dbo.TestProcedure;');
 
+    EXEC ('
     IF NOT EXISTS (SELECT 1 FROM dbo.TestProcedure_SpyProcedureLog WHERE _id_ = 1 AND DATEDIFF(ms, _start_, _end_) > 0)
     BEGIN
-        EXEC tSQLt.Fail 'dbo.TestProcedure_SpyProcedureLog should has _start_ and _end_.';
+        EXEC tSQLt.Fail ''dbo.TestProcedure_SpyProcedureLog should has _start_ and _end_.'';
     END
+    ');
 END;
 GO
 

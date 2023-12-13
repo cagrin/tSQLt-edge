@@ -131,8 +131,8 @@ BEGIN
 
     INSERT INTO Schema1.Table1 (Column1) VALUES (1), (2)
 
-    DECLARE @Actual INT = (SELECT TOP 1 Column1 FROM Schema1.Table1)
-    DECLARE @Expected INT = 2
+    DECLARE @Actual INT, @Expected INT = 2
+    SELECT TOP 1 @Actual = Column1 FROM Schema1.Table1
 
     EXEC tSQLt.AssertEquals @Expected, @Actual;
 END;

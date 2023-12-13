@@ -269,13 +269,13 @@ BEGIN
     CREATE TABLE dbo.TestTable1 (Column1 int NOT NULL);
 
     SELECT * INTO #TempTable1 FROM dbo.TestTable1
-    ALTER TABLE #TempTable1 ADD PRIMARY KEY (Column1) -- Works
+    EXEC ('ALTER TABLE #TempTable1 ADD PRIMARY KEY (Column1)') -- Works
 
     EXEC tSQLt.ExpectException 'Could not create constraint or index. See previous errors.';
     EXEC tSQLt.FakeTable 'dbo.TestTable1';
 
     SELECT * INTO #TempTable2 FROM dbo.TestTable1
-    ALTER TABLE #TempTable2 ADD PRIMARY KEY (Column1) -- Fails
+    EXEC ('ALTER TABLE #TempTable2 ADD PRIMARY KEY (Column1)') -- Fails
 END;
 GO
 
@@ -285,12 +285,12 @@ BEGIN
     CREATE TABLE dbo.TestTable1 (Column1 int NOT NULL);
 
     SELECT * INTO #TempTable1 FROM dbo.TestTable1
-    ALTER TABLE #TempTable1 ADD PRIMARY KEY (Column1) -- Works
+    EXEC ('ALTER TABLE #TempTable1 ADD PRIMARY KEY (Column1)') -- Works
 
     EXEC tSQLt.FakeTable 'dbo.TestTable1', @NotNulls = 1;
 
     SELECT * INTO #TempTable2 FROM dbo.TestTable1
-    ALTER TABLE #TempTable2 ADD PRIMARY KEY (Column1) -- Works too
+    EXEC ('ALTER TABLE #TempTable2 ADD PRIMARY KEY (Column1)') -- Works too
 END;
 GO
 
