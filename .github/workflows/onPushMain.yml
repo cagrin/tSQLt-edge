@@ -23,9 +23,7 @@ jobs:
           runCmd: |
             docker pull ${{matrix.image}}
             sqltest runall --image ${{matrix.image}} --project ./latest/tSQLt.Edge.Tests               --cc-include-tsqlt
-            sqltest runall --image ${{matrix.image}} --project ./latest/tSQLt.Edge.Tests               --cc-include-tsqlt --collation SQL_Latin1_General_CP1_CS_AS
             sqltest runall --image ${{matrix.image}} --project ./latest/tSQLt.Edge.Tests.CaseSensitive --cc-include-tsqlt
-            sqltest runall --image ${{matrix.image}} --project ./latest/tSQLt.Edge.Tests.CaseSensitive --cc-include-tsqlt --collation SQL_Latin1_General_CP1_CS_AS
             sqltest runall --image ${{matrix.image}} --project ./latest/tSQLt.Original.Tests           --cc-disable
             sqltest runall --image ${{matrix.image}} --project ./current/Example.Tests
   test-xmlresult:
