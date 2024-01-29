@@ -1,4 +1,4 @@
-CREATE SCHEMA [Test_Example];
+CREATE SCHEMA [Test_Example] AUTHORIZATION [tSQLt.TestClass];
 GO
 
 CREATE PROCEDURE [Test_Example].[Test_Avg]
