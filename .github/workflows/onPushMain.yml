@@ -35,3 +35,17 @@ jobs:
       - uses: devcontainers/ci@v0.3
         with:
           runCmd: dotnet test ./latest/tSQLt.XmlResult.Tests
+  test-legacy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - image: mcr.microsoft.com/mssql/server:2019-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: devcontainers/ci@v0.3
+        with:
+          runCmd: |
+            docker pull ${{matrix.image}}
+            sqltest runall --image ${{matrix.image}} --project ./legacy/tSQLt.Unoriginal.Tests         --cc-disable
+            sqltest runall --image ${{matrix.image}} --project ./legacy/Example.Tests

@@ -4,10 +4,12 @@
         <SqlServerVersion>Sql150</SqlServerVersion>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Example\Example.csproj" />
-    </ItemGroup>
-    <ItemGroup>
         <PackageReference Include="tSQLt.Dacpacs" Version="1.0.8083.3529-preview1" DacpacName="tSQLt.2019" />
         <PreDeploy Include="Pre-Deployment\PrepareServer.sql" />
+        <PostDeploy Include="Post-Deployment/Debug.sql" />
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_ApplyConstraint.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_AssertLike.sql" />
     </ItemGroup>
 </Project>
