@@ -5,11 +5,33 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="tSQLt.Dacpacs" Version="1.0.8083.3529-preview1" DacpacName="tSQLt.2019" />
-        <PreDeploy Include="Pre-Deployment\PrepareServer.sql" />
+        <PreDeploy Include="Pre-Deployment/PrepareServer.sql" />
         <PostDeploy Include="Post-Deployment/Debug.sql" />
     </ItemGroup>
     <ItemGroup>
         <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_ApplyConstraint.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_ApplyTrigger.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_AssertEmptyTable.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_AssertEquals.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_AssertEqualsString.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_AssertEqualsTable.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_AssertEqualsTableSchema.sql" />
         <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_AssertLike.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_AssertNotEquals.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_AssertObjectDoesNotExist.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_AssertObjectExists.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_AssertResultSetsHaveSameMetaData.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_AssertStringIn.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_ExpectException.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_ExpectNoException.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_Fail.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_FakeFunction.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_FakeTable.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_RemoveObject.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_RemoveObjectIfExists.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_SpyProcedure.sql" />
+
+        <Content Include="../../latest/tSQLt.Edge.Tests/dbo/**" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/PrivateExtentions/**" />
     </ItemGroup>
 </Project>
