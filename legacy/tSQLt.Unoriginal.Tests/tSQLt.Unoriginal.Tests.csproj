@@ -2,6 +2,8 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <SqlServerVersion>Sql150</SqlServerVersion>
+        <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+        <CreateNewDatabase>True</CreateNewDatabase>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="tSQLt.Dacpacs" Version="1.0.8083.3529-preview1" DacpacName="tSQLt.2019" />

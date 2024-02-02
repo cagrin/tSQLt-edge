@@ -1,6 +1,6 @@
 PRINT 'Creating SqlProcedure [tSQLt].[Debug]...'
 GO
-CREATE PROCEDURE tSQLt.Debug
+CREATE OR ALTER PROCEDURE tSQLt.Debug
 AS
 BEGIN
 
@@ -36,6 +36,32 @@ END;
 ';
     EXEC (@AlterFail);
 
+    DECLARE @AlterExpectException NVARCHAR(MAX) =
+'
+CREATE PROCEDURE tSQLt.ExpectException
+    @ExpectedMessage NVARCHAR(MAX) = NULL,
+    @ExpectedSeverity INT = NULL,
+    @ExpectedState INT = NULL,
+    @Message NVARCHAR(MAX) = NULL,
+    @ExpectedMessagePattern NVARCHAR(MAX) = NULL,
+    @ExpectedErrorNumber INT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @Command NVARCHAR(MAX) = ''tSQLt.Internal_ExpectExceptionDebug'';
+    EXEC @Command
+    @ExpectedMessage = @ExpectedMessage,
+    @ExpectedSeverity = @ExpectedSeverity,
+    @ExpectedState = @ExpectedState,
+    @Message = @Message,
+    @ExpectedMessagePattern = @ExpectedMessagePattern,
+    @ExpectedErrorNumber = @ExpectedErrorNumber;
+END;
+';
+
+    EXEC sp_rename 'tSQLt.ExpectException', 'Internal_ExpectException';
+    EXEC (@AlterExpectException);
+
     -- Setup
     EXEC ('ALTER AUTHORIZATION ON SCHEMA::[Test_ApplyConstraint] TO [tSQLt.TestClass];')
     EXEC ('ALTER AUTHORIZATION ON SCHEMA::[Test_ApplyTrigger] TO [tSQLt.TestClass];')
@@ -60,23 +86,6 @@ END;
     EXEC ('ALTER AUTHORIZATION ON SCHEMA::[Test_SpyProcedure] TO [tSQLt.TestClass];')
 
     -- Failure
-    EXEC ('DROP PROCEDURE [Test_ApplyConstraint].[Test_ConstraintExistsOnOtherTable]');
-    EXEC ('DROP PROCEDURE [Test_ApplyConstraint].[Test_ConstraintNotExists]');
-    EXEC ('DROP PROCEDURE [Test_ApplyConstraint].[Test_PrimaryKeyApplied_WithDescendingKey]');
-    EXEC ('DROP PROCEDURE [Test_ApplyConstraint].[Test_TableNotExists]');
-    EXEC ('DROP PROCEDURE [Test_ApplyConstraint].[Test_TableSchemaNotExists]');
-    EXEC ('DROP PROCEDURE [Test_ApplyConstraint].[Test_TableWasNotFaked]');
-    EXEC ('DROP PROCEDURE [Test_ApplyTrigger].[Test_FailWhenTableWasNotFaked]');
-    EXEC ('DROP PROCEDURE [Test_ApplyTrigger].[Test_TableNotExists]');
-    EXEC ('DROP PROCEDURE [Test_ApplyTrigger].[Test_TriggerExistsOnOtherTable]');
-    EXEC ('DROP PROCEDURE [Test_ApplyTrigger].[Test_TriggerNotExists]');
-    EXEC ('DROP PROCEDURE [Test_AssertEmptyTable].[Test_ErrorMessage]');
-    EXEC ('DROP PROCEDURE [Test_AssertEmptyTable].[Test_NonEmptyExternalTable]');
-    EXEC ('DROP PROCEDURE [Test_AssertEmptyTable].[Test_NonEmptyTable]');
-    EXEC ('DROP PROCEDURE [Test_AssertEmptyTable].[Test_NonEmptyTempTable]');
-    EXEC ('DROP PROCEDURE [Test_AssertEmptyTable].[Test_NonExistsTable]');
-    EXEC ('DROP PROCEDURE [Test_AssertEmptyTable].[Test_NonExistsTempTable]');
-    EXEC ('DROP PROCEDURE [Test_AssertEmptyTable].[Test_NullCommand]');
     EXEC ('DROP PROCEDURE [Test_AssertEqualsTable].[Test_ErrorMessage]');
     EXEC ('DROP PROCEDURE [Test_AssertEqualsTable].[Test_FirstTableHasTwinRows]');
     EXEC ('DROP PROCEDURE [Test_AssertEqualsTable].[Test_FirstTableIsNotEmpty]');
@@ -117,12 +126,6 @@ END;
     EXEC ('DROP PROCEDURE [Test_SpyProcedure].[Test_ProcedureDoesNotExist]');
 
     -- Error
-    EXEC ('DROP PROCEDURE [Test_ApplyConstraint].[Test_ExternalCheckConstraintApplied]');
-    EXEC ('DROP PROCEDURE [Test_ApplyConstraint].[Test_ExternalForeignKeyApplied]');
-    EXEC ('DROP PROCEDURE [Test_ApplyConstraint].[Test_ExternalPrimaryKeyApplied]');
-    EXEC ('DROP PROCEDURE [Test_ApplyConstraint].[Test_ExternalUniqueConstraintApplied]');
-    EXEC ('DROP PROCEDURE [Test_ApplyTrigger].[Test_IsExternalTriggeredAfterFakeTableAndApplyTrigger]');
-    EXEC ('DROP PROCEDURE [Test_AssertEmptyTable].[Test_QuotedEmptyTempTable]');
     EXEC ('DROP PROCEDURE [Test_AssertEqualsTable].[Test_XmlComparison]');
     EXEC ('DROP PROCEDURE [Test_AssertEqualsTable].[Test_XmlComparisonToString]');
     EXEC ('DROP PROCEDURE [Test_AssertStringIn].[Test_Null_Null]');
@@ -143,16 +146,26 @@ END;
     EXEC ('DROP PROCEDURE [Test_ExpectNoException].[Test_GoodAndFailSelectButSecondFail]');
     EXEC ('DROP PROCEDURE [Test_FakeFunction].[Test_Can_Fake_Assembly_CLR_ScalarFunction]');
     EXEC ('DROP PROCEDURE [Test_FakeFunction].[Test_Can_Fake_Assembly_CLR_TableValuedFunction]');
-    EXEC ('DROP PROCEDURE [Test_FakeFunction].[Test_ExternalInlineTableValuedFunction]');
-    EXEC ('DROP PROCEDURE [Test_FakeFunction].[Test_ExternalMultiStatementTableValuedFunctionWithP1]');
-    EXEC ('DROP PROCEDURE [Test_FakeFunction].[Test_ExternalScalarFunctionWithP1]');
     EXEC ('DROP PROCEDURE [Test_FakeFunction].[Test_Failed_When_UnsuportedFunctionType]');
     EXEC ('DROP PROCEDURE [Test_FakeTable].[Test_CanFakeExternalTable]');
     EXEC ('DROP PROCEDURE [Test_FakeTable].[Test_CanPreserveNotNull]');
-    EXEC ('DROP PROCEDURE [Test_RemoveObject].[Test_ExternalTable]');
-    EXEC ('DROP PROCEDURE [Test_RemoveObject].[Test_ExternalTableNewName]');
     EXEC ('DROP PROCEDURE [Test_RemoveObject].[Test_NewNameIsEmpty]');
     EXEC ('DROP PROCEDURE [Test_RemoveObject].[Test_NewNameIsNotEmpty]');
+
+    -- Unsupported
+    EXEC ('DROP PROCEDURE [Test_ApplyConstraint].[Test_PrimaryKeyApplied_WithDescendingKey]');
+    EXEC ('DROP PROCEDURE [Test_ApplyConstraint].[Test_ExternalCheckConstraintApplied]');
+    EXEC ('DROP PROCEDURE [Test_ApplyConstraint].[Test_ExternalForeignKeyApplied]');
+    EXEC ('DROP PROCEDURE [Test_ApplyConstraint].[Test_ExternalPrimaryKeyApplied]');
+    EXEC ('DROP PROCEDURE [Test_ApplyConstraint].[Test_ExternalUniqueConstraintApplied]');
+    EXEC ('DROP PROCEDURE [Test_ApplyTrigger].[Test_IsExternalTriggeredAfterFakeTableAndApplyTrigger]');
+    EXEC ('DROP PROCEDURE [Test_AssertEmptyTable].[Test_QuotedEmptyTempTable]');
+    EXEC ('DROP PROCEDURE [Test_AssertEmptyTable].[Test_NonEmptyExternalTable]');
+    EXEC ('DROP PROCEDURE [Test_FakeFunction].[Test_ExternalInlineTableValuedFunction]');
+    EXEC ('DROP PROCEDURE [Test_FakeFunction].[Test_ExternalMultiStatementTableValuedFunctionWithP1]');
+    EXEC ('DROP PROCEDURE [Test_FakeFunction].[Test_ExternalScalarFunctionWithP1]');
+    EXEC ('DROP PROCEDURE [Test_RemoveObject].[Test_ExternalTable]');
+    EXEC ('DROP PROCEDURE [Test_RemoveObject].[Test_ExternalTableNewName]');
     EXEC ('DROP PROCEDURE [Test_SpyProcedure].[Test_ExternalProcedure]');
     EXEC ('DROP PROCEDURE [Test_SpyProcedure].[Test_Procedure_Start_End_]');
 END;
