@@ -6,7 +6,6 @@ namespace ValidationTests
     using System.Xml.Schema;
     using Dapper;
     using Microsoft.Data.SqlClient;
-    using Testcontainers.MsSql;
 
     [TestClass]
     public partial class XmlResultFormatterTests
@@ -16,13 +15,13 @@ namespace ValidationTests
         {
             using var con = new SqlConnection(testcontainer?.GetConnectionString());
 
-            con.Execute(GetSql("tSQLt.sql"));
-            con.Execute(GetSql("tSQLt.TestResult.sql"));
-            con.Execute(GetSql("tSQLt.XmlResultFormatter.sql"));
-            con.Execute(GetSql("tSQLt.Internal_XmlResultFormatter.sql"));
-            con.Execute($"CREATE XML SCHEMA COLLECTION tSQLt.JUnitSchema AS '{GetSchema("JUnit.xsd")}';");
+            _ = con.Execute(GetSql("tSQLt.sql"));
+            _ = con.Execute(GetSql("tSQLt.TestResult.sql"));
+            _ = con.Execute(GetSql("tSQLt.XmlResultFormatter.sql"));
+            _ = con.Execute(GetSql("tSQLt.Internal_XmlResultFormatter.sql"));
+            _ = con.Execute($"CREATE XML SCHEMA COLLECTION tSQLt.JUnitSchema AS '{GetSchema("JUnit.xsd")}';");
 
-            con.Execute("""
+            _ = con.Execute("""
             INSERT INTO tSQLt.TestResult (Class, TestCase, Result, TestStartTime, TestEndTime) VALUES
             ('TestClass', 'TestCase', 'Success', '2022-06-14 23:37:01.1', '2022-06-14 23:37:01.3')
             """);
@@ -34,7 +33,7 @@ namespace ValidationTests
             var schema = XmlSchema.Read(new StringReader(GetSchema("JUnit.xsd")), (o, e) => throw new XmlException(e.Message));
             if (schema != null)
             {
-                doc.Schemas.Add(schema);
+                _ = doc.Schemas.Add(schema);
                 doc.Validate((o, e) => throw new XmlSchemaValidationException(e.Message));
             }
 
@@ -57,7 +56,7 @@ namespace ValidationTests
                     line = lineAction(line);
                     if (line != null)
                     {
-                        sql.AppendLine(line);
+                        _ = sql.AppendLine(line);
                     }
                 }
             }
