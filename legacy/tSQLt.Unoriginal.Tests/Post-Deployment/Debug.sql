@@ -126,9 +126,6 @@ END;
     EXEC ('DROP PROCEDURE [Test_SpyProcedure].[Test_ProcedureDoesNotExist]');
 
     -- Error
-    EXEC ('DROP PROCEDURE [Test_AssertEqualsTable].[Test_XmlComparison]');
-    EXEC ('DROP PROCEDURE [Test_AssertEqualsTable].[Test_XmlComparisonToString]');
-    EXEC ('DROP PROCEDURE [Test_AssertStringIn].[Test_Null_Null]');
     EXEC ('DROP PROCEDURE [Test_ExpectException].[Test_BadErrorMessage]');
     EXEC ('DROP PROCEDURE [Test_ExpectException].[Test_BadErrorMessageWithMessage]');
     EXEC ('DROP PROCEDURE [Test_ExpectException].[Test_BadExpectedErrorNumber]');
@@ -147,8 +144,6 @@ END;
     EXEC ('DROP PROCEDURE [Test_FakeFunction].[Test_Can_Fake_Assembly_CLR_ScalarFunction]');
     EXEC ('DROP PROCEDURE [Test_FakeFunction].[Test_Can_Fake_Assembly_CLR_TableValuedFunction]');
     EXEC ('DROP PROCEDURE [Test_FakeFunction].[Test_Failed_When_UnsuportedFunctionType]');
-    EXEC ('DROP PROCEDURE [Test_FakeTable].[Test_CanFakeExternalTable]');
-    EXEC ('DROP PROCEDURE [Test_FakeTable].[Test_CanPreserveNotNull]');
     EXEC ('DROP PROCEDURE [Test_RemoveObject].[Test_NewNameIsEmpty]');
     EXEC ('DROP PROCEDURE [Test_RemoveObject].[Test_NewNameIsNotEmpty]');
 
@@ -161,9 +156,14 @@ END;
     EXEC ('DROP PROCEDURE [Test_ApplyTrigger].[Test_IsExternalTriggeredAfterFakeTableAndApplyTrigger]');
     EXEC ('DROP PROCEDURE [Test_AssertEmptyTable].[Test_QuotedEmptyTempTable]');
     EXEC ('DROP PROCEDURE [Test_AssertEmptyTable].[Test_NonEmptyExternalTable]');
+    EXEC ('DROP PROCEDURE [Test_AssertEqualsTable].[Test_XmlComparison]');
+    EXEC ('DROP PROCEDURE [Test_AssertEqualsTable].[Test_XmlComparisonToString]');
+    EXEC ('DROP PROCEDURE [Test_AssertStringIn].[Test_Null_Null]');
     EXEC ('DROP PROCEDURE [Test_FakeFunction].[Test_ExternalInlineTableValuedFunction]');
     EXEC ('DROP PROCEDURE [Test_FakeFunction].[Test_ExternalMultiStatementTableValuedFunctionWithP1]');
     EXEC ('DROP PROCEDURE [Test_FakeFunction].[Test_ExternalScalarFunctionWithP1]');
+    EXEC ('DROP PROCEDURE [Test_FakeTable].[Test_CanFakeExternalTable]');
+    EXEC ('DROP PROCEDURE [Test_FakeTable].[Test_CanPreserveNotNull]');
     EXEC ('DROP PROCEDURE [Test_RemoveObject].[Test_ExternalTable]');
     EXEC ('DROP PROCEDURE [Test_RemoveObject].[Test_ExternalTableNewName]');
     EXEC ('DROP PROCEDURE [Test_SpyProcedure].[Test_ExternalProcedure]');
