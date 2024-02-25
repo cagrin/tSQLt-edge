@@ -21,12 +21,14 @@ pwsh
 Invoke-Sqlcmd -Query "EXEC tSQLt.RunAll" -ServerInstance "localhost,51433" -Database "tSQLt.Edge.Tests" -Username "sa" -Password "A.794613"
 ```
 
-## Run unit tests on Codespaces
+## Run unit tests on Dev Container
 ```
 git submodule update --init
 sqltest runall --image mcr.microsoft.com/azure-sql-edge --project ./latest/tSQLt.Edge.Tests --cc-include-tsqlt
 sqltest runall --image mcr.microsoft.com/azure-sql-edge --project ./latest/tSQLt.Edge.Tests.CaseSensitive --cc-include-tsqlt
 sqltest runall --image mcr.microsoft.com/azure-sql-edge --project ./latest/tSQLt.Original.Tests --cc-disable
 sqltest runall --image mcr.microsoft.com/azure-sql-edge --project ./current/Example.Tests
-dotnet test --configuration Release ./latest/tSQLt.XmlResult.Tests --logger "console;verbosity=normal"
+dotnet test ./latest/tSQLt.XmlResult.Tests
+sqltest runall --image mcr.microsoft.com/mssql/server:2019-latest --project ./legacy/tSQLt.Unoriginal.Tests --cc-disable
+sqltest runall --image mcr.microsoft.com/mssql/server:2019-latest --project ./legacy/Example.Tests
 ```
