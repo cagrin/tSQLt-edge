@@ -8,6 +8,9 @@
         <ProjectReference Include="..\Example\Example.csproj" />
     </ItemGroup>
     <ItemGroup>
+        <PackageReference Include="Microsoft.SqlServer.Dacpacs.Azure.Master" Version="160.0.0" DacpacName="master" DatabaseVariableLiteralValue="master" />
+    </ItemGroup>
+    <ItemGroup>
         <PackageReference Include="tSQLt.Edge" Version="0.9.6" />
     </ItemGroup>
 </Project>
