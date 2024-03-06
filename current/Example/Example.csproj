@@ -1,8 +1,7 @@
 <Project Sdk="MSBuild.Sdk.SqlProj/2.6.1">
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>netstandard2.0</TargetFramework>
         <SqlServerVersion>SqlAzure</SqlServerVersion>
-        <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.SqlServer.Dacpacs.Azure.Master" Version="160.0.0" DacpacName="master" DatabaseVariableLiteralValue="master" />

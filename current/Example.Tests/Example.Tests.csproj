@@ -1,8 +1,7 @@
 <Project Sdk="MSBuild.Sdk.SqlProj/2.6.1">
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>netstandard2.0</TargetFramework>
         <SqlServerVersion>SqlAzure</SqlServerVersion>
-        <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\Example\Example.csproj" />
