@@ -2,6 +2,8 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <SqlServerVersion>SqlAzure</SqlServerVersion>
+        <RunSqlCodeAnalysis>True</RunSqlCodeAnalysis>
+        <CodeAnalysisRules>"-SqlServer.Rules.SRP0005;-Smells.SML030"</CodeAnalysisRules>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.SqlServer.Dacpacs.Azure.Master" Version="160.0.0" DacpacName="master" DatabaseVariableLiteralValue="master" />
