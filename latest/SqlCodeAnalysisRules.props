@@ -3,7 +3,6 @@
         <CodeAnalysisRules>-Microsoft.Rules.Data.SR0013; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRD0001; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRD0002; $(CodeAnalysisRules)</CodeAnalysisRules>
-        <CodeAnalysisRules>-SqlServer.Rules.SRD0006; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRD0009; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRD0013; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRD0015; $(CodeAnalysisRules)</CodeAnalysisRules>
