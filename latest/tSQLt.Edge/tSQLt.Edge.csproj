@@ -2,7 +2,9 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <SqlServerVersion>Sql150</SqlServerVersion>
+        <RunSqlCodeAnalysis>True</RunSqlCodeAnalysis>
     </PropertyGroup>
+    <Import Project="../SqlCodeAnalysisRules.props" />
     <ItemGroup>
         <PackageReference Include="Microsoft.SqlServer.Dacpacs.Master" DacpacName="master" DatabaseVariableLiteralValue="master" Version="150.0.0"/>
     </ItemGroup>

@@ -1,0 +1,34 @@
+<Project>
+    <PropertyGroup>
+        <CodeAnalysisRules>-Microsoft.Rules.Data.SR0001; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-Microsoft.Rules.Data.SR0007; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-Microsoft.Rules.Data.SR0013; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-Microsoft.Rules.Data.SR0014; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-Microsoft.Rules.Data.SR0015; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRD0001; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRD0002; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRD0006; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRD0009; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRD0013; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRD0015; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRD0016; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRD0017; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRD0024; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRD0026; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRD0032; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRD0043; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRD0058; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRD0063; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRD0064; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRN0007; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRP0005; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRP0006; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRP0009; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRP0014; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRP0016; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRP0020; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRP0021; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRP0024; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>"$(CodeAnalysisRules)"</CodeAnalysisRules>
+    </PropertyGroup>
+</Project>
