@@ -1,6 +1,5 @@
 <Project>
     <PropertyGroup>
-        <CodeAnalysisRules>-Microsoft.Rules.Data.SR0001; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-Microsoft.Rules.Data.SR0007; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-Microsoft.Rules.Data.SR0013; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-Microsoft.Rules.Data.SR0014; $(CodeAnalysisRules)</CodeAnalysisRules>

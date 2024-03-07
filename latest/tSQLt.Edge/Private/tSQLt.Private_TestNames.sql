@@ -19,6 +19,6 @@ BEGIN
 	)
 	FROM tSQLt.System_Tests(@TestName)
 
-    SELECT * FROM @TestNames
+    SELECT TestName FROM @TestNames
 END;
 GO
