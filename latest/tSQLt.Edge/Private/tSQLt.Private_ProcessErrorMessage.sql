@@ -1,5 +1,5 @@
 CREATE PROCEDURE tSQLt.Private_ProcessErrorMessage
-    @ErrorMessage NVARCHAR(4000) OUTPUT,
+    @ErrorMessage NVARCHAR(MAX) OUTPUT,
     @ErrorSeverity INT,
     @ErrorState INT,
     @ErrorNumber INT

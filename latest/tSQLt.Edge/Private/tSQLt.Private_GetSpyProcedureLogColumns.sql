@@ -60,7 +60,7 @@ BEGIN
         DECLARE @Type NVARCHAR(MAX)
         EXEC tSQLt.Private_GetType @ObjectName, @Type OUTPUT, @user_type_id, @max_length, @precision, @scale
 
-        DECLARE @IsTableType NVARCHAR(MAX)
+        DECLARE @IsTableType BIT
         DECLARE @Types tSQLt.System_TypesType
         INSERT INTO @Types
         EXEC tSQLt.System_Types @ObjectName, @user_type_id

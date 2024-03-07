@@ -45,7 +45,7 @@ BEGIN
         FROM @Result
         WHERE _id_ = @_i_
 
-        DECLARE @IsTableType NVARCHAR(MAX)
+        DECLARE @IsTableType BIT
         DECLARE @Types tSQLt.System_TypesType
         INSERT INTO @Types
         EXEC tSQLt.System_Types @ObjectName, @user_type_id

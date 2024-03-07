@@ -1,7 +1,6 @@
 <Project>
     <PropertyGroup>
         <CodeAnalysisRules>-Microsoft.Rules.Data.SR0013; $(CodeAnalysisRules)</CodeAnalysisRules>
-        <CodeAnalysisRules>-Microsoft.Rules.Data.SR0014; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-Microsoft.Rules.Data.SR0015; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRD0001; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRD0002; $(CodeAnalysisRules)</CodeAnalysisRules>
