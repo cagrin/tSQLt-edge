@@ -4,7 +4,12 @@ CREATE PROCEDURE tSQLt.Internal_AssertStringIn
     @Message NVARCHAR(MAX) = ''
 AS
 BEGIN
-    IF EXISTS (SELECT 1 FROM @Expected WHERE ([value] = @Actual) OR ([value] IS NULL AND @Actual IS NULL))
+    IF EXISTS
+    (
+        SELECT 1 FROM @Expected
+        WHERE ([value] IS NOT NULL AND ISNULL([value], '') = @Actual)
+        OR ([value] IS NULL AND @Actual IS NULL)
+    )
     BEGIN
         RETURN;
     END
