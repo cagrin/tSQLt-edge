@@ -74,6 +74,7 @@ BEGIN
         SET @_i_ = @_i_ + 1
     END
 
+    SET @Scalar = ISNULL(@Scalar, 0)
     SELECT
         @ParametersWithTypes = STRING_AGG
         (
@@ -88,6 +89,6 @@ BEGIN
             ', '
         ) WITHIN GROUP (ORDER BY parameter_id)
     FROM @Result
-    WHERE (@Scalar = 1 AND parameter_id > 0) OR ISNULL(@Scalar, 0) = 0
+    WHERE (@Scalar = 1 AND parameter_id > 0) OR @Scalar = 0
 END;
 GO
