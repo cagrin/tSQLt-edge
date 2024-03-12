@@ -24,6 +24,5 @@
         <CodeAnalysisRules>-SqlServer.Rules.SRP0020; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRP0021; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRP0024; $(CodeAnalysisRules)</CodeAnalysisRules>
-        <CodeAnalysisRules>"$(CodeAnalysisRules)"</CodeAnalysisRules>
     </PropertyGroup>
 </Project>
