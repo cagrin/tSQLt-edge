@@ -1,4 +1,6 @@
+.mono
+.vscode
+*.nupkg
 bin
 obj
-*.nupkg
 TestResults
