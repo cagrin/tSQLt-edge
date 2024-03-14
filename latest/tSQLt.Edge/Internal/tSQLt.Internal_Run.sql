@@ -3,6 +3,11 @@ CREATE PROCEDURE tSQLt.Internal_Run
     @TestResultFormatter NVARCHAR(MAX) = NULL
 AS
 BEGIN
+    IF @TestResultFormatter IS NOT NULL
+    BEGIN
+        EXEC tSQLt.Fail 'tSQLt.Run with @TestResultFormatter is not supported.';
+    END
+
     DELETE FROM tSQLt.TestResult;
 
     DECLARE @TestNames tSQLt.Private_TestNamesType;

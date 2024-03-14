@@ -16,6 +16,7 @@ BEGIN
         DECLARE @Failed NVARCHAR(MAX) = CONCAT_WS
         (
             ' ',
+            NULLIF(@FailMsg, 'Unexpected/missing resultset rows!'),
             'tSQLt.AssertEqualsTable failed.',
             CONCAT('Expected:<', ISNULL(@Expected, '(null)'), '>'),
             'has different rowset than',
@@ -23,5 +24,7 @@ BEGIN
         );
         EXEC tSQLt.Fail @Message, @Failed;
     END
+
+    SET @FailMsg = NULL
 END;
 GO

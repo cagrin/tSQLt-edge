@@ -24,3 +24,12 @@ BEGIN
     END
 END;
 GO
+
+CREATE PROCEDURE Test_Run.Test_ResultFormatter_IsUnsupported
+AS
+BEGIN
+    EXEC tSQLt.ExpectException 'tSQLt.Run with @TestResultFormatter is not supported.'
+
+    EXEC tSQLt.Run '[Test_Run].[Test_CreateNewTable]', @TestResultFormatter = 'ResultFormatter';
+END;
+GO

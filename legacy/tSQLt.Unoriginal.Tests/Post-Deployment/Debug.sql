@@ -87,6 +87,7 @@ END;
 
     -- Failure
     EXEC ('DROP PROCEDURE [Test_AssertEqualsTable].[Test_ErrorMessage]');
+    EXEC ('DROP PROCEDURE [Test_AssertEqualsTable].[Test_ErrorMessage_FailMsg]');
     EXEC ('DROP PROCEDURE [Test_AssertEqualsTable].[Test_FirstTableHasTwinRows]');
     EXEC ('DROP PROCEDURE [Test_AssertEqualsTable].[Test_FirstTableIsNotEmpty]');
     EXEC ('DROP PROCEDURE [Test_AssertEqualsTable].[Test_FloatLossOfPrecision]');

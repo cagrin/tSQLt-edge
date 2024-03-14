@@ -4,7 +4,7 @@ GO
 CREATE PROCEDURE Test_NewTestClass.Test_IsUnsupported
 AS
 BEGIN
-    EXEC tSQLt.ExpectException 'tSQLt.NewTestClass is not supported. Use CREATE SCHEMA ''ClassName''.'
+    EXEC tSQLt.ExpectException 'tSQLt.NewTestClass of TestClass1 is not supported.'
 
     EXEC tSQLt.NewTestClass 'TestClass1';
 END;

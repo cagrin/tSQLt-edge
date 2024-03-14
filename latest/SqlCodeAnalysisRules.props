@@ -6,7 +6,6 @@
         <CodeAnalysisRules>-SqlServer.Rules.SRD0009; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRD0013; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRD0015; $(CodeAnalysisRules)</CodeAnalysisRules>
-        <CodeAnalysisRules>-SqlServer.Rules.SRD0016; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRD0017; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRD0024; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRD0026; $(CodeAnalysisRules)</CodeAnalysisRules>

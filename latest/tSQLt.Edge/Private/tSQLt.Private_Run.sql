@@ -14,7 +14,7 @@ BEGIN
     IF @TranCounter = 0
         BEGIN TRANSACTION;
     ELSE
-        SAVE TRANSACTION @TestName;
+        SAVE TRANSACTION @TranName;
 
     BEGIN TRY
         EXEC @TestName;
@@ -33,6 +33,6 @@ BEGIN
         ROLLBACK TRANSACTION;
     ELSE
         IF XACT_STATE() <> -1
-            ROLLBACK TRANSACTION @TestName;
+            ROLLBACK TRANSACTION @TranName;
 END;
 GO
