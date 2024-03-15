@@ -31,10 +31,10 @@ BEGIN
     (
         SELECT
             Cnt = COUNT(1),
-            SuccessCnt = ISNULL(SUM(CASE WHEN Result = 'Success' THEN 1 ELSE 0 END), 0),
-            SkippedCnt = ISNULL(SUM(CASE WHEN Result = 'Skipped' THEN 1 ELSE 0 END), 0),
-            FailCnt = ISNULL(SUM(CASE WHEN Result = 'Failure' THEN 1 ELSE 0 END), 0),
-            ErrorCnt = ISNULL(SUM(CASE WHEN Result = 'Error' THEN 1 ELSE 0 END), 0)
+            SuccessCnt = COALESCE(SUM(CASE WHEN Result = 'Success' THEN 1 ELSE 0 END), 0),
+            SkippedCnt = COALESCE(SUM(CASE WHEN Result = 'Skipped' THEN 1 ELSE 0 END), 0),
+            FailCnt = COALESCE(SUM(CASE WHEN Result = 'Failure' THEN 1 ELSE 0 END), 0),
+            ErrorCnt = COALESCE(SUM(CASE WHEN Result = 'Error' THEN 1 ELSE 0 END), 0)
         FROM tSQLt.TestResult
     ) A
     RETURN
