@@ -23,7 +23,7 @@ BEGIN
         @IndexId = [object_id],
         @IndexName = QUOTENAME([index_name])
     FROM @System_IndexColumns
-    WHERE ([index_name] = @IndexName OR QUOTENAME([index_name]) = @IndexName)
+    WHERE @IndexName IN ([index_name], QUOTENAME([index_name]))
 
     IF @IndexId IS NOT NULL
     BEGIN
