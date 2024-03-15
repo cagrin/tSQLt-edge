@@ -27,6 +27,6 @@ BEGIN
         QUOTENAME(@NewName)
     );
 
-    EXEC (@Command);
+    EXEC sys.sp_executesql @Command;
 END;
 GO

@@ -21,6 +21,6 @@ BEGIN
         'ALTER TABLE', @ObjectName, 'ADD CONSTRAINT',  @ConstraintName, 'CHECK', @ConstraintDefinition
     )
 
-    EXEC (@CreateConstraint);
+    EXEC sys.sp_executesql @CreateConstraint;
 END;
 GO

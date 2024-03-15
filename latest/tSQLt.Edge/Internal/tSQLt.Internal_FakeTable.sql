@@ -24,7 +24,7 @@ BEGIN
     DECLARE @NewTableName NVARCHAR(MAX);
     EXEC tSQLt.Private_RenameObject @TableName, @NewTableName OUTPUT;
 
-    EXEC (@CreateFakeTableCommand);
+    EXEC sys.sp_executesql @CreateFakeTableCommand;
 
     DECLARE @NewObjectId INT = OBJECT_ID(@TableName);
     INSERT INTO tSQLt.Private_FakeTables (ObjectId, ObjectName, FakeObjectId, FakeObjectName)

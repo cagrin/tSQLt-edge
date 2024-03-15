@@ -47,7 +47,7 @@ BEGIN
             'CREATE', @IndexUnique, @IndexType, 'INDEX', @IndexName, 'ON', @ObjectName, @IndexDefinition
         )
 
-        EXEC (@CreateIndex);
+        EXEC sys.sp_executesql @CreateIndex;
     END
     ELSE
     BEGIN

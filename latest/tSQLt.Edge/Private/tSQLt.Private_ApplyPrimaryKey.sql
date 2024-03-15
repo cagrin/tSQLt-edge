@@ -139,7 +139,7 @@ BEGIN
         'ALTER TABLE', @ObjectName, 'ADD CONSTRAINT',  @ConstraintName, 'PRIMARY KEY', @ConstraintDefinition
     )
 
-    EXEC (@AlterPrimaryColumns);
-    EXEC (@CreatePrimaryKey);
+    EXEC sys.sp_executesql @AlterPrimaryColumns;
+    EXEC sys.sp_executesql @CreatePrimaryKey;
 END;
 GO

@@ -33,6 +33,6 @@ BEGIN
         'ALTER TABLE', @ObjectName, 'ADD CONSTRAINT',  @ConstraintName, 'UNIQUE', @ConstraintDefinition
     )
 
-    EXEC (@CreateUniqueConstraint);
+    EXEC sys.sp_executesql @CreateUniqueConstraint;
 END;
 GO

@@ -41,7 +41,7 @@ BEGIN
         'ALTER TABLE', @ObjectName, 'ADD CONSTRAINT',  @ConstraintName, 'FOREIGN KEY', @ConstraintDefinition
     )
 
-    EXEC (@CreateUniqueIndex);
-    EXEC (@CreateForeignKey);
+    EXEC sys.sp_executesql @CreateUniqueIndex;
+    EXEC sys.sp_executesql @CreateForeignKey;
 END;
 GO
