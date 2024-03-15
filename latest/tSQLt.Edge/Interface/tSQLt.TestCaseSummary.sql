@@ -16,11 +16,11 @@ BEGIN
         (
             ' ',
             'Test Case Summary:',
-            CAST(Cnt AS NVARCHAR), 'test case(s) executed,',
-            CAST(SuccessCnt AS NVARCHAR), 'succeeded,',
-            CAST(SkippedCnt AS NVARCHAR), 'skipped,',
-            CAST(FailCnt AS NVARCHAR), 'failed,',
-            CAST(ErrorCnt AS NVARCHAR), 'errored.'
+            Cnt, 'test case(s) executed,',
+            SuccessCnt, 'succeeded,',
+            SkippedCnt, 'skipped,',
+            FailCnt, 'failed,',
+            ErrorCnt, 'errored.'
         ),
         Cnt,
         SuccessCnt,
