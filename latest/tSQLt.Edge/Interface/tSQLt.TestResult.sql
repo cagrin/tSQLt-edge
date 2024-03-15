@@ -7,6 +7,6 @@ CREATE TABLE tSQLt.TestResult
     TranName NVARCHAR(MAX) NULL,
     Result NVARCHAR(MAX) NULL,
     Msg NVARCHAR(MAX) NULL,
-    TestStartTime DATETIME2 NOT NULL CONSTRAINT [DF__tSQLt_TestResult_TestStartTime] DEFAULT SYSDATETIME(),
+    TestStartTime DATETIME2 NOT NULL,
     TestEndTime DATETIME2 NULL
 );
