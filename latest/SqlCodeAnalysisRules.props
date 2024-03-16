@@ -13,7 +13,6 @@
         <CodeAnalysisRules>-SqlServer.Rules.SRP0005; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRP0009; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRP0014; $(CodeAnalysisRules)</CodeAnalysisRules>
-        <CodeAnalysisRules>-SqlServer.Rules.SRP0016; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRP0020; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRP0021; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRP0024; $(CodeAnalysisRules)</CodeAnalysisRules>
