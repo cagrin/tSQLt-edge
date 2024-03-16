@@ -44,6 +44,6 @@ BEGIN
     AND name NOT LIKE 'Internal[_]%'
     AND name NOT LIKE 'Private[_]%'
     AND name NOT LIKE 'System[_]%'
-    AND name <> 'RunAll'
+    AND name NOT LIKE 'RunAll'
 END;
 GO

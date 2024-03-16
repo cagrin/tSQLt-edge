@@ -39,7 +39,7 @@ BEGIN
 		[skips_repl_constraints]
 	FROM sys.procedures r
 	WHERE LOWER(r.name) LIKE 'test%'
-	AND SCHEMA_NAME(r.schema_id) <> 'tSQLt'
+	AND SCHEMA_NAME(r.schema_id) NOT LIKE 'tSQLt'
 	AND NOT EXISTS (SELECT 1 FROM sys.parameters p WHERE p.object_id = r.object_id)
 	AND
 	(
