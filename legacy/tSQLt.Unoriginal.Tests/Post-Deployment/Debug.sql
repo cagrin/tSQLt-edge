@@ -83,6 +83,7 @@ END;
     EXEC ('ALTER AUTHORIZATION ON SCHEMA::[Test_FakeTable] TO [tSQLt.TestClass];')
     EXEC ('ALTER AUTHORIZATION ON SCHEMA::[Test_RemoveObject] TO [tSQLt.TestClass];')
     EXEC ('ALTER AUTHORIZATION ON SCHEMA::[Test_RemoveObjectIfExists] TO [tSQLt.TestClass];')
+    EXEC ('ALTER AUTHORIZATION ON SCHEMA::[Test_RunTestSetUp] TO [tSQLt.TestClass];')
     EXEC ('ALTER AUTHORIZATION ON SCHEMA::[Test_SpyProcedure] TO [tSQLt.TestClass];')
 
     -- Failure

@@ -17,6 +17,8 @@ BEGIN
         SAVE TRANSACTION @TranName;
 
     BEGIN TRY
+        EXEC tSQLt.Private_RunTestSetUp @TestName;
+
         EXEC @TestName;
         SET @ErrorMessage = NULL;
     END TRY

@@ -31,6 +31,7 @@
         <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_FakeTable.sql" />
         <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_RemoveObject.sql" />
         <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_RemoveObjectIfExists.sql" />
+        <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_RunTestSetUp.sql" />
         <Content Include="../../latest/tSQLt.Edge.Tests/InterfaceTests/Test_SpyProcedure.sql" />
 
         <Content Include="../../latest/tSQLt.Edge.Tests/dbo/**" />
