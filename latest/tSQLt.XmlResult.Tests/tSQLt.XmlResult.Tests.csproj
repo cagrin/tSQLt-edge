@@ -15,9 +15,9 @@
     </ItemGroup>
     <ItemGroup>
         <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting"/>
-        <PackageReference Include="MSTest.Analyzers" Version="3.3.0"/>
-        <PackageReference Include="MSTest.TestAdapter" Version="3.3.0"/>
-        <PackageReference Include="MSTest.TestFramework" Version="3.3.0"/>
+        <PackageReference Include="MSTest.Analyzers" Version="3.3.1"/>
+        <PackageReference Include="MSTest.TestAdapter" Version="3.3.1"/>
+        <PackageReference Include="MSTest.TestFramework" Version="3.3.1"/>
     </ItemGroup>
     <ItemGroup>
         <Using Include="LikeComparison.TransactSql"/>

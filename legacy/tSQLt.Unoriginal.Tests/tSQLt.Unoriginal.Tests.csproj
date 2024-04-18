@@ -6,7 +6,7 @@
         <CreateNewDatabase>True</CreateNewDatabase>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="tSQLt.Dacpacs" Version="1.0.8083.3529-preview1" DacpacName="tSQLt.2019" />
+        <PackageReference Include="tSQLt.Dacpacs" Version="1.0.8083.3529" DacpacName="tSQLt.2019" />
         <PreDeploy Include="Pre-Deployment/PrepareServer.sql" />
         <PostDeploy Include="Post-Deployment/Debug.sql" />
     </ItemGroup>
