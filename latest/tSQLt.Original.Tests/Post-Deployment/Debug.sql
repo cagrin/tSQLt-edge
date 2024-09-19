@@ -66,6 +66,8 @@ END;
 
     EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test a single ExpectNoException can be followed by a single ExpectException]'); --todo
     EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test fails if called more then once]'); --todo
+    EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test ExpectException reports TestEndTime when failing]');
+    EXEC ('DROP PROCEDURE [ExpectExceptionTests].[test ExpectException reports TestEndTime when passing]');
 
     EXEC ('DROP PROCEDURE [ExpectNoExceptionTests].[test a ExpectNoException cannot follow an ExpectException]');
     EXEC ('DROP PROCEDURE [ExpectNoExceptionTests].[test fails if called more then once]');
