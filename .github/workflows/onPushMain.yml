@@ -6,12 +6,11 @@ on:
     - main
 
 jobs:
-  test-edge:
+  test-mssql:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
-          - image: mcr.microsoft.com/azure-sql-edge
           - image: mcr.microsoft.com/mssql/server:2019-latest
           - image: mcr.microsoft.com/mssql/server:2022-latest
     steps:
