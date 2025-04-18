@@ -9,3 +9,8 @@ dotnet test ./latest/tSQLt.XmlResult.Tests
 sqltest runall --image mcr.microsoft.com/mssql/server:2019-latest --project ./legacy/tSQLt.Unoriginal.Tests --cc-disable
 sqltest runall --image mcr.microsoft.com/mssql/server:2019-latest --project ./legacy/Example.Tests
 ```
+
+## Run check for update packages
+```
+dotnet-outdated -r --version-lock Major --ignore-failed-sources
+```

@@ -10,6 +10,6 @@
         <PackageReference Include="Microsoft.SqlServer.Dacpacs.Master" Version="150.1.2" DacpacName="master" DatabaseVariableLiteralValue="master" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="tSQLt.Edge" Version="0.9.7" />
+        <PackageReference Include="tSQLt.Edge" Version="0.9.9" />
     </ItemGroup>
 </Project>
