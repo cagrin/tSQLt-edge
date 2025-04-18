@@ -1,0 +1,16 @@
+<Project>
+    <PropertyGroup>
+        <RunSqlCodeAnalysis>True</RunSqlCodeAnalysis>
+        <CodeAnalysisRules>-SqlServer.Rules.SRP0005;-Smells.SML030</CodeAnalysisRules>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="ErikEJ.DacFX.SqlServer.Rules" Version="2.0.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="ErikEJ.DacFX.TSQLSmellSCA" Version="2.0.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+</Project>

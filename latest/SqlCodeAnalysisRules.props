@@ -1,5 +1,6 @@
 <Project>
     <PropertyGroup>
+        <RunSqlCodeAnalysis>True</RunSqlCodeAnalysis>
         <CodeAnalysisRules>-Microsoft.Rules.Data.SR0013; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRD0001; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRD0002; $(CodeAnalysisRules)</CodeAnalysisRules>
@@ -9,6 +10,8 @@
         <CodeAnalysisRules>-SqlServer.Rules.SRD0017; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRD0058; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRD0063; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRD0066; $(CodeAnalysisRules)</CodeAnalysisRules>
+        <CodeAnalysisRules>-SqlServer.Rules.SRD0068; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRN0007; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRP0005; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRP0009; $(CodeAnalysisRules)</CodeAnalysisRules>
@@ -17,4 +20,14 @@
         <CodeAnalysisRules>-SqlServer.Rules.SRP0021; $(CodeAnalysisRules)</CodeAnalysisRules>
         <CodeAnalysisRules>-SqlServer.Rules.SRP0024; $(CodeAnalysisRules)</CodeAnalysisRules>
     </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="ErikEJ.DacFX.SqlServer.Rules" Version="2.0.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="ErikEJ.DacFX.TSQLSmellSCA" Version="2.0.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
 </Project>

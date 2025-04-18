@@ -14,7 +14,7 @@ BEGIN
     INSERT INTO @TestNames EXEC tSQLt.Private_TestNames @TestName;
     DECLARE @TestNamesOrdered TABLE (Id INT IDENTITY(1,1), TestName NVARCHAR(MAX) NOT NULL);
     INSERT INTO @TestNamesOrdered (TestName) SELECT TestName FROM @TestNames ORDER BY TestName;
-    DECLARE @TestCase NVARCHAR(MAX), @TestTime DATETIME2, @ErrorMessage NVARCHAR(MAX), @Idx int = 1, @Max int = (SELECT COUNT(1) FROM @TestNames);
+    DECLARE @TestCase NVARCHAR(MAX), @TestTime DATETIME2, @ErrorMessage NVARCHAR(MAX), @Idx INT = 1, @Max INT = (SELECT COUNT(1) FROM @TestNames);
     DECLARE @TranName CHAR(32); EXEC tSQLt.Private_GetNewTranName @TranName OUTPUT;
 
     WHILE @Idx <= @Max

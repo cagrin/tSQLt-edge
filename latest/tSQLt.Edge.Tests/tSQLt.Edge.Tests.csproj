@@ -1,12 +1,12 @@
 <Project Sdk="MSBuild.Sdk.SqlProj/3.1.1">
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>netstandard2.1</TargetFramework>
         <SqlServerVersion>Sql150</SqlServerVersion>
         <DropObjectsNotInSource>True</DropObjectsNotInSource>
         <DoNotDropObjectTypes>Files</DoNotDropObjectTypes>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.SqlServer.Dacpacs.Master" DacpacName="master" DatabaseVariableLiteralValue="master" Version="150.0.0"/>
+        <PackageReference Include="Microsoft.SqlServer.Dacpacs.Master" DacpacName="master" DatabaseVariableLiteralValue="master" Version="150.1.2"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="../tSQLt.Edge/tSQLt.Edge.csproj"/>
