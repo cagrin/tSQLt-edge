@@ -12,5 +12,5 @@ sqltest runall --image mcr.microsoft.com/mssql/server:2019-latest --project ./le
 
 ## Run check for update packages
 ```
-dotnet-outdated -r --version-lock Major --ignore-failed-sources
+dotnet-outdated -r --version-lock Major ./latest/tSQLt.XmlResult.Tests/tSQLt.XmlResult.Tests.csproj
 ```

@@ -4,8 +4,12 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AnalysisMode>All</AnalysisMode>
-        <CodeAnalysisRuleSet>../StyleCop.ruleset</CodeAnalysisRuleSet>
+        <AnalysisLevel>Latest</AnalysisLevel>
+        <MSTestAnalysisMode>All</MSTestAnalysisMode>
     </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" Version="1.2.0-beta.556"/>
+    </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="../tSQLt.Edge/Interface/tSQLt.sql" />
         <EmbeddedResource Include="../tSQLt.Edge/Interface/tSQLt.TestResult.sql" />
