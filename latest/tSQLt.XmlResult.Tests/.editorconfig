@@ -9,6 +9,7 @@ dotnet_diagnostic.SA1602.severity = none
 dotnet_diagnostic.SA1633.severity = none
 
 dotnet_diagnostic.MSTEST0034.severity = none
+dotnet_diagnostic.MSTEST0049.severity = none
 
 dotnet_analyzer_diagnostic.category-Style.severity = warning
 dotnet_diagnostic.IDE0008.severity = none
