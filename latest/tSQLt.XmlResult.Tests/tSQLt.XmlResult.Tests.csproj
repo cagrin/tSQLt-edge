@@ -19,9 +19,9 @@
     </ItemGroup>
     <ItemGroup>
         <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting"/>
-        <PackageReference Include="MSTest.Analyzers" Version="3.10.3"/>
-        <PackageReference Include="MSTest.TestAdapter" Version="3.10.3"/>
-        <PackageReference Include="MSTest.TestFramework" Version="3.10.3"/>
+        <PackageReference Include="MSTest.Analyzers" Version="3.11.1"/>
+        <PackageReference Include="MSTest.TestAdapter" Version="3.11.1"/>
+        <PackageReference Include="MSTest.TestFramework" Version="3.11.1"/>
     </ItemGroup>
     <ItemGroup>
         <Using Include="LikeComparison.TransactSql"/>
@@ -29,8 +29,8 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Dapper" Version="2.1.66"/>
-        <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.1"/>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1"/>
-        <PackageReference Include="Testcontainers.MsSql" Version="4.6.0"/>
+        <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.3"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1"/>
+        <PackageReference Include="Testcontainers.MsSql" Version="4.8.1"/>
     </ItemGroup>
 </Project>

@@ -1,3 +1,5 @@
+[assembly: Parallelize(Scope = ExecutionScope.ClassLevel)]
+
 namespace ValidationTests
 {
     using Testcontainers.MsSql;
