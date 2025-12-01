@@ -14,7 +14,7 @@ namespace ValidationTests
             _ = context;
 
             testcontainer = new MsSqlBuilder()
-                .WithImage("mcr.microsoft.com/mssql/server")
+                .WithImage("mcr.microsoft.com/mssql/server:2019-latest")
                 .Build();
 
             testcontainer.StartAsync().Wait();
