@@ -5,6 +5,6 @@
     </PropertyGroup>
     <Import Project="../SqlCodeAnalysisRules.props" />
     <ItemGroup>
-        <PackageReference Include="Microsoft.SqlServer.Dacpacs.Master" DacpacName="master" DatabaseVariableLiteralValue="master" Version="150.1.2"/>
+        <PackageReference Include="Microsoft.SqlServer.Dacpacs.Master" DacpacName="master" DatabaseVariableLiteralValue="master" Version="170.0.3"/>
     </ItemGroup>
 </Project>
