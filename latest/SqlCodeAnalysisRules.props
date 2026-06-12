@@ -21,7 +21,7 @@
         <CodeAnalysisRules>-SqlServer.Rules.SRP0024; $(CodeAnalysisRules)</CodeAnalysisRules>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="ErikEJ.DacFX.SqlServer.Rules" Version="2.0.0">
+        <PackageReference Include="ErikEJ.DacFX.SqlServer.Rules" Version="4.0.0">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
