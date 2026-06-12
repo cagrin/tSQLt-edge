@@ -7,7 +7,7 @@
         <ProjectReference Include="..\Example\Example.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.SqlServer.Dacpacs.Master" Version="150.1.2" DacpacName="master" DatabaseVariableLiteralValue="master" />
+        <PackageReference Include="Microsoft.SqlServer.Dacpacs.Master" Version="170.0.3" DacpacName="master" DatabaseVariableLiteralValue="master" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="tSQLt.Edge" Version="0.9.9" />
